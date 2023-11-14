@@ -134,10 +134,5 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
             multiConicProjection(x, y, 324, 33, 150, 1100);
             MessageBox.Show("x[0]: " + x[0] + " y[0]: " + y[0]);
         }
-        {
-            x[0] = -30;
-            y[0] = 90;
-            multiConicProjection(x, y, 90, -30, 150, 50000);
-        }
     }
 }
