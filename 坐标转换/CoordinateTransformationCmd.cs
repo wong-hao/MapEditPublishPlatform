@@ -86,7 +86,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
             return an * l / ln;
         }
 
-        void multiConicProjection(double[] x, double[] y, double B, double L, double midlL, double mapScale)
+        void multiConicProjection(double[] x, double[] y, double L, double B, double midlL, double mapScale)
         {
             huL = L * Math.PI / 180;
             huB = B * Math.PI / 180;
@@ -95,33 +95,45 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
             xn = getxn();
             yn = getyn();
 
-            MessageBox.Show("L: " + L + " B: " + B + " huL: " + huL + " huB: " + huB + " x0: " + x0 + " xn: " + xn + " yn: " + yn, "中间结果1");
+            //MessageBox.Show("L: " + L + " B: " + B + " huL: " + huL + " huB: " + huB + " x0: " + x0 + " xn: " + xn + " yn: " + yn, "中间结果1");
 
-            if (L < 0)
+            if (huB < 0)
             {
                 q = getq();
                 sinan = getsinan();
                 an = getan();
                 l = getl(L, midlL);
                 a = geta();
-                MessageBox.Show(" q: " + q + " sinan: " + sinan + " an: " + an + " l: " + l + " a: " + a, "中间结果2");
+                
+                //MessageBox.Show(" q: " + q + " sinan: " + sinan + " an: " + an + " l: " + l + " a: " + a, "中间结果2");
+                //MessageBox.Show((q * Math.Sin(a) * 14000).ToString(), "中间结果3");
 
-                x[0] = (x0 + q * (1 - Math.Cos(a))) * (-0.888428) / mapScale;
-                y[0] = q * Math.Sin(a) / mapScale;
+                x[0] = (x0 + q * (1 - Math.Cos(a))) * (-0.888428) * 14000 / mapScale;
+                y[0] = q * Math.Sin(a) * 14000 / mapScale;
             }
-            else if (L == 0)
+            else if (huB == 0)
             {
                 x[0] = 0;
-                y[0] = yn * l / (ln * mapScale);
+                y[0] = yn * l / ln * 14000 / mapScale;
             }
             else
             {
-                x[0] = (x0 + q * (1 - Math.Cos(a))) * (0.888428) / mapScale;
-                y[0] = q * Math.Sin(a) / mapScale;
+                q = getq();
+                sinan = getsinan();
+                an = getan();
+                l = getl(L, midlL);
+                a = geta();
+
+                x[0] = (x0 + q * (1 - Math.Cos(a))) * (0.888428) * 14000 / mapScale;
+                y[0] = q * Math.Sin(a) * 14000 / mapScale;
             }
         }
 
         public override void OnClick()
+        {
+            multiConicProjection(x, y, 324, 33, 150, 1100);
+            MessageBox.Show("x[0]: " + x[0] + " y[0]: " + y[0]);
+        }
         {
             x[0] = -30;
             y[0] = 90;
