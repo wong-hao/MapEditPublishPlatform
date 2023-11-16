@@ -43,8 +43,6 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
         private double a;
         private double l;
         private double ln = 201.6 * Math.PI / 180;
-        double[] x = new double[1];
-        double[] y = new double[1];
         private double huL;
         private double huB;
 
@@ -88,11 +86,12 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
             return an * l / ln;
         }
 
-        // L：经度（坐标）；B：纬度（坐标）
-        void multiConicProjection(double[] x, double[] y, double L, double B, double midlL, double mapScale)
+        // L：经度（坐标）；B：纬度（坐标）；mapScale：比例尺（真实值）
+        void multiConicProjection(ref double x, ref double y, double L, double B, double midlL, double mapScale)
         {
-            huL = L * Math.PI / 180; //纬度（弧度）
-            huB = B * Math.PI / 180; //经度（弧度）
+            mapScale = this.mapScale / 10000; //比例尺（以万为单位）
+            huL = L * Math.PI / 180; //经度（弧度）
+            huB = B * Math.PI / 180; //纬度（弧度）
 
             x0 = getx0();
             xn = getxn();
@@ -111,13 +110,13 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                 //MessageBox.Show(" q: " + q + " sinan: " + sinan + " an: " + an + " l: " + l + " a: " + a, "中间结果2");
                 //MessageBox.Show((q * Math.Sin(a) * 14000).ToString(), "中间结果3");
 
-                x[0] = (x0 + q * (1 - Math.Cos(a))) * (-0.888428) * 14000 / mapScale;
-                y[0] = q * Math.Sin(a) * 14000 / mapScale;
+                x = (x0 + q * (1 - Math.Cos(a))) * (-0.888428) * 14000 / mapScale;
+                y = q * Math.Sin(a) * 14000 / mapScale;
             }
             else if (huB == 0)
             {
-                x[0] = 0;
-                y[0] = yn * l / ln * 14000 / mapScale;
+                x = 0;
+                y = yn * l / ln * 14000 / mapScale;
             }
             else
             {
@@ -127,8 +126,8 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                 l = getl(L, midlL);
                 a = geta();
 
-                x[0] = (x0 + q * (1 - Math.Cos(a))) * (0.888428) * 14000 / mapScale;
-                y[0] = q * Math.Sin(a) * 14000 / mapScale;
+                x = (x0 + q * (1 - Math.Cos(a))) * (0.888428) * 14000 / mapScale;
+                y = q * Math.Sin(a) * 14000 / mapScale;
             }
         }
 
@@ -143,8 +142,15 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                 return;
             }
 
-            //multiConicProjection(x, y, 324, 33, 150, mapScale);
-            //MessageBox.Show("x[0]: " + x[0] + " y[0]: " + y[0]);
+            /*
+            double longitude = 0;
+            double latitude = 0;
+            double xCoordination = 0;
+            double yCoordination = 0;
+            multiConicProjection(ref xCoordination, ref yCoordination, longitude, latitude, 150, mapScale);
+            MessageBox.Show("longitude: " + longitude + " latitude: " + latitude +
+                              " xCoordination: " + xCoordination + " yCoordination: " + yCoordination);
+             */
 
             using (var wo = m_Application.SetBusy())
             {
@@ -196,6 +202,9 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
 
             double longitude;
             double latitude;
+            double xCoordination = 0;
+            double yCoordination = 0;
+
             IFeatureCursor featureCursor = null;
             try
             {
@@ -203,17 +212,19 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
 
                 while ((feature = (IFeature)featureCursor.NextFeature()) != null)
                 {
-                    featurecount++;
                     pGeo = feature.Shape;
-                    wo.SetText("正在处理第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname + "的第" + featurecount + "/" + featureCount + "个要素");
-                    Console.WriteLine("正在处理第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname + "的第" + featurecount + "/" + featureCount + "个要素");
-                    //pGeo.SpatialReference = unknownSpatialReference;
 
                     // 不考虑几何为空的要素
                     if (pGeo == null || pGeo.IsEmpty)
                     {
                         continue;
                     }
+
+                    featurecount++;
+
+                    wo.SetText("正在处理第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname + "的第" + featurecount + "/" + featureCount + "个要素");
+                    Console.WriteLine("正在处理第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname + "的第" + featurecount + "/" + featureCount + "个要素");
+                    //pGeo.SpatialReference = unknownSpatialReference;
 
                     // 根据几何类型输出相应信息
                     switch (geometryType)
@@ -227,9 +238,19 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                             longitude = point.X;
                             latitude = point.Y;
 
-                            multiConicProjection(x, y, longitude, latitude, 150, mapScale);
+                            multiConicProjection(ref xCoordination, ref yCoordination, longitude, latitude, 150, mapScale);
 
-                            point.PutCoords(longitude + 2, latitude + 2);
+                            Console.WriteLine("longitude: " + longitude + " latitude: " + latitude +
+                                              " xCoordination: " + xCoordination + " yCoordination: " + yCoordination);
+
+                            if (double.IsNaN(xCoordination) || double.IsNaN(yCoordination))
+                            {
+                                MessageBox.Show("要素类" + fcname + "OID为" + feature.OID + "的要素坐标转换失败，请检查是否源数据是否均为地理坐标系！", "错误", MessageBoxButtons.OK,
+                                    MessageBoxIcon.Error);
+                                return;
+                            }
+
+                            point.PutCoords(xCoordination, yCoordination);
 
                             //pGeo.Project(ISR);
 
@@ -252,9 +273,19 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                                 longitude = point.X;
                                 latitude = point.Y;
 
-                                multiConicProjection(x, y, longitude, latitude, 150, mapScale);
+                                multiConicProjection(ref xCoordination, ref yCoordination, longitude, latitude, 150, mapScale);
 
-                                point.PutCoords(longitude + 2, latitude + 2);
+                                Console.WriteLine("longitude: " + longitude + " latitude: " + latitude +
+                                                  " xCoordination: " + xCoordination + " yCoordination: " + yCoordination);
+
+                                if (double.IsNaN(xCoordination) || double.IsNaN(yCoordination))
+                                {
+                                    MessageBox.Show("要素类" + fcname + "OID为" + feature.OID + "的要素坐标转换失败，请检查是否源数据是否均为地理坐标系！", "错误", MessageBoxButtons.OK,
+                                        MessageBoxIcon.Error);
+                                    return;
+                                }
+
+                                point.PutCoords(xCoordination, yCoordination);
 
                                 // 将移动后的点重新设置到要素中
                                 pointCollection.UpdatePoint(i, point);
@@ -290,9 +321,19 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                                     longitude = originalPoints[j].X;
                                     latitude = originalPoints[j].Y;
 
-                                    multiConicProjection(x, y, longitude, latitude, 150, mapScale);
+                                    multiConicProjection(ref xCoordination, ref yCoordination, longitude, latitude, 150, mapScale);
 
-                                    point.PutCoords(longitude + 2, latitude + 2);
+                                    Console.WriteLine("longitude: " + longitude + " latitude: " + latitude +
+                                                      " xCoordination: " + xCoordination + " yCoordination: " + yCoordination);
+
+                                    if (double.IsNaN(xCoordination) || double.IsNaN(yCoordination))
+                                    {
+                                        MessageBox.Show("要素类" + fcname + "OID为" + feature.OID + "的要素坐标转换失败，请检查是否源数据是否均为地理坐标系！", "错误", MessageBoxButtons.OK,
+                                            MessageBoxIcon.Error);
+                                        return;
+                                    }
+
+                                    point.PutCoords(xCoordination, yCoordination);
 
                                     // 将移动后的点重新设置到环中
                                     pointCollection.UpdatePoint(j, point);
@@ -321,9 +362,19 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                            longitude = point.X;
                            latitude = point.Y;
                            
-                           multiConicProjection(x, y, longitude, latitude, 150, mapScale);
-                                                      
-                           point.PutCoords(longitude + 2, latitude + 2);
+                            multiConicProjection(ref xCoordination, ref yCoordination, longitude, latitude, 150, mapScale);
+                           
+                           Console.WriteLine("longitude: " + longitude + " latitude: " + latitude +
+                           " xCoordination: " + xCoordination + " yCoordination: " + yCoordination);
+                            
+                           if (double.IsNaN(xCoordination) || double.IsNaN(yCoordination))
+                           {
+                                    MessageBox.Show("要素类" + fcname + "OID为" + feature.OID + "的要素坐标转换失败，请检查是否源数据是否均为地理坐标系！", "错误", MessageBoxButtons.OK,
+                           MessageBoxIcon.Error);
+                           return;
+                           }
+                         
+                            point.PutCoords(xCoordination,yCoordination);
                            
                            // 将移动后的点重新设置到环中
                            pointCollection.UpdatePoint(j, point);
