@@ -88,7 +88,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
             return an * l / ln;
         }
 
-        // L：纬度（坐标）；B：经度（坐标）
+        // L：经度（坐标）；B：纬度（坐标）
         void multiConicProjection(double[] x, double[] y, double L, double B, double midlL, double mapScale)
         {
             huL = L * Math.PI / 180; //纬度（弧度）
@@ -194,6 +194,8 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
 
             int featurecount = 0;
 
+            double longitude;
+            double latitude;
             IFeatureCursor featureCursor = null;
             try
             {
@@ -221,12 +223,14 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                             // 获取点要素的几何对象
                             point = pGeo as IPoint;
 
-                            double longitude = point.X;
-                            double latitude = point.Y;
-                            multiConicProjection(x, y, latitude, longitude, 150, mapScale);
-
                             // 设置点要素的坐标
+                            longitude = point.X;
+                            latitude = point.Y;
+
+                            multiConicProjection(x, y, longitude, latitude, 150, mapScale);
+
                             point.PutCoords(longitude + 2, latitude + 2);
+
                             //pGeo.Project(ISR);
 
                             // 更新要素
@@ -243,12 +247,14 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                             for (int i = 0; i < pointCount; i++)
                             {
                                 point = pointCollection.get_Point(i);
-                                double x1 = point.X;
-                                double y1 = point.Y;
 
-                                // 移动点的横纵坐标
-                                point.X = x1 + 2; 
-                                point.Y = y1 + 2; 
+                                // 设置点要素的坐标
+                                longitude = point.X;
+                                latitude = point.Y;
+
+                                multiConicProjection(x, y, longitude, latitude, 150, mapScale);
+
+                                point.PutCoords(longitude + 2, latitude + 2);
 
                                 // 将移动后的点重新设置到要素中
                                 pointCollection.UpdatePoint(i, point);
@@ -280,13 +286,13 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                                 {
                                     point = pointCollection.get_Point(j);
 
-                                    // 在这里应用你的坐标移动逻辑，例如：
-                                    double newX = originalPoints[j].X + 2;
-                                    double newY = originalPoints[j].Y + 2;
+                                    // 设置点要素的坐标
+                                    longitude = originalPoints[j].X;
+                                    latitude = originalPoints[j].Y;
 
-                                    // 更新点的位置
-                                    point.X = newX;
-                                    point.Y = newY;
+                                    multiConicProjection(x, y, longitude, latitude, 150, mapScale);
+
+                                    point.PutCoords(longitude + 2, latitude + 2);
 
                                     // 将移动后的点重新设置到环中
                                     pointCollection.UpdatePoint(j, point);
@@ -311,13 +317,13 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                            {
                            point = pointCollection.get_Point(j);
                            
-                           // 在这里应用你的坐标移动逻辑，例如：
-                           double newX = point.X + 2.0;
-                           double newY = point.Y + 2.0;
+                            // 设置点要素的坐标
+                           longitude = point.X;
+                           latitude = point.Y;
                            
-                           // 更新点的位置
-                           point.X = newX;
-                           point.Y = newY;
+                           multiConicProjection(x, y, longitude, latitude, 150, mapScale);
+                                                      
+                           point.PutCoords(longitude + 2, latitude + 2);
                            
                            // 将移动后的点重新设置到环中
                            pointCollection.UpdatePoint(j, point);
