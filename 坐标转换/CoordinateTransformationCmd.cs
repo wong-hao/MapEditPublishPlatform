@@ -14,6 +14,7 @@ using ESRI.ArcGIS.AnalysisTools;
 using ESRI.ArcGIS.ConversionTools;
 using ESRI.ArcGIS.DataManagementTools;
 using ESRI.ArcGIS.DataSourcesGDB;
+using ESRI.ArcGIS.esriSystem;
 using ESRI.ArcGIS.GeoAnalyst;
 using ESRI.ArcGIS.Geoprocessor;
 using SMGI.Plugin.DCDProcess;
@@ -30,6 +31,10 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                 return m_Application != null && m_Application.Workspace != null;
             }
         }
+
+        static string apppath = DCDHelper.GetAppDataPath();
+        static string newgdb = "投影数据库.gdb";
+        static string fullPath = apppath + "\\" + newgdb;
 
         private double mapScale = 0.0;
         private double R = 6371116;
@@ -153,7 +158,6 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
         {
 
             mapScale = m_Application.MapControl.Map.ReferenceScale;
-
             if (mapScale == 0)
             {
                 MessageBox.Show("请先设置参考比例尺！");
@@ -177,13 +181,92 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
 
         }
 
+        // 将 ArcObjects 的几何类型转换为字符串表示形式
+        static string GetGeometryType(esriGeometryType shapeType)
+        {
+            switch (shapeType)
+            {
+                case esriGeometryType.esriGeometryPoint:
+                    return "POINT";
+                case esriGeometryType.esriGeometryPolyline:
+                    return "POLYLINE";
+                case esriGeometryType.esriGeometryPolygon:
+                    return "POLYGON";
+                case esriGeometryType.esriGeometryMultipoint:
+                    return "MULTIPOINT";
+                default:
+                    return "";
+            }
+        }
+
         public void GeoDBDataTransfer(IWorkspace ws, WaitOperation wo)
         {
+            #region 创建并初始化投影数据库
+
             IFeatureWorkspace fws = ws as IFeatureWorkspace;
+
+            wo.SetText("正在创建新投影数据库:" + newgdb);
+
+            // 创建GP工具对象
+            Geoprocessor geoprocessor = new Geoprocessor();
+            geoprocessor.OverwriteOutput = true;
+
+            // 使用createFileGdb工具
+            CreateFileGDB createFileGdb = new CreateFileGDB();
+            createFileGdb.out_name = newgdb;
+            createFileGdb.out_folder_path = apppath;
+            Helper.ExecuteGPTool(geoprocessor, createFileGdb, null);
+
+            // 使用CreateFeatureclass工具
+            CreateFeatureclass createFeatureclass = new CreateFeatureclass();
+
+            // 设置为未知坐标系统
+            ISpatialReference unknownSpatialReference = new UnknownCoordinateSystem() as ISpatialReference;
+
+            // 使用Append工具
+            Append append = new Append();
+
             Dictionary<string, IFeatureClass> fcName2FC = DCDHelper.GetAllFeatureClassFromWorkspace(fws);
             // 获取数据库中要素类的数量
             int fcTotalNum = fcName2FC.Count;
             int fcNum = 0;
+            foreach (var kv in fcName2FC)
+            {
+                fcNum++;
+
+                IFeatureClass fc = kv.Value;
+                String fcname = kv.Key;
+
+                wo.SetText("正在创建投影数据库的第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname);
+
+                esriGeometryType geometryType = fc.ShapeType;
+
+                createFeatureclass.spatial_reference = unknownSpatialReference;
+                createFeatureclass.out_name = fcname;
+                createFeatureclass.out_path = fullPath;
+                createFeatureclass.geometry_type = GetGeometryType(geometryType);
+                Helper.ExecuteGPTool(geoprocessor, createFeatureclass, null);
+
+                wo.SetText("正在拷贝投影数据库的第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname);
+
+                append.inputs = fcname;
+                append.schema_type = "NO_TEST";
+                append.target = fullPath + "\\" + fcname;
+                Helper.ExecuteGPTool(geoprocessor, append, null);
+
+            }
+
+            #endregion
+
+            #region 在投影数据库中进行投影
+
+            ws = DCDHelper.createTempWorkspace(fullPath);
+            fws = ws as IFeatureWorkspace;
+
+            fcName2FC = DCDHelper.GetAllFeatureClassFromWorkspace(fws);
+            // 获取数据库中要素类的数量
+            fcTotalNum = fcName2FC.Count;
+            fcNum = 0;
             foreach (var kv in fcName2FC)
             {
                 fcNum++;
@@ -198,6 +281,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                 FeatureClassTransfer(kv, fws, geometryType, ISR, fcNum, fcTotalNum, envelope, wo);
             }
 
+            #endregion
         }
 
         public void FeatureClassTransfer(KeyValuePair<string, IFeatureClass> fcName2FC, IFeatureWorkspace fws, esriGeometryType geometryType, ISpatialReference ISR, int fcNum, int fcTotalNum, IEnvelope envelope, WaitOperation wo)
@@ -209,8 +293,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
             int featureCount = fc.FeatureCount(null); // 如果传入 null，则计算所有的要素数量
             IFeatureClassManage featureClassManage = (IFeatureClassManage)fc;
 
-            // 设置为未知坐标系统
-            ISpatialReference unknownSpatialReference = new UnknownCoordinateSystem() as ISpatialReference;
+
 
             IFeature feature;
             IGeometry pGeo;
