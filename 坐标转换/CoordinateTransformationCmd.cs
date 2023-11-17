@@ -222,8 +222,8 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
 
             double longitude;
             double latitude;
-            double xCoordination = 0;
-            double yCoordination = 0;
+            double xCoordination = 0; //x（自南向北）-B
+            double yCoordination = 0; //y（自西向东）-L
 
             IFeatureCursor featureCursor = null;
             try
@@ -277,7 +277,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                                 //return;
                             }
 
-                            point.PutCoords(xCoordination, yCoordination);
+                            point.PutCoords(yCoordination, xCoordination);
 
                             //pGeo.Project(ISR);
 
@@ -319,7 +319,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                                     //return;
                                 }
 
-                                point.PutCoords(xCoordination, yCoordination);
+                                point.PutCoords(yCoordination, xCoordination);
 
                                 // 将移动后的点重新设置到要素中
                                 pointCollection.UpdatePoint(i, point);
@@ -374,7 +374,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                                         //return;
                                     }
 
-                                    point.PutCoords(xCoordination, yCoordination);
+                                    point.PutCoords(yCoordination, xCoordination);
 
                                     // 将移动后的点重新设置到环中
                                     pointCollection.UpdatePoint(j, point);
@@ -422,8 +422,8 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                            return;
                            }
                          
-                            point.PutCoords(xCoordination,yCoordination);
-                           
+                                point.PutCoords(yCoordination, xCoordination);
+                                                      
                            // 将移动后的点重新设置到环中
                            pointCollection.UpdatePoint(j, point);
                            }
