@@ -93,20 +93,22 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
             huL = L * Math.PI / 180; //经度（弧度）
             huB = B * Math.PI / 180; //纬度（弧度）
 
-            x0 = getx0();
-            xn = getxn();
-            yn = getyn();
-
-            //MessageBox.Show("L: " + L + " B: " + B + " huL: " + huL + " huB: " + huB + " x0: " + x0 + " xn: " + xn + " yn: " + yn, "中间结果1");
 
             if (huB < 0)
             {
+                huB = -1 * huB;
+
+                x0 = getx0();
+                xn = getxn();
+                yn = getyn();
+
                 q = getq();
                 sinan = getsinan();
                 an = getan();
                 l = getl(L, midlL);
                 a = geta();
 
+                //MessageBox.Show("L: " + L + " B: " + B + " huL: " + huL + " huB: " + huB + " x0: " + x0 + " xn: " + xn + " yn: " + yn, "中间结果1");
                 //MessageBox.Show(" q: " + q + " sinan: " + sinan + " an: " + an + " l: " + l + " a: " + a, "中间结果2");
                 //MessageBox.Show((q * Math.Sin(a) * 14000).ToString(), "中间结果3");
 
@@ -115,16 +117,32 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
             }
             else if (huB == 0)
             {
+                x0 = getx0();
+                xn = getxn();
+                yn = getyn();
+
+                //MessageBox.Show("L: " + L + " B: " + B + " huL: " + huL + " huB: " + huB + " x0: " + x0 + " xn: " + xn + " yn: " + yn, "中间结果1");
+                //MessageBox.Show(" q: " + q + " sinan: " + sinan + " an: " + an + " l: " + l + " a: " + a, "中间结果2");
+                //MessageBox.Show((q * Math.Sin(a) * 14000).ToString(), "中间结果3");
+
                 x = 0;
                 y = yn * l / ln * 14000 / mapScale;
             }
             else
             {
+                x0 = getx0();
+                xn = getxn();
+                yn = getyn();
+
                 q = getq();
                 sinan = getsinan();
                 an = getan();
                 l = getl(L, midlL);
                 a = geta();
+
+                //MessageBox.Show("L: " + L + " B: " + B + " huL: " + huL + " huB: " + huB + " x0: " + x0 + " xn: " + xn + " yn: " + yn, "中间结果1");
+                //MessageBox.Show(" q: " + q + " sinan: " + sinan + " an: " + an + " l: " + l + " a: " + a, "中间结果2");
+                //MessageBox.Show((q * Math.Sin(a) * 14000).ToString(), "中间结果3");
 
                 x = (x0 + q * (1 - Math.Cos(a))) * (0.888428) * 14000 / mapScale;
                 y = q * Math.Sin(a) * 14000 / mapScale;
@@ -172,15 +190,17 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                 IFeatureClass fc = kv.Value;
                 String fcname = kv.Key;
 
+                // 获取要素类的范围
+                IEnvelope envelope = ((IGeoDataset)fc).Extent;
                 ISpatialReference ISR = (fc as IGeoDataset).SpatialReference;
                 esriGeometryType geometryType = fc.ShapeType;
 
-                FeatureClassTransfer(kv, fws, geometryType, ISR, fcNum, fcTotalNum, wo);
+                FeatureClassTransfer(kv, fws, geometryType, ISR, fcNum, fcTotalNum, envelope, wo);
             }
 
         }
 
-        public void FeatureClassTransfer(KeyValuePair<string, IFeatureClass> fcName2FC, IFeatureWorkspace fws, esriGeometryType geometryType, ISpatialReference ISR, int fcNum, int fcTotalNum, WaitOperation wo)
+        public void FeatureClassTransfer(KeyValuePair<string, IFeatureClass> fcName2FC, IFeatureWorkspace fws, esriGeometryType geometryType, ISpatialReference ISR, int fcNum, int fcTotalNum, IEnvelope envelope, WaitOperation wo)
         {
             IFeatureClass fc = fcName2FC.Value;
             String fcname = fcName2FC.Key;
@@ -245,9 +265,16 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
 
                             if (double.IsNaN(xCoordination) || double.IsNaN(yCoordination))
                             {
-                                MessageBox.Show("要素类" + fcname + "OID为" + feature.OID + "的要素坐标转换失败，请检查是否源数据是否均为地理坐标系！", "错误", MessageBoxButtons.OK,
+                                MessageBox.Show("对于要素类" + fcname + "，OID为" + feature.OID + "的要素坐标转换得到空值，请检查是否源数据是否均为地理坐标系或中央经线及比例尺设置是否正确！", "错误", MessageBoxButtons.OK,
                                     MessageBoxIcon.Error);
                                 return;
+                            }
+                            else if (envelope.XMin > xCoordination || xCoordination > envelope.XMax ||
+                                     envelope.YMin > yCoordination || yCoordination > envelope.YMax)
+                            {
+                                //MessageBox.Show("对于要素类" + fcname + "，OID为" + feature.OID + "转换出的投影坐标超过了要素类的范围！", "错误", MessageBoxButtons.OK,
+                                //MessageBoxIcon.Error);
+                                //return;
                             }
 
                             point.PutCoords(xCoordination, yCoordination);
@@ -280,9 +307,16 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
 
                                 if (double.IsNaN(xCoordination) || double.IsNaN(yCoordination))
                                 {
-                                    MessageBox.Show("要素类" + fcname + "OID为" + feature.OID + "的要素坐标转换失败，请检查是否源数据是否均为地理坐标系！", "错误", MessageBoxButtons.OK,
+                                    MessageBox.Show("对于要素类" + fcname + "，OID为" + feature.OID + "的要素坐标转换得到空值，请检查是否源数据是否均为地理坐标系或中央经线及比例尺设置是否正确！", "错误", MessageBoxButtons.OK,
                                         MessageBoxIcon.Error);
                                     return;
+                                }
+                                else if (envelope.XMin > xCoordination || xCoordination > envelope.XMax ||
+                                         envelope.YMin > yCoordination || yCoordination > envelope.YMax)
+                                {
+                                    //MessageBox.Show("对于要素类" + fcname + "，OID为" + feature.OID + "转换出的投影坐标超过了要素类的范围！", "错误", MessageBoxButtons.OK,
+                                    //MessageBoxIcon.Error);
+                                    //return;
                                 }
 
                                 point.PutCoords(xCoordination, yCoordination);
@@ -328,9 +362,16 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
 
                                     if (double.IsNaN(xCoordination) || double.IsNaN(yCoordination))
                                     {
-                                        MessageBox.Show("要素类" + fcname + "OID为" + feature.OID + "的要素坐标转换失败，请检查是否源数据是否均为地理坐标系！", "错误", MessageBoxButtons.OK,
+                                        MessageBox.Show("对于要素类" + fcname + "，OID为" + feature.OID + "的要素坐标转换得到空值，请检查是否源数据是否均为地理坐标系或中央经线及比例尺设置是否正确！", "错误", MessageBoxButtons.OK,
                                             MessageBoxIcon.Error);
                                         return;
+                                    }
+                                    else if (envelope.XMin > xCoordination || xCoordination > envelope.XMax ||
+                                             envelope.YMin > yCoordination || yCoordination > envelope.YMax)
+                                    {
+                                        //MessageBox.Show("对于要素类" + fcname + "，OID为" + feature.OID + "转换出的投影坐标超过了要素类的范围！", "错误", MessageBoxButtons.OK,
+                                            //MessageBoxIcon.Error);
+                                        //return;
                                     }
 
                                     point.PutCoords(xCoordination, yCoordination);
@@ -367,9 +408,16 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                            Console.WriteLine("longitude: " + longitude + " latitude: " + latitude +
                            " xCoordination: " + xCoordination + " yCoordination: " + yCoordination);
                             
-                           if (double.IsNaN(xCoordination) || double.IsNaN(yCoordination))
+                                if (double.IsNaN(xCoordination) || double.IsNaN(yCoordination))
                            {
-                                    MessageBox.Show("要素类" + fcname + "OID为" + feature.OID + "的要素坐标转换失败，请检查是否源数据是否均为地理坐标系！", "错误", MessageBoxButtons.OK,
+                                        //MessageBox.Show("对于要素类" + fcname + "，OID为" + feature.OID + "转换出的投影坐标超过了要素类的范围！", "错误", MessageBoxButtons.OK,
+                           //MessageBoxIcon.Error);
+                           //return;
+                           }
+                           else if (envelope.XMin > xCoordination || xCoordination > envelope.XMax ||
+                           envelope.YMin > yCoordination || yCoordination > envelope.YMax)
+                           {
+                           MessageBox.Show("对于要素类" + fcname + "，OID为" + feature.OID + "转换出的投影坐标超过了要素类的范围！", "错误", MessageBoxButtons.OK,
                            MessageBoxIcon.Error);
                            return;
                            }
