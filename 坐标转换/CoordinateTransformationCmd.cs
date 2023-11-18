@@ -93,7 +93,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
             return an * l / ln;
         }
 
-        // L：经度（坐标）；B：纬度（坐标）；mapScale：比例尺（真实值）
+        // L：经度（坐标）；B：纬度（坐标）；mapScale：比例尺（真实值）；midlL：中央经线（坐标）
         void multiConicProjection(ref double x, ref double y, double L, double B, double midlL, double mapScale)
         {
             mapScale = this.mapScale / 10000; //比例尺（以万为单位）
@@ -171,7 +171,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
             double latitude = 0;
             double xCoordination = 0;
             double yCoordination = 0;
-            multiConicProjection(ref xCoordination, ref yCoordination, longitude, latitude, 150, mapScale);
+            multiConicProjection(ref xCoordination, ref yCoordination, longitude, latitude, midlL, mapScale);
             MessageBox.Show("longitude: " + longitude + " latitude: " + latitude +
                               " xCoordination: " + xCoordination + " yCoordination: " + yCoordination);
              */
@@ -235,6 +235,9 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
             // 获取数据库中要素类的数量
             int fcTotalNum = fcName2FC.Count;
             int fcNum = 0;
+
+            double midlL = 0;
+
             foreach (var kv in fcName2FC)
             {
                 fcNum++;
@@ -263,6 +266,16 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                 createFeatureclass.out_name = fcname;
                 createFeatureclass.out_path = fullPath;
                 createFeatureclass.geometry_type = GetGeometryType(geometryType);
+
+                string geoType = GetGeometryType(geometryType);
+
+                if (string.IsNullOrEmpty(geoType))
+                {
+                    MessageBox.Show("要素类" + fcname + "的几何类型不受支持，无法创建", "Error", MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                    return;
+                }
+
                 Helper.ExecuteGPTool(geoprocessor, createFeatureclass, null);
 
                 wo.SetText("正在拷贝投影数据库的第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname);
@@ -277,6 +290,8 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
             #endregion
 
             #region 在投影数据库中进行投影
+
+            midlL = (mapEnvelope.XMax + mapEnvelope.XMin) / 2;
 
             ws = DCDHelper.createTempWorkspace(fullPath);
             fws = ws as IFeatureWorkspace;
@@ -293,13 +308,13 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
 
                 esriGeometryType geometryType = fc.ShapeType;
 
-                FeatureClassTransfer(kv, fws, geometryType, fcNum, fcTotalNum, wo);
+                FeatureClassTransfer(kv, fws, geometryType, fcNum, fcTotalNum, midlL, wo);
             }
 
             #endregion
         }
 
-        public void FeatureClassTransfer(KeyValuePair<string, IFeatureClass> fcName2FC, IFeatureWorkspace fws, esriGeometryType geometryType, int fcNum, int fcTotalNum, WaitOperation wo)
+        public void FeatureClassTransfer(KeyValuePair<string, IFeatureClass> fcName2FC, IFeatureWorkspace fws, esriGeometryType geometryType, int fcNum, int fcTotalNum, double midlL, WaitOperation wo)
         {
             IFeatureClass fc = fcName2FC.Value;
             String fcname = fcName2FC.Key;
@@ -354,7 +369,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                             longitude = point.X;
                             latitude = point.Y;
 
-                            multiConicProjection(ref xCoordination, ref yCoordination, longitude, latitude, 150, mapScale);
+                            multiConicProjection(ref xCoordination, ref yCoordination, longitude, latitude, midlL, mapScale);
 
                             Console.WriteLine("longitude: " + longitude + " latitude: " + latitude +
                                               " xCoordination: " + xCoordination + " yCoordination: " + yCoordination);
@@ -389,7 +404,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                                 longitude = point.X;
                                 latitude = point.Y;
 
-                                multiConicProjection(ref xCoordination, ref yCoordination, longitude, latitude, 150, mapScale);
+                                multiConicProjection(ref xCoordination, ref yCoordination, longitude, latitude, midlL, mapScale);
 
                                 Console.WriteLine("longitude: " + longitude + " latitude: " + latitude +
                                                   " xCoordination: " + xCoordination + " yCoordination: " + yCoordination);
@@ -437,7 +452,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                                     longitude = originalPoints[j].X;
                                     latitude = originalPoints[j].Y;
 
-                                    multiConicProjection(ref xCoordination, ref yCoordination, longitude, latitude, 150, mapScale);
+                                    multiConicProjection(ref xCoordination, ref yCoordination, longitude, latitude, midlL, mapScale);
 
                                     Console.WriteLine("longitude: " + longitude + " latitude: " + latitude +
                                                       " xCoordination: " + xCoordination + " yCoordination: " + yCoordination);
@@ -460,50 +475,9 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                             feature.Shape = (IGeometry)polygon;
                             feature.Store();
                             break;
-                        /* 不对面形变做出处理
-                           case esriGeometryType.esriGeometryPolygon:
-                           IPolygon polygon = (IPolygon)pGeo;
-                           
-                           IGeometryCollection ringCollection = (IGeometryCollection)polygon;
-                           for (int i = 0; i < ringCollection.GeometryCount; i++)
-                           {
-                           IRing ring = (IRing)ringCollection.get_Geometry(i);
-                           pointCollection = (IPointCollection)ring;
-                           
-                           for (int j = 0; j < pointCollection.PointCount; j++)
-                           {
-                           point = pointCollection.get_Point(j);
-                           
-                            // 设置点要素的坐标
-                           longitude = point.X;
-                           latitude = point.Y;
-                           
-                            multiConicProjection(ref xCoordination, ref yCoordination, longitude, latitude, 150, mapScale);
-                           
-                           Console.WriteLine("longitude: " + longitude + " latitude: " + latitude +
-                           " xCoordination: " + xCoordination + " yCoordination: " + yCoordination);
-                            
-                                if (double.IsNaN(xCoordination) || double.IsNaN(yCoordination))
-                           {
-                                        //MessageBox.Show("对于要素类" + fcname + "，OID为" + feature.OID + "转换出的投影坐标超过了要素类的范围！", "错误", MessageBoxButtons.OK,
-                           //MessageBoxIcon.Error);
-                           //return;
-                           }
-                         
-                                point.PutCoords(yCoordination, xCoordination);
-                                                      
-                           // 将移动后的点重新设置到环中
-                           pointCollection.UpdatePoint(j, point);
-                           }
-                           }
-                           
-                           // 更新要素的几何对象
-                           feature.Shape = (IGeometry)polygon;
-                           feature.Store();
-                           break;
-                         */
                         default:
-                            MessageBox.Show("出现未知几何类型要素！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show("对于要素类" + fcname + "，OID为" + feature.OID + "的要素，其几何类型不受支持！", "错误", MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
                             return;
                     }
                 }
