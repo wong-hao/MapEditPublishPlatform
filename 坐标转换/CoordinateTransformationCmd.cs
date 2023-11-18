@@ -32,9 +32,11 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
             }
         }
 
-        static string apppath = DCDHelper.GetAppDataPath();
-        static string newgdb = "投影数据库.gdb";
-        static string fullPath = apppath + "\\" + newgdb;
+        static string appAath = DCDHelper.GetAppDataPath();
+        static string projectedGDB = "投影数据库.gdb";
+        static string fullPath = appAath + "\\" + projectedGDB;
+
+        private static Envelope mapEnvelope = new EnvelopeClass();
 
         private double mapScale = 0.0;
         private double R = 6371116;
@@ -205,7 +207,10 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
 
             IFeatureWorkspace fws = ws as IFeatureWorkspace;
 
-            wo.SetText("正在创建新投影数据库:" + newgdb);
+            mapEnvelope.XMin = 0;
+            mapEnvelope.XMax = 0;
+
+            wo.SetText("正在创建新投影数据库:" + projectedGDB);
 
             // 创建GP工具对象
             Geoprocessor geoprocessor = new Geoprocessor();
@@ -213,8 +218,8 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
 
             // 使用createFileGdb工具
             CreateFileGDB createFileGdb = new CreateFileGDB();
-            createFileGdb.out_name = newgdb;
-            createFileGdb.out_folder_path = apppath;
+            createFileGdb.out_name = projectedGDB;
+            createFileGdb.out_folder_path = appAath;
             Helper.ExecuteGPTool(geoprocessor, createFileGdb, null);
 
             // 使用CreateFeatureclass工具
@@ -238,6 +243,19 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                 String fcname = kv.Key;
 
                 wo.SetText("正在创建投影数据库的第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname);
+
+                // 获取要素类的范围
+                IEnvelope fcEnvelope = ((IGeoDataset)fc).Extent;
+
+                if (fcEnvelope.XMin < mapEnvelope.XMin)
+                {
+                    mapEnvelope.XMin = fcEnvelope.XMin;
+                }
+
+                if (fcEnvelope.XMax > mapEnvelope.XMax)
+                {
+                    mapEnvelope.XMax = fcEnvelope.XMax;
+                }
 
                 esriGeometryType geometryType = fc.ShapeType;
 
@@ -273,18 +291,15 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                 IFeatureClass fc = kv.Value;
                 String fcname = kv.Key;
 
-                // 获取要素类的范围
-                IEnvelope envelope = ((IGeoDataset)fc).Extent;
-                ISpatialReference ISR = (fc as IGeoDataset).SpatialReference;
                 esriGeometryType geometryType = fc.ShapeType;
 
-                FeatureClassTransfer(kv, fws, geometryType, ISR, fcNum, fcTotalNum, envelope, wo);
+                FeatureClassTransfer(kv, fws, geometryType, fcNum, fcTotalNum, wo);
             }
 
             #endregion
         }
 
-        public void FeatureClassTransfer(KeyValuePair<string, IFeatureClass> fcName2FC, IFeatureWorkspace fws, esriGeometryType geometryType, ISpatialReference ISR, int fcNum, int fcTotalNum, IEnvelope envelope, WaitOperation wo)
+        public void FeatureClassTransfer(KeyValuePair<string, IFeatureClass> fcName2FC, IFeatureWorkspace fws, esriGeometryType geometryType, int fcNum, int fcTotalNum, WaitOperation wo)
         {
             IFeatureClass fc = fcName2FC.Value;
             String fcname = fcName2FC.Key;
@@ -292,8 +307,6 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
             // 获取要素类中要素的数量
             int featureCount = fc.FeatureCount(null); // 如果传入 null，则计算所有的要素数量
             IFeatureClassManage featureClassManage = (IFeatureClassManage)fc;
-
-
 
             IFeature feature;
             IGeometry pGeo;
@@ -352,13 +365,6 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                                     MessageBoxIcon.Error);
                                 return;
                             }
-                            else if (envelope.XMin > xCoordination || xCoordination > envelope.XMax ||
-                                     envelope.YMin > yCoordination || yCoordination > envelope.YMax)
-                            {
-                                //MessageBox.Show("对于要素类" + fcname + "，OID为" + feature.OID + "转换出的投影坐标超过了要素类的范围！", "错误", MessageBoxButtons.OK,
-                                //MessageBoxIcon.Error);
-                                //return;
-                            }
 
                             point.PutCoords(yCoordination, xCoordination);
 
@@ -393,13 +399,6 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                                     MessageBox.Show("对于要素类" + fcname + "，OID为" + feature.OID + "的要素坐标转换得到空值，请检查是否源数据是否均为地理坐标系或中央经线及比例尺设置是否正确！", "错误", MessageBoxButtons.OK,
                                         MessageBoxIcon.Error);
                                     return;
-                                }
-                                else if (envelope.XMin > xCoordination || xCoordination > envelope.XMax ||
-                                         envelope.YMin > yCoordination || yCoordination > envelope.YMax)
-                                {
-                                    //MessageBox.Show("对于要素类" + fcname + "，OID为" + feature.OID + "转换出的投影坐标超过了要素类的范围！", "错误", MessageBoxButtons.OK,
-                                    //MessageBoxIcon.Error);
-                                    //return;
                                 }
 
                                 point.PutCoords(yCoordination, xCoordination);
@@ -449,13 +448,6 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                                             MessageBoxIcon.Error);
                                         return;
                                     }
-                                    else if (envelope.XMin > xCoordination || xCoordination > envelope.XMax ||
-                                             envelope.YMin > yCoordination || yCoordination > envelope.YMax)
-                                    {
-                                        //MessageBox.Show("对于要素类" + fcname + "，OID为" + feature.OID + "转换出的投影坐标超过了要素类的范围！", "错误", MessageBoxButtons.OK,
-                                            //MessageBoxIcon.Error);
-                                        //return;
-                                    }
 
                                     point.PutCoords(yCoordination, xCoordination);
 
@@ -496,13 +488,6 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                                         //MessageBox.Show("对于要素类" + fcname + "，OID为" + feature.OID + "转换出的投影坐标超过了要素类的范围！", "错误", MessageBoxButtons.OK,
                            //MessageBoxIcon.Error);
                            //return;
-                           }
-                           else if (envelope.XMin > xCoordination || xCoordination > envelope.XMax ||
-                           envelope.YMin > yCoordination || yCoordination > envelope.YMax)
-                           {
-                           MessageBox.Show("对于要素类" + fcname + "，OID为" + feature.OID + "转换出的投影坐标超过了要素类的范围！", "错误", MessageBoxButtons.OK,
-                           MessageBoxIcon.Error);
-                           return;
                            }
                          
                                 point.PutCoords(yCoordination, xCoordination);
