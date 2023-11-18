@@ -327,7 +327,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
             IGeometry pGeo;
             IPoint point;
             IPointCollection pointCollection;
-            int pointCount;
+            double pointCount;
 
             int featurecount = 0;
 
@@ -353,9 +353,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
 
                     featurecount++;
 
-                    wo.SetText("正在处理第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname + "的第" + featurecount + "/" + featureCount + "个要素");
-                    Console.WriteLine("正在处理第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname + "的第" + featurecount + "/" + featureCount + "个要素");
-                    //pGeo.SpatialReference = unknownSpatialReference;
+                    Console.WriteLine("正在投影第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname + "的第" + featurecount + "/" + featureCount + "个要素");
 
                     // 根据几何类型输出相应信息
                     switch (geometryType)
@@ -370,6 +368,8 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                             latitude = point.Y;
 
                             multiConicProjection(ref xCoordination, ref yCoordination, longitude, latitude, midlL, mapScale);
+
+                            wo.SetText("正在投影第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname + "的第" + featurecount + "/" + featureCount + "个要素" + "(100%)");
 
                             Console.WriteLine("longitude: " + longitude + " latitude: " + latitude +
                                               " xCoordination: " + xCoordination + " yCoordination: " + yCoordination);
@@ -394,7 +394,6 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                             pointCollection = pGeo as IPointCollection;
                             pointCount = pointCollection.PointCount;
 
-
                             // 对于每个点，获取其当前的横纵坐标，然后进行移动
                             for (int i = 0; i < pointCount; i++)
                             {
@@ -405,6 +404,8 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                                 latitude = point.Y;
 
                                 multiConicProjection(ref xCoordination, ref yCoordination, longitude, latitude, midlL, mapScale);
+
+                                wo.SetText("正在投影第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname + "的第" + featurecount + "/" + featureCount + "个要素" + "(" + ((i + 1) / pointCount).ToString("P") + ")");
 
                                 Console.WriteLine("longitude: " + longitude + " latitude: " + latitude +
                                                   " xCoordination: " + xCoordination + " yCoordination: " + yCoordination);
@@ -429,10 +430,23 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                         case esriGeometryType.esriGeometryPolygon:
                             IPolygon polygon = (IPolygon)pGeo;
 
+                            pointCount = 0;
+
+                            IRing ring = new RingClass();
+
                             IGeometryCollection ringCollection = (IGeometryCollection)polygon;
                             for (int i = 0; i < ringCollection.GeometryCount; i++)
                             {
-                                IRing ring = (IRing)ringCollection.get_Geometry(i);
+                                ring = (IRing)ringCollection.get_Geometry(i);
+                                pointCollection = (IPointCollection)ring;
+    
+                                // 获取每个环（Ring）中的点数量并累加
+                                pointCount += pointCollection.PointCount;
+                            }
+
+                            for (int i = 0; i < ringCollection.GeometryCount; i++)
+                            {
+                                ring = (IRing)ringCollection.get_Geometry(i);
                                 pointCollection = (IPointCollection)ring;
 
                                 IPoint[] originalPoints = new IPoint[pointCollection.PointCount];
@@ -453,6 +467,8 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                                     latitude = originalPoints[j].Y;
 
                                     multiConicProjection(ref xCoordination, ref yCoordination, longitude, latitude, midlL, mapScale);
+
+                                    wo.SetText("正在投影第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname + "的第" + featurecount + "/" + featureCount + "个要素" + "(" + ((i + 1) / pointCount).ToString("P") + ")");
 
                                     Console.WriteLine("longitude: " + longitude + " latitude: " + latitude +
                                                       " xCoordination: " + xCoordination + " yCoordination: " + yCoordination);
