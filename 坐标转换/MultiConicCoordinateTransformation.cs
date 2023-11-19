@@ -68,7 +68,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
             return Math.Asin(sinan);
         }
 
-        // 需要保证L - midlL的范围为[-180, 180]
+        // 由于公式限制，若不对原始地理坐标系数据进行额外处理，则需要保证L - midlL的范围为[-180, 180]
         double getl(double L, double midlL)
         {
             return (L - midlL) * Math.PI / 180;
