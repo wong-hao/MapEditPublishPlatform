@@ -68,6 +68,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
             return Math.Asin(sinan);
         }
 
+        // 需要保证L - midlL的范围为[-180, 180]
         double getl(double L, double midlL)
         {
             return (L - midlL) * Math.PI / 180;
