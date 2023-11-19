@@ -97,7 +97,6 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                 esriGeometryType geometryType = fc.ShapeType;
 
                 FeatureClassProject(kv, gdbOperation.fws, geometryType, fcNum, fcTotalNum, midlL, wo);
-
             }
 
             #endregion
@@ -116,7 +115,8 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
             IGeometry pGeo;
             IPoint point;
             IPointCollection pointCollection;
-            double pointCount;
+            double pointToTalCount; // 要素类的总点个数
+            double pointCount; // 目前已经遍历到的点个数
 
             int featurecount = 0;
 
@@ -181,10 +181,11 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                         case esriGeometryType.esriGeometryPolyline:
                             // 获取要素的所有点
                             pointCollection = pGeo as IPointCollection;
-                            pointCount = pointCollection.PointCount;
+                            pointToTalCount = pointCollection.PointCount;
+                            pointCount = 0;
 
                             // 对于每个点，获取其当前的横纵坐标，然后进行移动
-                            for (int i = 0; i < pointCount; i++)
+                            for (int i = 0; i < pointToTalCount; i++)
                             {
                                 point = pointCollection.get_Point(i);
 
@@ -193,8 +194,10 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                                 latitude = point.Y;
 
                                 multiConicObj.multiConicProjection(ref xCoordination, ref yCoordination, longitude, latitude, midlL, mapScale);
+                                
+                                pointCount++;
 
-                                wo.SetText("正在投影第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname + "的第" + featurecount + "/" + featureCount + "个要素" + "(" + ((i + 1) / pointCount).ToString("P") + ")");
+                                wo.SetText("正在投影第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname + "的第" + featurecount + "/" + featureCount + "个要素" + "(" + (pointCount / pointToTalCount).ToString("P") + ")");
 
                                 Console.WriteLine("longitude: " + longitude + " latitude: " + latitude +
                                                   " xCoordination: " + xCoordination + " yCoordination: " + yCoordination);
@@ -219,6 +222,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                         case esriGeometryType.esriGeometryPolygon:
                             IPolygon polygon = (IPolygon)pGeo;
 
+                            pointToTalCount = 0;
                             pointCount = 0;
 
                             IRing ring = new RingClass();
@@ -230,11 +234,12 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                                 pointCollection = (IPointCollection)ring;
     
                                 // 获取每个环（Ring）中的点数量并累加
-                                pointCount += pointCollection.PointCount;
+                                pointToTalCount += pointCollection.PointCount;
                             }
 
                             for (int i = 0; i < ringCollection.GeometryCount; i++)
                             {
+
                                 ring = (IRing)ringCollection.get_Geometry(i);
                                 pointCollection = (IPointCollection)ring;
 
@@ -256,8 +261,10 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                                     latitude = originalPoints[j].Y;
 
                                     multiConicObj.multiConicProjection(ref xCoordination, ref yCoordination, longitude, latitude, midlL, mapScale);
+                                    
+                                    pointCount++;
 
-                                    wo.SetText("正在投影第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname + "的第" + featurecount + "/" + featureCount + "个要素" + "(" + ((i + 1) / pointCount).ToString("P") + ")");
+                                    wo.SetText("正在投影第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname + "的第" + featurecount + "/" + featureCount + "个要素" + "(" + (pointCount / pointToTalCount).ToString("P") + ")");
 
                                     Console.WriteLine("longitude: " + longitude + " latitude: " + latitude +
                                                       " xCoordination: " + xCoordination + " yCoordination: " + yCoordination);
