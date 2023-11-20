@@ -49,16 +49,6 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                 return;
             }
 
-            /*
-            double longitude = 0;
-            double latitude = 0;
-            double xCoordination = 0;
-            double yCoordination = 0;
-            multiConicProjection(ref xCoordination, ref yCoordination, longitude, latitude, midlL, mapScale);
-            MessageBox.Show("longitude: " + longitude + " latitude: " + latitude +
-                              " xCoordination: " + xCoordination + " yCoordination: " + yCoordination);
-             */
-
             using (var wo = m_Application.SetBusy())
             {
                 GDBProject(m_Application.Workspace.EsriWorkspace, wo);
@@ -114,7 +104,6 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
 
             // 获取要素类中要素的数量
             int featureCount = fc.FeatureCount(null); // 如果传入 null，则计算所有的要素数量
-            IFeatureClassManage featureClassManage = (IFeatureClassManage)fc;
 
             IFeature feature;
             IGeometry pGeo;
