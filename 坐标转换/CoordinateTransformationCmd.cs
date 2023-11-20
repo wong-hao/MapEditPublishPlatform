@@ -70,7 +70,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
 
             #region 在投影数据库中进行投影
 
-            double midlL = (mapEnvelope.XMax + mapEnvelope.XMin) / 2;
+            double realMidlL = (mapEnvelope.XMax + mapEnvelope.XMin) / 2;
 
             ws = DCDHelper.createTempWorkspace(gdbOperation.fullPath);
 
@@ -90,17 +90,220 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
 
                 esriGeometryType geometryType = fc.ShapeType;
 
-                //FeatureClassProject(gdbOperation.GDBMultipartToSinglepart(geoprocessor, ws, fcname, fcTotalNum, fcNum, wo), gdbOperation.fws, geometryType, fcNum, fcTotalNum, midlL, wo);
-                FeatureClassProject(kv, gdbOperation.fws, geometryType, fcNum, fcTotalNum, midlL, wo);
+                //FeatureClassProject(gdbOperation.GDBMultipartToSinglepart(geoprocessor, ws, fcname, fcTotalNum, fcNum, wo), gdbOperation.fws, geometryType, fcNum, fcTotalNum, realMidlL, wo);
+                FeatureClassProject(kv, gdbOperation.fws, geometryType, fcNum, fcTotalNum, realMidlL, wo);
             }
 
             #endregion
+        }
+
+        public void SplitFeatures(IFeatureClass fc, string fcname, WaitOperation wo)
+        {
+            wo.SetText("正在切割" + "要素类" + fcname + "中经度范围为" + "-180" + "到" + "-30" + "的要素");
+
+            // 创建一个 Polyline
+            IPoint startPoint = new PointClass();
+            IPoint endPoint = new PointClass();
+            startPoint.PutCoords(-30, -1000); // 你的竖线起点坐标
+            endPoint.PutCoords(-30, 1000); // 你的竖线终点坐标
+
+            // 构建竖线
+            IPolyline verticalLine = new PolylineClass();
+            verticalLine.FromPoint = startPoint;
+            verticalLine.ToPoint = endPoint;
+
+            // 调用分割要素的方法
+            if (fc.ShapeType == esriGeometryType.esriGeometryPolygon)
+            {
+                splitFeaturePolygon(verticalLine, fc);
+            }
+            else if (fc.ShapeType == esriGeometryType.esriGeometryPolyline)
+            {
+                splitFeaturePolyline(verticalLine, fc);
+            }
+            else
+            {
+                Console.WriteLine("要素类" + fcname + "为不受支持的几何类型，不进行切割。", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void splitFeaturePolygon(IPolyline splitLine, IFeatureClass fc)
+        {
+            try
+            {
+                IGeometry splitGeo = splitLine as IGeometry;
+
+                if (splitGeo == null)
+                {
+                    MessageBox.Show("切割要素为空！");
+                    return;
+                }
+                else
+                {
+                    ITopologicalOperator splitGeoTopo = splitGeo as ITopologicalOperator;
+                    splitGeoTopo.Simplify();
+                }
+
+                IFeatureCursor featureCursor = null;
+                featureCursor = fc.Search(null, false);
+
+                IRelationalOperator relOp = splitGeo as IRelationalOperator;
+
+                IFeature fe = null;
+                while ((fe = (IFeature)featureCursor.NextFeature()) != null)
+                {
+                    if (relOp.Disjoint(fe.Shape))
+                    {
+                        continue; // 如果不相交，则跳过这个要素
+                    }
+
+                    IFeatureEdit feEdit = (IFeatureEdit)fe;
+                    var feSet = feEdit.Split(splitGeo);
+                    if (feSet != null)
+                    {
+                        feSet.Reset();
+                    }
+                }
+                Marshal.ReleaseComObject(featureCursor);
+            }
+            catch (Exception ex)
+            {
+                // 错误处理
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.Source);
+                Console.WriteLine(ex.StackTrace);
+            }
+        }
+
+        private void splitFeaturePolyline(IPolyline splitLine, IFeatureClass fc)
+        {
+            try
+            {
+                List<int> originalPolylineOID = new List<int>();
+
+                // 遍历要素并分割
+                IFeatureCursor featureCursor = fc.Search(null, true);
+                double featureTotalCount = fc.FeatureCount(null);
+                double featureCount = 0;
+                IFeature feature = featureCursor.NextFeature();
+                while (feature != null)
+                {
+                    featureCount++;
+
+                    IGeometry geometry = feature.Shape;
+
+                    IProximityOperator proximityOperator = splitLine as IProximityOperator;
+                    if (proximityOperator != null && proximityOperator.ReturnDistance(geometry) == 0)
+                    {
+                        ITopologicalOperator topoOperator = geometry as ITopologicalOperator;
+                        if (topoOperator != null)
+                        {
+                            IGeometry leGeometry = null;
+                            IGeometry riGeometry = null;
+
+                            topoOperator.Cut(splitLine, out leGeometry, out riGeometry);
+
+                            if (leGeometry != null && riGeometry != null)
+                            {
+                                originalPolylineOID.Add(feature.OID);
+
+                                IFeature newFeaturele = fc.CreateFeature();
+                                newFeaturele.Shape = leGeometry;
+                                newFeaturele.Store();
+
+                                IFeature newFeatureri = fc.CreateFeature();
+                                newFeatureri.Shape = riGeometry;
+                                newFeatureri.Store();
+                            }
+                        }
+                    }
+
+                    feature = featureCursor.NextFeature();
+
+                    // 避免分割生成的要素继续被分割
+                    if (featureCount >= featureTotalCount)
+                    {
+                        break;
+                    }
+                }
+                System.Runtime.InteropServices.Marshal.ReleaseComObject(featureCursor);
+
+                // 循环删除指定 OID 的要素
+                foreach (int oid in originalPolylineOID)
+                {
+                    // 根据 OID 获取要素
+                    feature = fc.GetFeature(oid);
+
+                    if (feature != null)
+                    {
+                        // 删除要素
+                        feature.Delete();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // 错误处理
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.Source);
+                Console.WriteLine(ex.StackTrace);
+            }
+        }
+
+        private void MoveFeatures(IFeatureClass fc, string fcname, WaitOperation wo)
+        {
+            try
+            {
+                wo.SetText("正在移动" + "要素类" + fcname + "中经度范围为" + "-180" + "到" + "-30" + "的要素至经度范围180" + "到" + "330");
+
+                // 构建查询以选择满足条件的要素
+                ISpatialFilter spatialFilter = new SpatialFilter();
+                spatialFilter.GeometryField = fc.ShapeFieldName;
+                spatialFilter.SpatialRel = esriSpatialRelEnum.esriSpatialRelIntersects;
+
+                // 创建查询范围的 Envelope
+                IEnvelope queryEnvelope = new EnvelopeClass();
+                queryEnvelope.PutCoords(-180, -1000, -30, 1000);
+                spatialFilter.Geometry = queryEnvelope;
+
+                // 查询要素
+                IFeatureCursor featureCursor = fc.Search(spatialFilter, true);
+                IFeature feature = featureCursor.NextFeature();
+
+                // 对于每个选定的要素，修改其几何
+                while (feature != null)
+                {
+                    IGeometry geometry = feature.ShapeCopy;
+                    if (geometry != null)
+                    {
+                        ITransform2D transform = geometry as ITransform2D;
+                        if (transform != null)
+                        {
+                            transform.Move(360, 0); // 将几何对象向右平移 360
+                            feature.Shape = geometry;
+                            feature.Store();
+                        }
+                    }
+                    feature = featureCursor.NextFeature();
+                }
+
+                // 释放资源
+                System.Runtime.InteropServices.Marshal.ReleaseComObject(featureCursor);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         public void FeatureClassProject(KeyValuePair<string, IFeatureClass> fcName2FC, IFeatureWorkspace fws, esriGeometryType geometryType, int fcNum, int fcTotalNum, double midlL, WaitOperation wo)
         {
             IFeatureClass fc = fcName2FC.Value;
             String fcname = fcName2FC.Key;
+
+            //SplitFeatures(fc, fcname, wo);
+            //MoveFeatures(fc, fcname, wo);
 
             // 获取要素类中要素的数量
             int featureCount = fc.FeatureCount(null); // 如果传入 null，则计算所有的要素数量
