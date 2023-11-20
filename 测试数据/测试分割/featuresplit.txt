@@ -1,0 +1,66 @@
+            try
+            {
+                // 创建一个 Polyline
+                IPoint startPoint = new PointClass();
+                IPoint endPoint = new PointClass();
+                startPoint.PutCoords(-30, -100); // 你的竖线起点坐标
+                endPoint.PutCoords(-30, 100); // 你的竖线终点坐标
+
+                // 构建竖线
+                IPolyline verticalLine = new PolylineClass();
+                verticalLine.FromPoint = startPoint;
+                verticalLine.ToPoint = endPoint;
+
+                // 假设已经获取到要素图层 featureLayer
+
+                IFeatureCursor featureCursor2 = fc.Search(null, true);
+                IFeature feature2 = featureCursor2.NextFeature();
+
+                while (feature2 != null)
+                {
+                    IGeometry geometry = feature2.Shape;
+
+                    IRelationalOperator relationalOperator = geometry as IRelationalOperator;
+
+                    if (relationalOperator != null && relationalOperator.Crosses(verticalLine))
+                    {
+                        IFeatureEdit featureEdit = feature2 as IFeatureEdit;
+                        if (featureEdit != null)
+                        {
+                            // 使用Split方法分割要素
+                            ISet splitSet = featureEdit.Split(verticalLine);
+
+                            // 检查分割结果是否为空
+                            if (splitSet != null)
+                            {
+                                IEnumGeometry enumGeometry = splitSet as IEnumGeometry;
+                                if (enumGeometry != null)
+                                {
+                                    enumGeometry.Reset();
+                                    IGeometry splitGeometry = enumGeometry.Next();
+
+                                    while (splitGeometry != null)
+                                    {
+                                        // 创建新要素并添加到图层
+                                        IFeature newFeature = fc.CreateFeature();
+                                        newFeature.Shape = splitGeometry;
+                                        newFeature.Store();
+
+                                        splitGeometry = enumGeometry.Next();
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    feature2 = featureCursor2.NextFeature();
+                }
+
+                System.Runtime.InteropServices.Marshal.ReleaseComObject(featureCursor2);
+
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.ToString());
+                throw;
+            }

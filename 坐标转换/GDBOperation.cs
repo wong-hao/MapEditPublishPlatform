@@ -47,7 +47,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
             }
         }
 
-        public void GGBInit(ref Envelope mapEnvelope, IWorkspace ws, WaitOperation wo)
+        public void GDBInit(ref Envelope mapEnvelope, Geoprocessor geoprocessor, IWorkspace ws, WaitOperation wo)
         {
             fws = ws as IFeatureWorkspace;
 
@@ -55,10 +55,6 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
             mapEnvelope.XMax = 0;
 
             wo.SetText("正在创建新投影数据库:" + projectedGDB);
-
-            // 创建GP工具对象
-            Geoprocessor geoprocessor = new Geoprocessor();
-            geoprocessor.OverwriteOutput = true;
 
             // 使用createFileGdb工具
             CreateFileGDB createFileGdb = new CreateFileGDB();
@@ -128,6 +124,26 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                 append.target = fullPath + "\\" + fcname;
                 Helper.ExecuteGPTool(geoprocessor, append, null);
             }
+        }
+
+        public KeyValuePair<string, IFeatureClass> GDBMultipartToSinglepart(Geoprocessor geoprocessor, IWorkspace ws, String fcname, int fcTotalNum, int fcNum, WaitOperation wo)
+        {
+            fws = ws as IFeatureWorkspace;
+
+            wo.SetText("正在多部件处理投影数据库的第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname);
+
+            MultipartToSinglepart multipartToSinglepart = new MultipartToSinglepart();
+            multipartToSinglepart.in_features = fcname;
+            String fcname_MultipartToSinglep = fcname + "_MultipartToSinglep";
+            multipartToSinglepart.out_feature_class = fullPath + "\\" + fcname_MultipartToSinglep;
+
+            Helper.ExecuteGPTool(geoprocessor, multipartToSinglepart, null);
+
+            IFeatureClass fc_MultipartToSinglep = fws.OpenFeatureClass(fcname_MultipartToSinglep);
+            var kv__MultipartToSinglep =
+                new KeyValuePair<string, IFeatureClass>(fcname_MultipartToSinglep, fc_MultipartToSinglep);
+
+            return kv__MultipartToSinglep;
         }
     }
 }

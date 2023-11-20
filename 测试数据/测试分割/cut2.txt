@@ -1,0 +1,73 @@
+               try
+                {
+                    IFeatureCursor cursor = fc.Search(null, false);
+                    IFeature feature;
+
+                    // 创建表示 x = -30 线的几何体
+                    IPolyline polyline = new PolylineClass();
+                    IPointCollection pointCollection = polyline as IPointCollection;
+
+                    // 添加起点
+                    IPoint fromPoint = new PointClass();
+                    fromPoint.X = -30;
+                    fromPoint.Y = -90; // 修改 Y 值为需要的值
+                    pointCollection.AddPoint(fromPoint);
+
+                    // 添加终点
+                    IPoint toPoint = new PointClass();
+                    toPoint.X = -30;
+                    toPoint.Y = 90; // 修改 Y 值为需要的值
+                    pointCollection.AddPoint(toPoint);
+
+                    while ((feature = cursor.NextFeature()) != null)
+                    {
+                        // 检查面要素是否与 x = -30 线相交
+                        IGeometry geometry = feature.ShapeCopy;
+
+                        ITopologicalOperator2 topologicalOperator = geometry as ITopologicalOperator2;
+                        //topologicalOperator.Simplify();
+
+                        if (topologicalOperator != null)
+                        {
+                            // 检查几何体是否交叉
+                            IGeometry intersectGeometry = topologicalOperator.Intersect(polyline, esriGeometryDimension.esriGeometry1Dimension);
+                            if (intersectGeometry != null && !intersectGeometry.IsEmpty)
+                            {
+                                MessageBox.Show("要素" + feature.OID + " 发生了交叉");
+
+                                IGeometry leftGeom = null;
+                                IGeometry rightGeom = null;
+
+                                // 进行几何分割
+                                topologicalOperator.Cut(polyline, out leftGeom, out rightGeom);
+
+                                // leftGeom 和 rightGeom 分别是分割后的左右几何体，可以进一步处理或更新数据
+
+                                // 在分割操作后，将原始要素的几何形状替换
+                                if (leftGeom != null && rightGeom != null)
+                                {
+                                    // 替换要素的几何形状
+                                    MessageBox.Show("要素" + feature.OID + " 发生了替换");
+
+                                    IFeature featurelf = fc.CreateFeature();
+                                    featurelf.Shape = leftGeom;
+
+                                    IFeature featureri = fc.CreateFeature();
+                                    featureri.Shape = rightGeom;
+                                    // 更新要素（如果需要的话）
+                                    // 使用 feature.Store() 或者其它适当的方法将更改保存到数据源中
+                                    // fc.UpdateFeature(feature); 或者 feature.Store(); 或者其它适当的方法
+                                    featurelf.Store();
+                                    featureri.Store();
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("ex.Message: " + ex.Message);
+                    MessageBox.Show("ex.Source: " + ex.Source);
+                    MessageBox.Show("ex.StackTrace: " + ex.StackTrace);
+
+                }

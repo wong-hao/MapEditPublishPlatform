@@ -70,7 +70,11 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
         {
             #region 创建并初始化投影数据库
 
-            gdbOperation.GGBInit(ref mapEnvelope, ws, wo);
+            // 创建GP工具对象
+            Geoprocessor geoprocessor = new Geoprocessor();
+            geoprocessor.OverwriteOutput = true;
+
+            gdbOperation.GDBInit(ref mapEnvelope, geoprocessor, ws, wo);
 
             #endregion
 
@@ -96,6 +100,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
 
                 esriGeometryType geometryType = fc.ShapeType;
 
+                //FeatureClassProject(gdbOperation.GDBMultipartToSinglepart(geoprocessor, ws, fcname, fcTotalNum, fcNum, wo), gdbOperation.fws, geometryType, fcNum, fcTotalNum, midlL, wo);
                 FeatureClassProject(kv, gdbOperation.fws, geometryType, fcNum, fcTotalNum, midlL, wo);
             }
 
