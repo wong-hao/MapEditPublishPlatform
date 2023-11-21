@@ -72,7 +72,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
 
             double realMidlL = (mapEnvelope.XMax + mapEnvelope.XMin) / 2;
 
-            double midlL = 0;
+            double midlL = 150;
 
             bool bound = true; // 是否需要根据实际中央经线与目标中央经线的差值进行原始数据裁剪,以完善公式限制
 
@@ -102,7 +102,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                 else
                 {
                     FeatureClassProject(
-                        gdbOperation.GDBMultipartToSinglepart(geoprocessor, ws, fcname, fc, fcTotalNum, fcNum, wo),
+                        gdbOperation.GDBMultipartToSinglepartUnknown(geoprocessor, ws, fcname, fc, fcTotalNum, fcNum, wo),
                         gdbOperation.fws, geometryType, fcNum, fcTotalNum, midlL, bound, wo);
                 }
             }
@@ -320,9 +320,11 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                 SplitFeatures(fc, fcname, wo);
                 MoveFeatures(fc, fcname, wo);
 
+                /*
                 gdbOperation.PerformDissolve(fc, fcname, wo);
                 fcname = gdbOperation.RemoveSuffix(fcname, gdbOperation.suffixToRemove);
                 fc = fws.OpenFeatureClass(fcname);
+                 */
             }
 
             // 获取要素类中要素的数量

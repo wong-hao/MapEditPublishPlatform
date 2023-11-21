@@ -128,7 +128,42 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
             }
         }
 
-        public KeyValuePair<string, IFeatureClass> GDBMultipartToSinglepart(Geoprocessor geoprocessor, IWorkspace ws, String fcname, IFeatureClass fc, int fcTotalNum, int fcNum, WaitOperation wo)
+        public void AddField(FeatureClass fc, string fcname, WaitOperation wo)
+        {
+            wo.SetText("正在为" + "要素类" + fcname + "的要素添加字段");
+
+            // 创建GP工具对象
+            Geoprocessor geoprocessor = new Geoprocessor();
+            geoprocessor.OverwriteOutput = true;
+
+            AddField addField = new AddField();
+            addField.in_table = fullPath + "\\" + fcname;
+            addField.field_name = "FeatureOID";
+            addField.field_type = "TEXT";
+            addField.field_is_nullable = "NULLABLE";
+            addField.field_is_required = "NON_REQUIRED";
+
+            Helper.ExecuteGPTool(geoprocessor, addField, null);
+        }
+
+        public void CalculateField(FeatureClass fc, string fcname, WaitOperation wo)
+        {
+            wo.SetText("正在为" + "要素类" + fcname + "的要素添加字段");
+
+            // 创建GP工具对象
+            Geoprocessor geoprocessor = new Geoprocessor();
+            geoprocessor.OverwriteOutput = true;
+
+            CalculateField calculateField = new CalculateField();
+            calculateField.in_table = fullPath + "\\" + fcname;
+            calculateField.field = "FeatureOID";
+            calculateField.expression = "[OBJECTID]";
+            calculateField.expression_type = "VB";
+
+            Helper.ExecuteGPTool(geoprocessor, calculateField, null);
+        }
+
+        public KeyValuePair<string, IFeatureClass> GDBMultipartToSinglepartUnknown(Geoprocessor geoprocessor, IWorkspace ws, String fcname, IFeatureClass fc, int fcTotalNum, int fcNum, WaitOperation wo)
         {
             fws = ws as IFeatureWorkspace;
 
@@ -142,12 +177,44 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
             Helper.ExecuteGPTool(geoprocessor, multipartToSinglepart, null);
 
             IFeatureClass fc_MultipartToSinglep = fws.OpenFeatureClass(fcname_MultipartToSinglep);
-            var kv_MultipartToSinglep =
-                new KeyValuePair<string, IFeatureClass>(fcname_MultipartToSinglep, fc_MultipartToSinglep);
 
             ((IDataset)fc).Delete(); // 删除原始要素类
 
-            return kv_MultipartToSinglep;
+            wo.SetText("正在将第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname + "的多部件结果设置为未知空间坐标系");
+
+            String fcname_MultipartToSinglep_Unknown = fcname_MultipartToSinglep + "_Unknown";
+
+            // 使用CreateFeatureclass工具
+            CreateFeatureclass createFeatureclass = new CreateFeatureclass();
+
+            // 设置为未知坐标系统
+            ISpatialReference unknownSpatialReference = new UnknownCoordinateSystem() as ISpatialReference;
+
+            // 使用Append工具
+            Append append = new Append();
+
+            esriGeometryType geometryType = fc.ShapeType;
+
+            createFeatureclass.spatial_reference = unknownSpatialReference;
+            createFeatureclass.out_name = fcname_MultipartToSinglep_Unknown;
+            createFeatureclass.out_path = fullPath;
+            createFeatureclass.geometry_type = GetGeometryType(geometryType);
+
+            Helper.ExecuteGPTool(geoprocessor, createFeatureclass, null);
+
+            append.inputs = fullPath + "\\" + fcname_MultipartToSinglep;
+            append.schema_type = "NO_TEST";
+            append.target = fullPath + "\\" + fcname_MultipartToSinglep_Unknown;
+            Helper.ExecuteGPTool(geoprocessor, append, null);
+
+            IFeatureClass fc_MultipartToSinglep_Unknown = fws.OpenFeatureClass(fcname_MultipartToSinglep_Unknown);
+
+            var kv_MultipartToSinglep_Unknown =
+                new KeyValuePair<string, IFeatureClass>(fcname_MultipartToSinglep_Unknown, fc_MultipartToSinglep_Unknown);
+
+            ((IDataset)fc_MultipartToSinglep).Delete(); // 删除不是未知坐标系的多部件要素类
+
+            return kv_MultipartToSinglep_Unknown;
         }
 
         public string RemoveSuffix(string input, string suffix)
@@ -222,7 +289,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
 
         public void PerformDissolve(IFeatureClass fc, string fcname, WaitOperation wo)
         {
-            wo.SetText("正在结合" + "要素类" + "的要素");
+            wo.SetText("正在结合" + "要素类" + fcname + "的要素");
 
             // 创建一个 Dissolve 工具实例
             Dissolve dissolveTool = new Dissolve();
