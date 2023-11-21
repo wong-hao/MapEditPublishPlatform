@@ -28,6 +28,8 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
         static string projectedGDB = "投影数据库.gdb";
         public string fullPath = appAath + "\\" + projectedGDB;
         public IFeatureWorkspace fws = null;
+
+        public string suffixToRemove = "_MultipartToSinglep";
         
         // 将 ArcObjects 的几何类型转换为字符串表示形式
         static string GetGeometryType(esriGeometryType shapeType)
@@ -126,7 +128,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
             }
         }
 
-        public KeyValuePair<string, IFeatureClass> GDBMultipartToSinglepart(Geoprocessor geoprocessor, IWorkspace ws, String fcname, int fcTotalNum, int fcNum, WaitOperation wo)
+        public KeyValuePair<string, IFeatureClass> GDBMultipartToSinglepart(Geoprocessor geoprocessor, IWorkspace ws, String fcname, IFeatureClass fc, int fcTotalNum, int fcNum, WaitOperation wo)
         {
             fws = ws as IFeatureWorkspace;
 
@@ -140,10 +142,108 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
             Helper.ExecuteGPTool(geoprocessor, multipartToSinglepart, null);
 
             IFeatureClass fc_MultipartToSinglep = fws.OpenFeatureClass(fcname_MultipartToSinglep);
-            var kv__MultipartToSinglep =
+            var kv_MultipartToSinglep =
                 new KeyValuePair<string, IFeatureClass>(fcname_MultipartToSinglep, fc_MultipartToSinglep);
 
-            return kv__MultipartToSinglep;
+            ((IDataset)fc).Delete(); // 删除原始要素类
+
+            return kv_MultipartToSinglep;
+        }
+
+        public string RemoveSuffix(string input, string suffix)
+        {
+            if (input.EndsWith(suffix))
+            {
+                return input.Substring(0, input.Length - suffix.Length);
+            }
+
+            return input;
+        }
+
+        public void PerformUnion(IFeatureClass fc, string fcname, WaitOperation wo)
+        {
+            wo.SetText("正在结合" + "要素类" + fcname + "的要素");
+
+            if (fc.ShapeType == esriGeometryType.esriGeometryPolygon)
+            {
+                // 创建GP工具对象
+                Geoprocessor geoprocessor = new Geoprocessor();
+                geoprocessor.OverwriteOutput = true;
+
+                // 创建一个 Union 工具实例
+                Union unionTool = new Union();
+
+                // 设置输入要素类
+                unionTool.in_features = fullPath + "\\" + fcname;
+
+                fcname = RemoveSuffix(fcname, suffixToRemove);
+
+                // 设置输出要素类
+                unionTool.out_feature_class = fullPath + "\\" + fcname; // 替换为输出要素类的路径
+
+                // 执行 Union 工具
+                Helper.ExecuteGPTool(geoprocessor, unionTool, null);
+            }
+            else if (fc.ShapeType == esriGeometryType.esriGeometryPolyline)
+            {
+                // 创建GP工具对象
+                Geoprocessor geoprocessor = new Geoprocessor();
+                geoprocessor.OverwriteOutput = true;
+
+                // 创建一个 FeatureToPolygon 工具实例
+                FeatureToPolygon featureToPolygonTool = new FeatureToPolygon();
+
+                // 设置输入线要素类
+                featureToPolygonTool.in_features = fullPath + "\\" + fcname;
+
+                // 设置输出面要素类
+                featureToPolygonTool.out_feature_class = fullPath + "\\" + fcname + "_Polygon"; // 临时存储转换后的面要素
+
+                // 执行 FeatureToPolygon 工具
+                Helper.ExecuteGPTool(geoprocessor, featureToPolygonTool, null);
+
+                // 创建一个 Union 工具实例
+                Union unionTool = new Union();
+
+                // 设置输入要素类为转换后的面要素类
+                unionTool.in_features = fullPath + "\\" + fcname + "_Polygon";
+
+                fcname = RemoveSuffix(fcname, suffixToRemove + "_Polygon");
+
+                // 设置输出要素类
+                unionTool.out_feature_class = fullPath + "\\" + fcname; // 存储 Union 结果的路径
+
+                // 执行 Union 工具
+                Helper.ExecuteGPTool(geoprocessor, unionTool, null);
+            }
+
+            //((IDataset)fc).Delete(); // 删除多部件要素类
+        }
+
+        public void PerformDissolve(IFeatureClass fc, string fcname, WaitOperation wo)
+        {
+            wo.SetText("正在结合" + "要素类" + "的要素");
+
+            // 创建一个 Dissolve 工具实例
+            Dissolve dissolveTool = new Dissolve();
+
+            // 设置输入要素类
+            dissolveTool.in_features = fullPath + "\\" + fcname;
+
+            string suffixToRemove = "_MultipartToSinglep";
+            fcname = RemoveSuffix(fcname, suffixToRemove);
+
+            // 设置输出要素类
+            dissolveTool.out_feature_class = fullPath + "\\" + fcname; // 替换为输出要素类的路径
+
+            // 设置要素融合的字段
+            dissolveTool.dissolve_field = "ORIG_FID"; // 替换为用于融合的字段名
+
+            // 创建一个 Geoprocessor 实例并执行 Dissolve 工具
+            Geoprocessor geoprocessor = new Geoprocessor();
+            geoprocessor.Execute(dissolveTool, null);
+
+            ((IDataset)fc).Delete(); // 删除多部件要素类
         }
     }
 }

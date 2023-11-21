@@ -72,6 +72,10 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
 
             double realMidlL = (mapEnvelope.XMax + mapEnvelope.XMin) / 2;
 
+            double midlL = 0;
+
+            bool bound = true; // 是否需要根据实际中央经线与目标中央经线的差值进行原始数据裁剪,以完善公式限制
+
             ws = DCDHelper.createTempWorkspace(gdbOperation.fullPath);
 
             gdbOperation.fws = ws as IFeatureWorkspace;
@@ -90,8 +94,17 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
 
                 esriGeometryType geometryType = fc.ShapeType;
 
-                //FeatureClassProject(gdbOperation.GDBMultipartToSinglepart(geoprocessor, ws, fcname, fcTotalNum, fcNum, wo), gdbOperation.fws, geometryType, fcNum, fcTotalNum, realMidlL, wo);
-                FeatureClassProject(kv, gdbOperation.fws, geometryType, fcNum, fcTotalNum, realMidlL, wo);
+                if (Math.Abs(midlL - realMidlL) <= 2)
+                {
+                    bound = false;
+                    FeatureClassProject(kv, gdbOperation.fws, geometryType, fcNum, fcTotalNum, realMidlL, bound, wo);
+                }
+                else
+                {
+                    FeatureClassProject(
+                        gdbOperation.GDBMultipartToSinglepart(geoprocessor, ws, fcname, fc, fcTotalNum, fcNum, wo),
+                        gdbOperation.fws, geometryType, fcNum, fcTotalNum, midlL, bound, wo);
+                }
             }
 
             #endregion
@@ -297,13 +310,20 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
             }
         }
 
-        public void FeatureClassProject(KeyValuePair<string, IFeatureClass> fcName2FC, IFeatureWorkspace fws, esriGeometryType geometryType, int fcNum, int fcTotalNum, double midlL, WaitOperation wo)
+        public void FeatureClassProject(KeyValuePair<string, IFeatureClass> fcName2FC, IFeatureWorkspace fws, esriGeometryType geometryType, int fcNum, int fcTotalNum, double midlL, bool bound, WaitOperation wo)
         {
             IFeatureClass fc = fcName2FC.Value;
             String fcname = fcName2FC.Key;
 
-            //SplitFeatures(fc, fcname, wo);
-            //MoveFeatures(fc, fcname, wo);
+            if (bound)
+            {
+                SplitFeatures(fc, fcname, wo);
+                MoveFeatures(fc, fcname, wo);
+
+                gdbOperation.PerformDissolve(fc, fcname, wo);
+                fcname = gdbOperation.RemoveSuffix(fcname, gdbOperation.suffixToRemove);
+                fc = fws.OpenFeatureClass(fcname);
+            }
 
             // 获取要素类中要素的数量
             int featureCount = fc.FeatureCount(null); // 如果传入 null，则计算所有的要素数量
@@ -391,7 +411,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                                 latitude = point.Y;
 
                                 multiConicObj.multiConicProjection(ref xCoordination, ref yCoordination, longitude, latitude, midlL, mapScale);
-                                
+
                                 pointCount++;
 
                                 wo.SetText("正在投影第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname + "的第" + featurecount + "/" + featureCount + "个要素" + "(" + (pointCount / pointToTalCount).ToString("P") + ")");
@@ -493,9 +513,9 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Trace.WriteLine(ex.Message);
-                System.Diagnostics.Trace.WriteLine(ex.Source);
-                System.Diagnostics.Trace.WriteLine(ex.StackTrace);
+                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Source);
+                MessageBox.Show(ex.StackTrace);
                 throw;
             }
             finally
