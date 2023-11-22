@@ -341,7 +341,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
             double pointToTalCount; // 要素类的总点个数
             double pointCount; // 目前已经遍历到的点个数
 
-            int featurecount = 0;
+            double featurecount = 0;
 
             double longitude;
             double latitude;
@@ -366,6 +366,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                     featurecount++;
 
                     Console.WriteLine("正在投影第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname + "的第" + featurecount + "/" + featureCount + "个要素");
+                    wo.SetText("正在投影第" + fcNum + "/" + fcTotalNum + "个要素类" + "(" + (featurecount / featureCount).ToString("P") + ")");
 
                     // 根据几何类型输出相应信息
                     switch (geometryType)
@@ -381,7 +382,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
 
                             multiConicObj.multiConicProjection(ref xCoordination, ref yCoordination, longitude, latitude, midlL, mapScale);
 
-                            wo.SetText("正在投影第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname + "的第" + featurecount + "/" + featureCount + "个要素" + "(100%)");
+                            //wo.SetText("正在投影第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname + "的第" + featurecount + "/" + featureCount + "个要素" + "(100%)");
 
                             Console.WriteLine("longitude: " + longitude + " latitude: " + latitude +
                                               " xCoordination: " + xCoordination + " yCoordination: " + yCoordination);
@@ -420,7 +421,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
 
                                 pointCount++;
 
-                                wo.SetText("正在投影第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname + "的第" + featurecount + "/" + featureCount + "个要素" + "(" + (pointCount / pointToTalCount).ToString("P") + ")");
+                                //wo.SetText("正在投影第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname + "的第" + featurecount + "/" + featureCount + "个要素" + "(" + (pointCount / pointToTalCount).ToString("P") + ")");
 
                                 Console.WriteLine("longitude: " + longitude + " latitude: " + latitude +
                                                   " xCoordination: " + xCoordination + " yCoordination: " + yCoordination);
@@ -487,7 +488,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                                     
                                     pointCount++;
 
-                                    wo.SetText("正在投影第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname + "的第" + featurecount + "/" + featureCount + "个要素" + "(" + (pointCount / pointToTalCount).ToString("P") + ")");
+                                    //wo.SetText("正在投影第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname + "的第" + featurecount + "/" + featureCount + "个要素" + "(" + (pointCount / pointToTalCount).ToString("P") + ")");
 
                                     Console.WriteLine("longitude: " + longitude + " latitude: " + latitude +
                                                       " xCoordination: " + xCoordination + " yCoordination: " + yCoordination);

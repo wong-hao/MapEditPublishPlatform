@@ -333,6 +333,8 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
             // 设置输出要素类
             dissolveTool.out_feature_class = fullPath + "\\" + fcname; // 替换为输出要素类的路径
 
+            dissolveTool.multi_part = "MULTI_PART";
+
             // 设置要素融合的字段
             dissolveTool.dissolve_field = "ORIG_FID"; // 替换为用于融合的字段名
 
