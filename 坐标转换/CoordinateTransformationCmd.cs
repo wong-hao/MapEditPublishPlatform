@@ -365,7 +365,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
 
                     featurecount++;
 
-                    Console.WriteLine("正在投影第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname + "的第" + featurecount + "/" + featureCount + "个要素");
+                    Console.WriteLine("正在投影第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname + "的第" + featurecount + "/" + featureCount + "个要素" + "(" + (featurecount / featureCount).ToString("P") + ")");
                     wo.SetText("正在投影第" + fcNum + "/" + fcTotalNum + "个要素类" + "(" + (featurecount / featureCount).ToString("P") + ")");
 
                     // 根据几何类型输出相应信息
