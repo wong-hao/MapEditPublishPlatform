@@ -102,7 +102,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                 else
                 {
                     FeatureClassProject(
-                        gdbOperation.GDBMultipartToSinglepartUnknown(geoprocessor, ws, fcname, fc, fcTotalNum, fcNum, wo),
+                        gdbOperation.GDBMultipartToSinglepart(geoprocessor, ws, fcname, fc, fcTotalNum, fcNum, wo),
                         gdbOperation.fws, geometryType, fcNum, fcTotalNum, midlL, bound, wo);
                 }
             }
@@ -319,6 +319,10 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
             {
                 SplitFeatures(fc, fcname, wo);
                 MoveFeatures(fc, fcname, wo);
+
+                var keyValuePair = gdbOperation.GDBToUnknown(fws, fcname, fc, wo);
+                fcname = keyValuePair.Key;
+                fc = keyValuePair.Value;
 
                 /*
                 gdbOperation.PerformDissolve(fc, fcname, wo);

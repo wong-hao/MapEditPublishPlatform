@@ -29,8 +29,11 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
         public string fullPath = appAath + "\\" + projectedGDB;
         public IFeatureWorkspace fws = null;
 
-        public string suffixToRemove = "_MultipartToSinglep";
-        
+        public static string MultipartToSinglepsuffix = "_MultipartToSinglep";
+        public static string Unknownsuffix = "_Unknown";
+
+        public static string suffixToRemove = MultipartToSinglepsuffix + Unknownsuffix;
+
         // 将 ArcObjects 的几何类型转换为字符串表示形式
         static string GetGeometryType(esriGeometryType shapeType)
         {
@@ -163,7 +166,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
             Helper.ExecuteGPTool(geoprocessor, calculateField, null);
         }
 
-        public KeyValuePair<string, IFeatureClass> GDBMultipartToSinglepartUnknown(Geoprocessor geoprocessor, IWorkspace ws, String fcname, IFeatureClass fc, int fcTotalNum, int fcNum, WaitOperation wo)
+        public KeyValuePair<string, IFeatureClass> GDBMultipartToSinglepart(Geoprocessor geoprocessor, IWorkspace ws, String fcname, IFeatureClass fc, int fcTotalNum, int fcNum, WaitOperation wo)
         {
             fws = ws as IFeatureWorkspace;
 
@@ -171,18 +174,30 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
 
             MultipartToSinglepart multipartToSinglepart = new MultipartToSinglepart();
             multipartToSinglepart.in_features = fcname;
-            String fcname_MultipartToSinglep = fcname + "_MultipartToSinglep";
+            String fcname_MultipartToSinglep = fcname + MultipartToSinglepsuffix;
             multipartToSinglepart.out_feature_class = fullPath + "\\" + fcname_MultipartToSinglep;
 
             Helper.ExecuteGPTool(geoprocessor, multipartToSinglepart, null);
 
             IFeatureClass fc_MultipartToSinglep = fws.OpenFeatureClass(fcname_MultipartToSinglep);
 
+            var kv_MultipartToSinglep =
+                new KeyValuePair<string, IFeatureClass>(fcname_MultipartToSinglep, fc_MultipartToSinglep);
+
             ((IDataset)fc).Delete(); // 删除原始要素类
 
-            wo.SetText("正在将第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname + "的多部件结果设置为未知空间坐标系");
+            return kv_MultipartToSinglep;
+        }
 
-            String fcname_MultipartToSinglep_Unknown = fcname_MultipartToSinglep + "_Unknown";
+        public KeyValuePair<string, IFeatureClass> GDBToUnknown(IFeatureWorkspace fws, String fcname, IFeatureClass fc, WaitOperation wo)
+        {
+            wo.SetText("正在未知坐标系处理投影数据库的要素类" + fcname);
+
+            // 创建GP工具对象
+            Geoprocessor geoprocessor = new Geoprocessor();
+            geoprocessor.OverwriteOutput = true;
+
+            String fcname_MultipartToSinglep_Unknown = fcname + Unknownsuffix;
 
             // 使用CreateFeatureclass工具
             CreateFeatureclass createFeatureclass = new CreateFeatureclass();
@@ -202,7 +217,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
 
             Helper.ExecuteGPTool(geoprocessor, createFeatureclass, null);
 
-            append.inputs = fullPath + "\\" + fcname_MultipartToSinglep;
+            append.inputs = fullPath + "\\" + fcname;
             append.schema_type = "NO_TEST";
             append.target = fullPath + "\\" + fcname_MultipartToSinglep_Unknown;
             Helper.ExecuteGPTool(geoprocessor, append, null);
@@ -212,7 +227,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
             var kv_MultipartToSinglep_Unknown =
                 new KeyValuePair<string, IFeatureClass>(fcname_MultipartToSinglep_Unknown, fc_MultipartToSinglep_Unknown);
 
-            ((IDataset)fc_MultipartToSinglep).Delete(); // 删除不是未知坐标系的多部件要素类
+            ((IDataset)fc).Delete(); // 删除不是未知坐标系的多部件要素类
 
             return kv_MultipartToSinglep_Unknown;
         }
@@ -297,7 +312,6 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
             // 设置输入要素类
             dissolveTool.in_features = fullPath + "\\" + fcname;
 
-            string suffixToRemove = "_MultipartToSinglep";
             fcname = RemoveSuffix(fcname, suffixToRemove);
 
             // 设置输出要素类
