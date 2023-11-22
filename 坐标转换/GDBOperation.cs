@@ -32,7 +32,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
         public static string MultipartToSinglepsuffix = "_MultipartToSinglep";
         public static string Unknownsuffix = "_Unknown";
 
-        public static string suffixToRemove = MultipartToSinglepsuffix + Unknownsuffix;
+        public string suffixToRemove = MultipartToSinglepsuffix + Unknownsuffix;
 
         // 将 ArcObjects 的几何类型转换为字符串表示形式
         static string GetGeometryType(esriGeometryType shapeType)
@@ -73,6 +73,20 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
             // 设置为未知坐标系统
             ISpatialReference unknownSpatialReference = new UnknownCoordinateSystem() as ISpatialReference;
 
+            /*
+               // 创建一个 SpatialReferenceFactory
+               Type factoryType = Type.GetTypeFromProgID("esriGeometry.SpatialReferenceEnvironment");
+               ISpatialReferenceFactory spatialReferenceFactory = Activator.CreateInstance(factoryType) as ISpatialReferenceFactory;
+               
+               // 设置为指定投影坐标系统
+               ISpatialReference projectedSpatialReference = spatialReferenceFactory.CreateProjectedCoordinateSystem((int)esriSRProjCSType.esriSRProjCS_WGS1984UTM_10N);
+               
+               // 可以设置其他投影坐标系的参数，例如投影方式、单位等
+               // 比如，要设置投影单位为米：
+               IProjectedCoordinateSystem projectedCoordSys = projectedSpatialReference as IProjectedCoordinateSystem;
+               projectedCoordSys.CoordinateUnit(1);
+             */
+
             // 使用Append工具
             Append append = new Append();
 
@@ -107,6 +121,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                 esriGeometryType geometryType = fc.ShapeType;
 
                 createFeatureclass.spatial_reference = unknownSpatialReference;
+                createFeatureclass.template = fcname;
                 createFeatureclass.out_name = fcname;
                 createFeatureclass.out_path = fullPath;
                 createFeatureclass.geometry_type = GetGeometryType(geometryType);
@@ -125,7 +140,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                 wo.SetText("正在拷贝投影数据库的第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname);
 
                 append.inputs = fcname;
-                append.schema_type = "NO_TEST";
+                append.schema_type = "TEST";
                 append.target = fullPath + "\\" + fcname;
                 Helper.ExecuteGPTool(geoprocessor, append, null);
             }
@@ -211,6 +226,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
             esriGeometryType geometryType = fc.ShapeType;
 
             createFeatureclass.spatial_reference = unknownSpatialReference;
+            createFeatureclass.template = fullPath + "\\" + fcname;
             createFeatureclass.out_name = fcname_MultipartToSinglep_Unknown;
             createFeatureclass.out_path = fullPath;
             createFeatureclass.geometry_type = GetGeometryType(geometryType);
@@ -218,7 +234,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
             Helper.ExecuteGPTool(geoprocessor, createFeatureclass, null);
 
             append.inputs = fullPath + "\\" + fcname;
-            append.schema_type = "NO_TEST";
+            append.schema_type = "TEST";
             append.target = fullPath + "\\" + fcname_MultipartToSinglep_Unknown;
             Helper.ExecuteGPTool(geoprocessor, append, null);
 
