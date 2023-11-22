@@ -340,7 +340,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
             Geoprocessor geoprocessor = new Geoprocessor();
             geoprocessor.Execute(dissolveTool, null);
 
-            ((IDataset)fc).Delete(); // 删除多部件要素类
+            ((IDataset)fc).Delete(); // 删除未知坐标系的多部件要素类
         }
     }
 }
