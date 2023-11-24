@@ -31,8 +31,9 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
 
         public static string MultipartToSinglepsuffix = "_MultipartToSinglep";
         public static string Unknownsuffix = "_Unknown";
+        public static string Dissolvedsuffix = "_Dissolved";
 
-        public string suffixToRemove = MultipartToSinglepsuffix + Unknownsuffix;
+        public string suffixToRemove = MultipartToSinglepsuffix + Unknownsuffix + Dissolvedsuffix;
 
         // 将 ArcObjects 的几何类型转换为字符串表示形式
         static string GetGeometryType(esriGeometryType shapeType)
@@ -318,9 +319,14 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
             //((IDataset)fc).Delete(); // 删除多部件要素类
         }
 
-        public void PerformDissolve(IFeatureClass fc, string fcname, WaitOperation wo)
+        public KeyValuePair<string, IFeatureClass> GDBToDissolved(IFeatureWorkspace fws, string fcname, IFeatureClass fc, WaitOperation wo)
         {
             wo.SetText("正在融合" + "要素类" + fcname + "的要素");
+
+            // 创建一个 Geoprocessor 实例并执行 Dissolve 工具
+            Geoprocessor geoprocessor = new Geoprocessor();
+
+            String fcname_Dissolved = fcname + Dissolvedsuffix;
 
             // 创建一个 Dissolve 工具实例
             Dissolve dissolveTool = new Dissolve();
@@ -328,21 +334,24 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
             // 设置输入要素类
             dissolveTool.in_features = fullPath + "\\" + fcname;
 
-            fcname = RemoveSuffix(fcname, suffixToRemove);
-
             // 设置输出要素类
-            dissolveTool.out_feature_class = fullPath + "\\" + fcname; // 替换为输出要素类的路径
+            dissolveTool.out_feature_class = fullPath + "\\" + fcname_Dissolved; // 替换为输出要素类的路径
 
             // 设置要素融合的字段
             dissolveTool.dissolve_field = "ORIG_FID"; // 替换为用于融合的字段名
 
             dissolveTool.statistics_fields = "ORIG_FID COUNT";
 
-            // 创建一个 Geoprocessor 实例并执行 Dissolve 工具
-            Geoprocessor geoprocessor = new Geoprocessor();
             Helper.ExecuteGPTool(geoprocessor, dissolveTool, null);
 
+            IFeatureClass fc_Dissolved = fws.OpenFeatureClass(fcname_Dissolved);
+
             ((IDataset)fc).Delete(); // 删除未知坐标系的多部件要素类
+
+            var kv_Dissolved =
+                new KeyValuePair<string, IFeatureClass>(fcname_Dissolved, fc_Dissolved);
+
+            return kv_Dissolved;
         }
     }
 }
