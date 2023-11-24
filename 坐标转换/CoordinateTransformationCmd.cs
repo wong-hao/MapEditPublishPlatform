@@ -323,12 +323,13 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                 var keyValuePair = gdbOperation.GDBToUnknown(fws, fcname, fc, wo);
                 fcname = keyValuePair.Key;
                 fc = keyValuePair.Value;
-                
+
                 /*
                 gdbOperation.PerformDissolve(fc, fcname, wo);
                 fcname = gdbOperation.RemoveSuffix(fcname, gdbOperation.suffixToRemove);
                 fc = fws.OpenFeatureClass(fcname);
                  */
+
             }
 
             // 获取要素类中要素的数量

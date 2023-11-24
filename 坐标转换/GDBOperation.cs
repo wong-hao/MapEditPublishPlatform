@@ -212,7 +212,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
             Geoprocessor geoprocessor = new Geoprocessor();
             geoprocessor.OverwriteOutput = true;
 
-            String fcname_MultipartToSinglep_Unknown = fcname + Unknownsuffix;
+            String fcname_Unknown = fcname + Unknownsuffix;
 
             // 使用CreateFeatureclass工具
             CreateFeatureclass createFeatureclass = new CreateFeatureclass();
@@ -227,7 +227,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
 
             createFeatureclass.spatial_reference = unknownSpatialReference;
             createFeatureclass.template = fullPath + "\\" + fcname;
-            createFeatureclass.out_name = fcname_MultipartToSinglep_Unknown;
+            createFeatureclass.out_name = fcname_Unknown;
             createFeatureclass.out_path = fullPath;
             createFeatureclass.geometry_type = GetGeometryType(geometryType);
 
@@ -235,17 +235,17 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
 
             append.inputs = fullPath + "\\" + fcname;
             append.schema_type = "TEST";
-            append.target = fullPath + "\\" + fcname_MultipartToSinglep_Unknown;
+            append.target = fullPath + "\\" + fcname_Unknown;
             Helper.ExecuteGPTool(geoprocessor, append, null);
 
-            IFeatureClass fc_MultipartToSinglep_Unknown = fws.OpenFeatureClass(fcname_MultipartToSinglep_Unknown);
+            IFeatureClass fc_Unknown = fws.OpenFeatureClass(fcname_Unknown);
 
-            var kv_MultipartToSinglep_Unknown =
-                new KeyValuePair<string, IFeatureClass>(fcname_MultipartToSinglep_Unknown, fc_MultipartToSinglep_Unknown);
+            var kv_Unknown =
+                new KeyValuePair<string, IFeatureClass>(fcname_Unknown, fc_Unknown);
 
             ((IDataset)fc).Delete(); // 删除不是未知坐标系的多部件要素类
 
-            return kv_MultipartToSinglep_Unknown;
+            return kv_Unknown;
         }
 
         public string RemoveSuffix(string input, string suffix)
