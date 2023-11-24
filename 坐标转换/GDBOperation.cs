@@ -320,7 +320,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
 
         public void PerformDissolve(IFeatureClass fc, string fcname, WaitOperation wo)
         {
-            wo.SetText("正在结合" + "要素类" + fcname + "的要素");
+            wo.SetText("正在融合" + "要素类" + fcname + "的要素");
 
             // 创建一个 Dissolve 工具实例
             Dissolve dissolveTool = new Dissolve();
@@ -333,14 +333,14 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
             // 设置输出要素类
             dissolveTool.out_feature_class = fullPath + "\\" + fcname; // 替换为输出要素类的路径
 
-            dissolveTool.multi_part = "MULTI_PART";
-
             // 设置要素融合的字段
             dissolveTool.dissolve_field = "ORIG_FID"; // 替换为用于融合的字段名
 
+            dissolveTool.statistics_fields = "ORIG_FID COUNT";
+
             // 创建一个 Geoprocessor 实例并执行 Dissolve 工具
             Geoprocessor geoprocessor = new Geoprocessor();
-            geoprocessor.Execute(dissolveTool, null);
+            Helper.ExecuteGPTool(geoprocessor, dissolveTool, null);
 
             ((IDataset)fc).Delete(); // 删除未知坐标系的多部件要素类
         }

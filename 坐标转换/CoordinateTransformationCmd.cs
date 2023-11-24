@@ -323,7 +323,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                 var keyValuePair = gdbOperation.GDBToUnknown(fws, fcname, fc, wo);
                 fcname = keyValuePair.Key;
                 fc = keyValuePair.Value;
-
+                
                 /*
                 gdbOperation.PerformDissolve(fc, fcname, wo);
                 fcname = gdbOperation.RemoveSuffix(fcname, gdbOperation.suffixToRemove);
@@ -365,8 +365,8 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
 
                     featurecount++;
 
+                    wo.SetText("正在投影第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname + "(" + (featurecount / featureCount).ToString("P") + ")");
                     Console.WriteLine("正在投影第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname + "的第" + featurecount + "/" + featureCount + "个要素" + "(" + (featurecount / featureCount).ToString("P") + ")");
-                    wo.SetText("正在投影第" + fcNum + "/" + fcTotalNum + "个要素类" + "(" + (featurecount / featureCount).ToString("P") + ")");
 
                     // 根据几何类型输出相应信息
                     switch (geometryType)
