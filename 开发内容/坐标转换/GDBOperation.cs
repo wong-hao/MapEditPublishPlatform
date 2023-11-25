@@ -325,6 +325,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
 
             // 创建一个 Geoprocessor 实例并执行 Dissolve 工具
             Geoprocessor geoprocessor = new Geoprocessor();
+            geoprocessor.OverwriteOutput = true;
 
             String fcname_Dissolved = fcname + Dissolvedsuffix;
 

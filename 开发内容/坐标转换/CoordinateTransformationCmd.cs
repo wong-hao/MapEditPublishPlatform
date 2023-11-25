@@ -386,7 +386,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
 
                             multiConicObj.multiConicProjection(ref xCoordination, ref yCoordination, longitude, latitude, midlL, mapScale);
 
-                            //wo.SetText("正在投影第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname + "的第" + featurecount + "/" + featureCount + "个要素" + "(100%)");
+                            Console.WriteLine("正在投影第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname + "的第" + featurecount + "/" + featureCount + "个要素" + "(100%)");
 
                             Console.WriteLine("longitude: " + longitude + " latitude: " + latitude +
                                               " xCoordination: " + xCoordination + " yCoordination: " + yCoordination);
@@ -425,7 +425,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
 
                                 pointCount++;
 
-                                //wo.SetText("正在投影第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname + "的第" + featurecount + "/" + featureCount + "个要素" + "(" + (pointCount / pointToTalCount).ToString("P") + ")");
+                                Console.WriteLine("正在投影第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname + "的第" + featurecount + "/" + featureCount + "个要素" + "(" + (pointCount / pointToTalCount).ToString("P") + ")");
 
                                 Console.WriteLine("longitude: " + longitude + " latitude: " + latitude +
                                                   " xCoordination: " + xCoordination + " yCoordination: " + yCoordination);
@@ -492,7 +492,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                                     
                                     pointCount++;
 
-                                    //wo.SetText("正在投影第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname + "的第" + featurecount + "/" + featureCount + "个要素" + "(" + (pointCount / pointToTalCount).ToString("P") + ")");
+                                    Console.WriteLine("正在投影第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname + "的第" + featurecount + "/" + featureCount + "个要素" + "(" + (pointCount / pointToTalCount).ToString("P") + ")");
 
                                     Console.WriteLine("longitude: " + longitude + " latitude: " + latitude +
                                                       " xCoordination: " + xCoordination + " yCoordination: " + yCoordination);
