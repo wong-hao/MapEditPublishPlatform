@@ -319,6 +319,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
             //((IDataset)fc).Delete(); // 删除多部件要素类
         }
 
+        // 可能不成功的原因：https://desktop.arcgis.com/zh-cn/arcmap/latest/tools/supplement/tiled-processing-of-large-datasets.htm#GUID-03AE5F53-40DE-4BA7-888B-5198435B0C42
         public KeyValuePair<string, IFeatureClass> GDBToDissolved(IFeatureWorkspace fws, string fcname, IFeatureClass fc, WaitOperation wo)
         {
             wo.SetText("正在融合" + "要素类" + fcname + "的要素");

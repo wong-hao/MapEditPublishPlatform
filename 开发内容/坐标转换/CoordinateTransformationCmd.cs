@@ -140,6 +140,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
             }
         }
 
+        // 极有可能报异常，但仍可以得到最后的数据
         private void splitFeaturePolygon(IPolyline splitLine, IFeatureClass fc)
         {
             try
