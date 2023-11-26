@@ -104,6 +104,21 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                 IFeatureClass fc = kv.Value;
                 String fcname = kv.Key;
 
+                esriGeometryType geometryType = fc.ShapeType;
+                string geoType = GetGeometryType(geometryType);
+                if (string.IsNullOrEmpty(geoType))
+                {
+                    MessageBox.Show("要素类" + fcname + "的几何类型不受支持，无法创建", "Error", MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                    continue;
+                }
+
+                if (fc.FeatureType == esriFeatureType.esriFTAnnotation)
+                {
+                    Console.WriteLine("要素类" + fcname + "为注记类，无法投影");
+                    continue;
+                }
+
                 wo.SetText("正在创建投影数据库的第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname);
 
                 // 获取要素类的范围
@@ -119,22 +134,11 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                     mapEnvelope.XMax = fcEnvelope.XMax;
                 }
 
-                esriGeometryType geometryType = fc.ShapeType;
-
                 createFeatureclass.spatial_reference = unknownSpatialReference;
                 createFeatureclass.template = fcname;
                 createFeatureclass.out_name = fcname;
                 createFeatureclass.out_path = fullPath;
-                createFeatureclass.geometry_type = GetGeometryType(geometryType);
-
-                string geoType = GetGeometryType(geometryType);
-
-                if (string.IsNullOrEmpty(geoType))
-                {
-                    MessageBox.Show("要素类" + fcname + "的几何类型不受支持，无法创建", "Error", MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
-                    return;
-                }
+                createFeatureclass.geometry_type = geoType;
 
                 Helper.ExecuteGPTool(geoprocessor, createFeatureclass, null);
 
