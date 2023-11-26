@@ -33,7 +33,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
         public static string Unknownsuffix = "_Unknown";
         public static string Dissolvedsuffix = "_Dissolved";
 
-        public string suffixToRemove = MultipartToSinglepsuffix + Unknownsuffix + Dissolvedsuffix;
+        public string suffixToRemove = MultipartToSinglepsuffix + Unknownsuffix ;
 
         // 将 ArcObjects 的几何类型转换为字符串表示形式
         static string GetGeometryType(esriGeometryType shapeType)
@@ -358,6 +358,37 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                 new KeyValuePair<string, IFeatureClass>(fcname_Dissolved, fc_Dissolved);
 
             return kv_Dissolved;
+        }
+
+        public KeyValuePair<string, IFeatureClass> GDBRemoveSuffix(IFeatureWorkspace fws, string fcname, IFeatureClass fc, WaitOperation wo)
+        {
+            wo.SetText("正在更改" + "要素类" + fcname + "的名称");
+
+            // 创建一个 Geoprocessor 实例并执行 Copy 工具
+            Geoprocessor geoprocessor = new Geoprocessor();
+            geoprocessor.OverwriteOutput = true;
+
+            string fcname_Changed = RemoveSuffix(fcname, suffixToRemove);
+
+            // 创建一个 Copy 工具实例
+            Copy copy = new Copy();
+
+            // 设置输入要素类
+            copy.in_data = fullPath + "\\" + fcname;
+
+            // 设置输出要素类
+            copy.out_data = fullPath + "\\" + fcname_Changed; // 替换为输出要素类的路径
+
+            Helper.ExecuteGPTool(geoprocessor, copy, null);
+
+            IFeatureClass fc_Changed = fws.OpenFeatureClass(fcname_Changed);
+
+            ((IDataset)fc).Delete(); // 删除未改名的未知坐标系的多部件要素类
+
+            var kv_Changed =
+                new KeyValuePair<string, IFeatureClass>(fcname_Changed, fc_Changed);
+
+            return kv_Changed;
         }
     }
 }

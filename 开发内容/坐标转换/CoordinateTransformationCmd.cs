@@ -334,6 +334,10 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                 fcname = keyValuePair.Key;
                 fc = keyValuePair.Value;
                  */
+
+                keyValuePair = gdbOperation.GDBRemoveSuffix(fws, fcname, fc, wo);
+                fcname = keyValuePair.Key;
+                fc = keyValuePair.Value;
             }
 
             // 获取要素类中要素的数量
