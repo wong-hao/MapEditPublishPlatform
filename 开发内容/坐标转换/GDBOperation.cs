@@ -16,6 +16,7 @@ using ESRI.ArcGIS.DataManagementTools;
 using ESRI.ArcGIS.DataSourcesGDB;
 using ESRI.ArcGIS.esriSystem;
 using ESRI.ArcGIS.GeoAnalyst;
+using ESRI.ArcGIS.Geoprocessing;
 using ESRI.ArcGIS.Geoprocessor;
 using SMGI.Plugin.DCDProcess;
 
@@ -51,6 +52,29 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                 default:
                     return "";
             }
+        }
+
+        // 这个函数使用 GP 工具将要素类投影到 GCS_WGS_1984
+        public void FeatureClassReverseProject(string fcname, IFeatureClass fc, WaitOperation wo)
+        {
+            wo.SetText("正在将原始投影数据库中的要素类" + fcname + "反投影为地理坐标系");
+
+            // 创建 GP 工具
+            Geoprocessor geoprocessor = new Geoprocessor();
+            geoprocessor.OverwriteOutput = true;
+
+            Project project = new Project();
+
+            project.in_dataset = fcname;
+            IGeoDataset geoDataset = (IGeoDataset)fc;
+            project.in_coor_system = geoDataset.SpatialReference;
+
+            ISpatialReferenceFactory spatialReferenceFactory = new SpatialReferenceEnvironmentClass();
+            IGeographicCoordinateSystem wgs1984 = spatialReferenceFactory.CreateGeographicCoordinateSystem((int)esriSRGeoCSType.esriSRGeoCS_WGS1984);
+            project.out_coor_system = wgs1984;
+            project.out_dataset = fcname + "WGS1984";
+
+            Helper.ExecuteGPTool(geoprocessor, project, null);
         }
 
         public void GDBInit(ref Envelope mapEnvelope, Geoprocessor geoprocessor, IWorkspace ws, WaitOperation wo)
@@ -104,49 +128,110 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                 IFeatureClass fc = kv.Value;
                 String fcname = kv.Key;
 
-                esriGeometryType geometryType = fc.ShapeType;
-                string geoType = GetGeometryType(geometryType);
-                if (string.IsNullOrEmpty(geoType))
+                // 获取要素类中要素的数量
+                int featureCount = fc.FeatureCount(null); // 如果传入 null，则计算所有的要素数量
+                if (featureCount == 0)
                 {
-                    MessageBox.Show("要素类" + fcname + "的几何类型不受支持，无法创建", "Error", MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
                     continue;
                 }
 
-                if (fc.FeatureType == esriFeatureType.esriFTAnnotation)
+                IGeoDataset geoDataset = (IGeoDataset)fc;
+
+                if (geoDataset.SpatialReference is IProjectedCoordinateSystem)
                 {
-                    Console.WriteLine("要素类" + fcname + "为注记类，无法投影");
-                    continue;
+                    FeatureClassReverseProject(fcname, fc, wo);
+
+                    esriGeometryType geometryType = fc.ShapeType;
+                    string geoType = GetGeometryType(geometryType);
+                    if (string.IsNullOrEmpty(geoType))
+                    {
+                        MessageBox.Show("要素类" + fcname + "的几何类型不受支持，无法创建", "Error", MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
+                        continue;
+                    }
+
+                    if (fc.FeatureType == esriFeatureType.esriFTAnnotation)
+                    {
+                        Console.WriteLine("要素类" + fcname + "为注记类，无法投影");
+                        continue;
+                    }
+
+                    wo.SetText("正在创建投影数据库的第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname + "WGS1984");
+
+                    fc = fws.OpenFeatureClass(fcname + "WGS1984");
+
+                    // 获取要素类的范围
+                    IEnvelope fcEnvelope = ((IGeoDataset)fc).Extent;
+
+                    if (fcEnvelope.XMin < mapEnvelope.XMin)
+                    {
+                        mapEnvelope.XMin = fcEnvelope.XMin;
+                    }
+
+                    if (fcEnvelope.XMax > mapEnvelope.XMax)
+                    {
+                        mapEnvelope.XMax = fcEnvelope.XMax;
+                    }
+
+                    createFeatureclass.spatial_reference = unknownSpatialReference;
+                    createFeatureclass.template = fcname;
+                    createFeatureclass.out_name = fcname + "WGS1984";
+                    createFeatureclass.out_path = fullPath;
+                    createFeatureclass.geometry_type = geoType;
+
+                    Helper.ExecuteGPTool(geoprocessor, createFeatureclass, null);
+
+                    wo.SetText("正在拷贝投影数据库的第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname + "WGS1984");
+
+                    append.inputs = fcname + "WGS1984";
+                    append.target = fullPath + "\\" + fcname + "WGS1984";
                 }
-
-                wo.SetText("正在创建投影数据库的第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname);
-
-                // 获取要素类的范围
-                IEnvelope fcEnvelope = ((IGeoDataset)fc).Extent;
-
-                if (fcEnvelope.XMin < mapEnvelope.XMin)
+                else
                 {
-                    mapEnvelope.XMin = fcEnvelope.XMin;
+                    esriGeometryType geometryType = fc.ShapeType;
+                    string geoType = GetGeometryType(geometryType);
+                    if (string.IsNullOrEmpty(geoType))
+                    {
+                        MessageBox.Show("要素类" + fcname + "的几何类型不受支持，无法创建", "Error", MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
+                        continue;
+                    }
+
+                    if (fc.FeatureType == esriFeatureType.esriFTAnnotation)
+                    {
+                        Console.WriteLine("要素类" + fcname + "为注记类，无法投影");
+                        continue;
+                    }
+
+                    wo.SetText("正在创建投影数据库的第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname);
+
+                    // 获取要素类的范围
+                    IEnvelope fcEnvelope = ((IGeoDataset)fc).Extent;
+
+                    if (fcEnvelope.XMin < mapEnvelope.XMin)
+                    {
+                        mapEnvelope.XMin = fcEnvelope.XMin;
+                    }
+
+                    if (fcEnvelope.XMax > mapEnvelope.XMax)
+                    {
+                        mapEnvelope.XMax = fcEnvelope.XMax;
+                    }
+
+                    createFeatureclass.spatial_reference = unknownSpatialReference;
+                    createFeatureclass.template = fcname;
+                    createFeatureclass.out_name = fcname;
+                    createFeatureclass.out_path = fullPath;
+                    createFeatureclass.geometry_type = geoType;
+
+                    Helper.ExecuteGPTool(geoprocessor, createFeatureclass, null);
+
+                    wo.SetText("正在拷贝投影数据库的第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname);
+
+                    append.inputs = fcname;
+                    append.target = fullPath + "\\" + fcname;
                 }
-
-                if (fcEnvelope.XMax > mapEnvelope.XMax)
-                {
-                    mapEnvelope.XMax = fcEnvelope.XMax;
-                }
-
-                createFeatureclass.spatial_reference = unknownSpatialReference;
-                createFeatureclass.template = fcname;
-                createFeatureclass.out_name = fcname;
-                createFeatureclass.out_path = fullPath;
-                createFeatureclass.geometry_type = geoType;
-
-                Helper.ExecuteGPTool(geoprocessor, createFeatureclass, null);
-
-                wo.SetText("正在拷贝投影数据库的第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname);
-
-                append.inputs = fcname;
                 append.schema_type = "TEST";
-                append.target = fullPath + "\\" + fcname;
                 Helper.ExecuteGPTool(geoprocessor, append, null);
             }
         }
