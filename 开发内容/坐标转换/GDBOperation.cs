@@ -477,18 +477,5 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
 
             return kv_Changed;
         }
-
-        /// <summary>
-        /// 修改要素类空间参考
-        /// </summary>
-        /// <param name="pFeatureClass">要素类</param>
-        /// <param name="pSpatialReference">新空间参考</param>
-        public void AlterSpatialReference(IFeatureClass pFeatureClass, ISpatialReference pSpatialReference)
-        {
-            IGeoDataset pGeoDataset = pFeatureClass as IGeoDataset;
-            IGeoDatasetSchemaEdit pGeoDatasetSchemaEdit = pGeoDataset as IGeoDatasetSchemaEdit;
-            if (pGeoDatasetSchemaEdit.CanAlterSpatialReference == true)
-                pGeoDatasetSchemaEdit.AlterSpatialReference(pSpatialReference);
-        }
     }
 }

@@ -125,7 +125,11 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                 ISpatialReferenceFactory3 spatialReferenceFactory3 = (ISpatialReferenceFactory3)spatialReferenceFactory;
                 ISpatialReference wgsWebMercator = spatialReferenceFactory3.CreateSpatialReference(3785);
 
-                gdbOperation.AlterSpatialReference(fc, wgsWebMercator);
+                DefineProjection defineProjection = new DefineProjection();
+                defineProjection.in_dataset = gdbOperation.fullPath + "\\" + fcname;
+                defineProjection.coor_system = wgsWebMercator;
+
+                Helper.ExecuteGPTool(geoprocessor, defineProjection, null);
             }
 
             #endregion
