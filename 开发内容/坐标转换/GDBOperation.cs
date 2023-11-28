@@ -185,6 +185,8 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
 
                     append.inputs = fcname + "WGS1984";
                     append.target = fullPath + "\\" + fcname + "WGS1984";
+                    append.schema_type = "TEST";
+                    Helper.ExecuteGPTool(geoprocessor, append, null);
                 }
                 else
                 {
@@ -230,9 +232,9 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
 
                     append.inputs = fcname;
                     append.target = fullPath + "\\" + fcname;
+                    append.schema_type = "TEST";
+                    Helper.ExecuteGPTool(geoprocessor, append, null);
                 }
-                append.schema_type = "TEST";
-                Helper.ExecuteGPTool(geoprocessor, append, null);
             }
         }
 
@@ -474,6 +476,19 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                 new KeyValuePair<string, IFeatureClass>(fcname_Changed, fc_Changed);
 
             return kv_Changed;
+        }
+
+        /// <summary>
+        /// 修改要素类空间参考
+        /// </summary>
+        /// <param name="pFeatureClass">要素类</param>
+        /// <param name="pSpatialReference">新空间参考</param>
+        public void AlterSpatialReference(IFeatureClass pFeatureClass, ISpatialReference pSpatialReference)
+        {
+            IGeoDataset pGeoDataset = pFeatureClass as IGeoDataset;
+            IGeoDatasetSchemaEdit pGeoDatasetSchemaEdit = pGeoDataset as IGeoDatasetSchemaEdit;
+            if (pGeoDatasetSchemaEdit.CanAlterSpatialReference == true)
+                pGeoDatasetSchemaEdit.AlterSpatialReference(pSpatialReference);
         }
     }
 }

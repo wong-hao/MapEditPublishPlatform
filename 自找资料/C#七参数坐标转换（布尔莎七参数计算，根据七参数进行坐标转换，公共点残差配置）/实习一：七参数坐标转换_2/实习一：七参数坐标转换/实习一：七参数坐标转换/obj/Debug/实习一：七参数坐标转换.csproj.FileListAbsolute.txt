@@ -1,0 +1,19 @@
+D:\学习\测绘 大二 下\大地测量学基础\实习一：七参数坐标转换\实习一：七参数坐标转换\bin\Debug\实习一：七参数坐标转换.exe.config
+D:\学习\测绘 大二 下\大地测量学基础\实习一：七参数坐标转换\实习一：七参数坐标转换\bin\Debug\实习一：七参数坐标转换.exe
+D:\学习\测绘 大二 下\大地测量学基础\实习一：七参数坐标转换\实习一：七参数坐标转换\bin\Debug\实习一：七参数坐标转换.pdb
+D:\学习\测绘 大二 下\大地测量学基础\实习一：七参数坐标转换\实习一：七参数坐标转换\obj\Debug\实习一：七参数坐标转换.csprojResolveAssemblyReference.cache
+D:\学习\测绘 大二 下\大地测量学基础\实习一：七参数坐标转换\实习一：七参数坐标转换\obj\Debug\实习一_七参数坐标转换.Form1.resources
+D:\学习\测绘 大二 下\大地测量学基础\实习一：七参数坐标转换\实习一：七参数坐标转换\obj\Debug\实习一_七参数坐标转换.Properties.Resources.resources
+D:\学习\测绘 大二 下\大地测量学基础\实习一：七参数坐标转换\实习一：七参数坐标转换\obj\Debug\实习一：七参数坐标转换.csproj.GenerateResource.Cache
+D:\学习\测绘 大二 下\大地测量学基础\实习一：七参数坐标转换\实习一：七参数坐标转换\obj\Debug\实习一：七参数坐标转换.exe
+D:\学习\测绘 大二 下\大地测量学基础\实习一：七参数坐标转换\实习一：七参数坐标转换\obj\Debug\实习一：七参数坐标转换.pdb
+C:\Users\22907\Desktop\20221028tbKV3PmQ\实习一：七参数坐标转换_2\实习一：七参数坐标转换\实习一：七参数坐标转换\bin\Debug\实习一：七参数坐标转换.exe.config
+C:\Users\22907\Desktop\20221028tbKV3PmQ\实习一：七参数坐标转换_2\实习一：七参数坐标转换\实习一：七参数坐标转换\bin\Debug\实习一：七参数坐标转换.exe
+C:\Users\22907\Desktop\20221028tbKV3PmQ\实习一：七参数坐标转换_2\实习一：七参数坐标转换\实习一：七参数坐标转换\bin\Debug\实习一：七参数坐标转换.pdb
+C:\Users\22907\Desktop\20221028tbKV3PmQ\实习一：七参数坐标转换_2\实习一：七参数坐标转换\实习一：七参数坐标转换\obj\Debug\实习一：七参数坐标转换.csproj.AssemblyReference.cache
+C:\Users\22907\Desktop\20221028tbKV3PmQ\实习一：七参数坐标转换_2\实习一：七参数坐标转换\实习一：七参数坐标转换\obj\Debug\实习一_七参数坐标转换.Form1.resources
+C:\Users\22907\Desktop\20221028tbKV3PmQ\实习一：七参数坐标转换_2\实习一：七参数坐标转换\实习一：七参数坐标转换\obj\Debug\实习一_七参数坐标转换.Properties.Resources.resources
+C:\Users\22907\Desktop\20221028tbKV3PmQ\实习一：七参数坐标转换_2\实习一：七参数坐标转换\实习一：七参数坐标转换\obj\Debug\实习一：七参数坐标转换.csproj.GenerateResource.cache
+C:\Users\22907\Desktop\20221028tbKV3PmQ\实习一：七参数坐标转换_2\实习一：七参数坐标转换\实习一：七参数坐标转换\obj\Debug\实习一：七参数坐标转换.csproj.CoreCompileInputs.cache
+C:\Users\22907\Desktop\20221028tbKV3PmQ\实习一：七参数坐标转换_2\实习一：七参数坐标转换\实习一：七参数坐标转换\obj\Debug\实习一：七参数坐标转换.exe
+C:\Users\22907\Desktop\20221028tbKV3PmQ\实习一：七参数坐标转换_2\实习一：七参数坐标转换\实习一：七参数坐标转换\obj\Debug\实习一：七参数坐标转换.pdb

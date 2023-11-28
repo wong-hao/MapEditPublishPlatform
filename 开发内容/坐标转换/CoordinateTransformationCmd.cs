@@ -108,6 +108,27 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
             }
 
             #endregion
+
+            #region 在投影数据库中进行定义投影
+
+            fcName2FC = DCDHelper.GetAllFeatureClassFromWorkspace(gdbOperation.fws);
+
+            foreach (var kv in fcName2FC)
+            {
+                IFeatureClass fc = kv.Value;
+                String fcname = kv.Key;
+
+                wo.SetText("将投影数据库中的要素类" + fcname + "定义为Web墨卡托投影");
+
+                // 使用空间参考工厂创建 WGS_1984_Web_Mercator 空间参考对象
+                ISpatialReferenceFactory spatialReferenceFactory = new SpatialReferenceEnvironmentClass();
+                ISpatialReferenceFactory3 spatialReferenceFactory3 = (ISpatialReferenceFactory3)spatialReferenceFactory;
+                ISpatialReference wgsWebMercator = spatialReferenceFactory3.CreateSpatialReference(3785);
+
+                gdbOperation.AlterSpatialReference(fc, wgsWebMercator);
+            }
+
+            #endregion
         }
 
         public void SplitFeatures(IFeatureClass fc, string fcname, WaitOperation wo)
