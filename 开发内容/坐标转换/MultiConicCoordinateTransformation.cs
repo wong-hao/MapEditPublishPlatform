@@ -692,6 +692,12 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
         // 这个函数使用 GP 工具将要素类投影到 GCS_WGS_1984
         public static void FeatureClassReverseProject(string fcname, IFeatureClass fc, WaitOperation wo)
         {
+            if (fc.FeatureType == esriFeatureType.esriFTAnnotation)
+            {
+                Console.WriteLine("要素类" + fcname + "为注记类，无法投影");
+                return;
+            }
+
             wo.SetText("正在将原始投影数据库中的要素类" + fcname + "反投影为地理坐标系");
 
             // 创建 GP 工具
