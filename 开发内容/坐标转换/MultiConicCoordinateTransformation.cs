@@ -151,11 +151,12 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
         public static string fullPath = appAath + "\\" + projectedGDB;
         public static IFeatureWorkspace fws = null;
 
-        public static string MultipartToSinglepsuffix = "_MultipartToSinglep";
-        public static string Unknownsuffix = "_Unknown";
-        public static string Dissolvedsuffix = "_Dissolved";
+        public static string MultipartToSinglepSuffix = "_MultipartToSinglep";
+        public static string UnknownSuffix = "_Unknown";
+        public static string DissolvedSuffix = "_Dissolved";
+        public static string WGS1984Suffix = "_WGS1984";
 
-        public static string suffixToRemove = MultipartToSinglepsuffix + Unknownsuffix;
+        public static string suffixToRemove = MultipartToSinglepSuffix + UnknownSuffix;
 
         // 将 ArcObjects 的几何类型转换为字符串表示形式
         static string GetGeometryType(esriGeometryType shapeType)
@@ -713,7 +714,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
             ISpatialReferenceFactory spatialReferenceFactory = new SpatialReferenceEnvironmentClass();
             IGeographicCoordinateSystem wgs1984 = spatialReferenceFactory.CreateGeographicCoordinateSystem((int)esriSRGeoCSType.esriSRGeoCS_WGS1984);
             project.out_coor_system = wgs1984;
-            project.out_dataset = fcname + "WGS1984";
+            project.out_dataset = fcname + WGS1984Suffix;
 
             Helper.ExecuteGPTool(geoprocessor, project, null);
         }
@@ -797,9 +798,9 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                         continue;
                     }
 
-                    wo.SetText("正在创建投影数据库的第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname + "WGS1984");
+                    wo.SetText("正在创建投影数据库的第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname + WGS1984Suffix);
 
-                    fc = fws.OpenFeatureClass(fcname + "WGS1984");
+                    fc = fws.OpenFeatureClass(fcname + WGS1984Suffix);
 
                     // 获取要素类的范围
                     IEnvelope fcEnvelope = ((IGeoDataset)fc).Extent;
@@ -816,16 +817,16 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
 
                     createFeatureclass.spatial_reference = unknownSpatialReference;
                     createFeatureclass.template = fcname;
-                    createFeatureclass.out_name = fcname + "WGS1984";
+                    createFeatureclass.out_name = fcname + WGS1984Suffix;
                     createFeatureclass.out_path = fullPath;
                     createFeatureclass.geometry_type = geoType;
 
                     Helper.ExecuteGPTool(geoprocessor, createFeatureclass, null);
 
-                    wo.SetText("正在拷贝投影数据库的第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname + "WGS1984");
+                    wo.SetText("正在拷贝投影数据库的第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname + WGS1984Suffix);
 
-                    append.inputs = fcname + "WGS1984";
-                    append.target = fullPath + "\\" + fcname + "WGS1984";
+                    append.inputs = fcname + WGS1984Suffix;
+                    append.target = fullPath + "\\" + fcname + WGS1984Suffix;
                     append.schema_type = "TEST";
                     Helper.ExecuteGPTool(geoprocessor, append, null);
                 }
@@ -922,7 +923,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
 
             MultipartToSinglepart multipartToSinglepart = new MultipartToSinglepart();
             multipartToSinglepart.in_features = fcname;
-            String fcname_MultipartToSinglep = fcname + MultipartToSinglepsuffix;
+            String fcname_MultipartToSinglep = fcname + MultipartToSinglepSuffix;
             multipartToSinglepart.out_feature_class = fullPath + "\\" + fcname_MultipartToSinglep;
 
             Helper.ExecuteGPTool(geoprocessor, multipartToSinglepart, null);
@@ -945,7 +946,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
             Geoprocessor geoprocessor = new Geoprocessor();
             geoprocessor.OverwriteOutput = true;
 
-            String fcname_Unknown = fcname + Unknownsuffix;
+            String fcname_Unknown = fcname + UnknownSuffix;
 
             // 使用CreateFeatureclass工具
             CreateFeatureclass createFeatureclass = new CreateFeatureclass();
@@ -1060,7 +1061,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
             Geoprocessor geoprocessor = new Geoprocessor();
             geoprocessor.OverwriteOutput = true;
 
-            String fcname_Dissolved = fcname + Dissolvedsuffix;
+            String fcname_Dissolved = fcname + DissolvedSuffix;
 
             // 创建一个 Dissolve 工具实例
             Dissolve dissolveTool = new Dissolve();
