@@ -691,12 +691,15 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
         }
 
         // 这个函数使用 GP 工具将要素类投影到 GCS_WGS_1984
-        public static void FeatureClassReverseProject(string fcname, IFeatureClass fc, WaitOperation wo)
+        public static KeyValuePair<string, IFeatureClass> FeatureClassReverseProject(IFeatureWorkspace fws, string fcname, IFeatureClass fc, WaitOperation wo)
         {
+            string fcname_WGS1984 = fcname + WGS1984Suffix;
+
             if (fc.FeatureType == esriFeatureType.esriFTAnnotation)
             {
                 Console.WriteLine("要素类" + fcname + "为注记类，无法投影");
-                return;
+                var empty = new KeyValuePair<string, IFeatureClass>(string.Empty, null);
+                return empty;
             }
 
             wo.SetText("正在将原始投影数据库中的要素类" + fcname + "反投影为地理坐标系");
@@ -714,9 +717,15 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
             ISpatialReferenceFactory spatialReferenceFactory = new SpatialReferenceEnvironmentClass();
             IGeographicCoordinateSystem wgs1984 = spatialReferenceFactory.CreateGeographicCoordinateSystem((int)esriSRGeoCSType.esriSRGeoCS_WGS1984);
             project.out_coor_system = wgs1984;
-            project.out_dataset = fcname + WGS1984Suffix;
+            project.out_dataset = fcname_WGS1984;
 
             Helper.ExecuteGPTool(geoprocessor, project, null);
+
+            IFeatureClass fc_WGS1984 = fws.OpenFeatureClass(fcname_WGS1984);
+
+            var kv_WGS1984 = new KeyValuePair<string, IFeatureClass>(fcname_WGS1984, fc_WGS1984);
+
+            return kv_WGS1984;
         }
 
         public static void GDBInit(ref Envelope mapEnvelope, Geoprocessor geoprocessor, IWorkspace ws, WaitOperation wo)
@@ -781,7 +790,14 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
 
                 if (geoDataset.SpatialReference is IProjectedCoordinateSystem)
                 {
-                    FeatureClassReverseProject(fcname, fc, wo);
+                    var keyValuePair = FeatureClassReverseProject(fws, fcname, fc, wo);
+                    fcname = keyValuePair.Key;
+                    fc = keyValuePair.Value;
+
+                    if (string.IsNullOrEmpty(fcname) || fc == null)
+                    {
+                        continue;
+                    }
 
                     esriGeometryType geometryType = fc.ShapeType;
                     string geoType = GetGeometryType(geometryType);
@@ -792,15 +808,9 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                         continue;
                     }
 
-                    if (fc.FeatureType == esriFeatureType.esriFTAnnotation)
-                    {
-                        Console.WriteLine("要素类" + fcname + "为注记类，无法投影");
-                        continue;
-                    }
+                    wo.SetText("正在创建投影数据库的第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname);
 
-                    wo.SetText("正在创建投影数据库的第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname + WGS1984Suffix);
-
-                    fc = fws.OpenFeatureClass(fcname + WGS1984Suffix);
+                    fc = fws.OpenFeatureClass(fcname);
 
                     // 获取要素类的范围
                     IEnvelope fcEnvelope = ((IGeoDataset)fc).Extent;
@@ -817,16 +827,16 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
 
                     createFeatureclass.spatial_reference = unknownSpatialReference;
                     createFeatureclass.template = fcname;
-                    createFeatureclass.out_name = fcname + WGS1984Suffix;
+                    createFeatureclass.out_name = fcname;
                     createFeatureclass.out_path = fullPath;
                     createFeatureclass.geometry_type = geoType;
 
                     Helper.ExecuteGPTool(geoprocessor, createFeatureclass, null);
 
-                    wo.SetText("正在拷贝投影数据库的第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname + WGS1984Suffix);
+                    wo.SetText("正在拷贝投影数据库的第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname);
 
-                    append.inputs = fcname + WGS1984Suffix;
-                    append.target = fullPath + "\\" + fcname + WGS1984Suffix;
+                    append.inputs = fcname;
+                    append.target = fullPath + "\\" + fcname;
                     append.schema_type = "TEST";
                     Helper.ExecuteGPTool(geoprocessor, append, null);
                 }
