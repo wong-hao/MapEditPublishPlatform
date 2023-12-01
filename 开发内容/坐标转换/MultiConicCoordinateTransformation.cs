@@ -676,21 +676,27 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
 
             fcName2FC = DCDHelper.GetAllFeatureClassFromWorkspace(fws);
 
+            var filePath = Application.StartupPath + "\\Equal_Difference_Multi_Cone.prj";
+            if (!File.Exists(filePath))
+            {
+                MessageBox.Show("等差分多圆锥投影文件不存在!");
+                return;
+            }
+
             foreach (var kv in fcName2FC)
             {
                 IFeatureClass fc = kv.Value;
                 String fcname = kv.Key;
 
-                wo.SetText("将投影数据库中的要素类" + fcname + "定义为Web墨卡托投影");
+                wo.SetText("将投影数据库中的要素类" + fcname + "定义为等差分多圆锥投影");
 
-                // 使用空间参考工厂创建 WGS_1984_Web_Mercator 空间参考对象
+                // 使用空间参考工厂创建空间参考对象
                 ISpatialReferenceFactory spatialReferenceFactory = new SpatialReferenceEnvironmentClass();
-                ISpatialReferenceFactory3 spatialReferenceFactory3 = (ISpatialReferenceFactory3)spatialReferenceFactory;
-                ISpatialReference wgsWebMercator = spatialReferenceFactory3.CreateSpatialReference(3785);
+                ISpatialReference wgsProject = spatialReferenceFactory.CreateESRISpatialReferenceFromPRJFile(filePath);
 
                 DefineProjection defineProjection = new DefineProjection();
-                defineProjection.in_dataset = fullPath + "\\" + fcname;
-                defineProjection.coor_system = wgsWebMercator;
+                defineProjection.in_dataset = fc;
+                defineProjection.coor_system = wgsProject;
 
                 Helper.ExecuteGPTool(geoprocessor, defineProjection, null);
             }
