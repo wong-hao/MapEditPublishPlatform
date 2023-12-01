@@ -156,7 +156,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
         public static string DissolvedSuffix = "_Dissolved";
         public static string WGS1984Suffix = "_WGS1984";
 
-        public static string suffixToRemove = MultipartToSinglepSuffix + UnknownSuffix;
+        public static string suffixToRemove = string.Empty;
 
         // 将 ArcObjects 的几何类型转换为字符串表示形式
         static string GetGeometryType(esriGeometryType shapeType)
@@ -189,7 +189,8 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
 
                 // 创建查询范围的 Envelope
                 IEnvelope queryEnvelope = new EnvelopeClass();
-                queryEnvelope.PutCoords(-180, -1000, -30, 1000);
+                var deltaX = 0.001; // 避免移动的时候连带到边缘不该移动的要素
+                queryEnvelope.PutCoords(-180 + deltaX, -1000, -30 - deltaX, 1000);
                 spatialFilter.Geometry = queryEnvelope;
 
                 // 查询要素
@@ -384,12 +385,12 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
 
             if (bound)
             {
-                SplitFeatures(fc, fcname, wo);
-                MoveFeatures(fc, fcname, wo);
-
                 var keyValuePair = FCToUnknown(fws, fcname, fc, wo);
                 fcname = keyValuePair.Key;
                 fc = keyValuePair.Value;
+
+                SplitFeatures(fc, fcname, wo);
+                MoveFeatures(fc, fcname, wo);
 
                 /*
                 keyValuePair = FCToDissolved(fws, fcname, fc, wo);
@@ -647,6 +648,13 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                 IFeatureClass fc = kv.Value;
                 String fcname = kv.Key;
 
+                // 获取要素类中要素的数量
+                int featureCount = fc.FeatureCount(null); // 如果传入 null，则计算所有的要素数量
+                if (featureCount == 0)
+                {
+                    continue;
+                }
+
                 esriGeometryType geometryType = fc.ShapeType;
 
                 if (Math.Abs(midlL - realMidlL) <= 2)
@@ -790,6 +798,8 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
 
                 if (geoDataset.SpatialReference is IProjectedCoordinateSystem)
                 {
+                    suffixToRemove = WGS1984Suffix + MultipartToSinglepSuffix + UnknownSuffix;
+
                     var keyValuePair = FeatureClassReverseProject(fws, fcname, fc, wo);
                     fcname = keyValuePair.Key;
                     fc = keyValuePair.Value;
@@ -798,94 +808,61 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                     {
                         continue;
                     }
-
-                    esriGeometryType geometryType = fc.ShapeType;
-                    string geoType = GetGeometryType(geometryType);
-                    if (string.IsNullOrEmpty(geoType))
-                    {
-                        MessageBox.Show("要素类" + fcname + "的几何类型不受支持，无法创建", "Error", MessageBoxButtons.OK,
-                            MessageBoxIcon.Error);
-                        continue;
-                    }
-
-                    wo.SetText("正在创建投影数据库的第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname);
-
-                    fc = fws.OpenFeatureClass(fcname);
-
-                    // 获取要素类的范围
-                    IEnvelope fcEnvelope = ((IGeoDataset)fc).Extent;
-
-                    if (fcEnvelope.XMin < mapEnvelope.XMin)
-                    {
-                        mapEnvelope.XMin = fcEnvelope.XMin;
-                    }
-
-                    if (fcEnvelope.XMax > mapEnvelope.XMax)
-                    {
-                        mapEnvelope.XMax = fcEnvelope.XMax;
-                    }
-
-                    createFeatureclass.spatial_reference = unknownSpatialReference;
-                    createFeatureclass.template = fcname;
-                    createFeatureclass.out_name = fcname;
-                    createFeatureclass.out_path = fullPath;
-                    createFeatureclass.geometry_type = geoType;
-
-                    Helper.ExecuteGPTool(geoprocessor, createFeatureclass, null);
-
-                    wo.SetText("正在拷贝投影数据库的第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname);
-
-                    append.inputs = fcname;
-                    append.target = fullPath + "\\" + fcname;
-                    append.schema_type = "TEST";
-                    Helper.ExecuteGPTool(geoprocessor, append, null);
                 }
                 else
                 {
-                    esriGeometryType geometryType = fc.ShapeType;
-                    string geoType = GetGeometryType(geometryType);
-                    if (string.IsNullOrEmpty(geoType))
-                    {
-                        MessageBox.Show("要素类" + fcname + "的几何类型不受支持，无法创建", "Error", MessageBoxButtons.OK,
-                            MessageBoxIcon.Error);
-                        continue;
-                    }
+                    suffixToRemove = MultipartToSinglepSuffix + UnknownSuffix;
 
                     if (fc.FeatureType == esriFeatureType.esriFTAnnotation)
                     {
                         Console.WriteLine("要素类" + fcname + "为注记类，无法投影");
                         continue;
                     }
+                }
 
-                    wo.SetText("正在创建投影数据库的第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname);
+                esriGeometryType geometryType = fc.ShapeType;
+                string geoType = GetGeometryType(geometryType);
+                if (string.IsNullOrEmpty(geoType))
+                {
+                    MessageBox.Show("要素类" + fcname + "的几何类型不受支持，无法创建", "Error", MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                    continue;
+                }
 
-                    // 获取要素类的范围
-                    IEnvelope fcEnvelope = ((IGeoDataset)fc).Extent;
+                wo.SetText("正在创建投影数据库的第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname);
 
-                    if (fcEnvelope.XMin < mapEnvelope.XMin)
-                    {
-                        mapEnvelope.XMin = fcEnvelope.XMin;
-                    }
+                // 获取要素类的范围
+                IEnvelope fcEnvelope = ((IGeoDataset)fc).Extent;
 
-                    if (fcEnvelope.XMax > mapEnvelope.XMax)
-                    {
-                        mapEnvelope.XMax = fcEnvelope.XMax;
-                    }
+                if (fcEnvelope.XMin < mapEnvelope.XMin)
+                {
+                    mapEnvelope.XMin = fcEnvelope.XMin;
+                }
 
-                    createFeatureclass.spatial_reference = unknownSpatialReference;
-                    createFeatureclass.template = fcname;
-                    createFeatureclass.out_name = fcname;
-                    createFeatureclass.out_path = fullPath;
-                    createFeatureclass.geometry_type = geoType;
+                if (fcEnvelope.XMax > mapEnvelope.XMax)
+                {
+                    mapEnvelope.XMax = fcEnvelope.XMax;
+                }
 
-                    Helper.ExecuteGPTool(geoprocessor, createFeatureclass, null);
+                createFeatureclass.spatial_reference = unknownSpatialReference;
+                createFeatureclass.template = fcname;
+                createFeatureclass.out_name = fcname;
+                createFeatureclass.out_path = fullPath;
+                createFeatureclass.geometry_type = geoType;
 
-                    wo.SetText("正在拷贝投影数据库的第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname);
+                Helper.ExecuteGPTool(geoprocessor, createFeatureclass, null);
 
-                    append.inputs = fcname;
-                    append.target = fullPath + "\\" + fcname;
-                    append.schema_type = "TEST";
-                    Helper.ExecuteGPTool(geoprocessor, append, null);
+                wo.SetText("正在拷贝投影数据库的第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname);
+
+                append.inputs = fcname;
+                append.target = fullPath + "\\" + fcname;
+                append.schema_type = "TEST";
+                Helper.ExecuteGPTool(geoprocessor, append, null);
+
+                if (geoDataset.SpatialReference is IProjectedCoordinateSystem)
+                {
+                    ((IDataset)fc).Delete(); // 删除反投影要素类
+
                 }
             }
         }
@@ -932,7 +909,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
             wo.SetText("正在多部件处理投影数据库的第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname);
 
             MultipartToSinglepart multipartToSinglepart = new MultipartToSinglepart();
-            multipartToSinglepart.in_features = fcname;
+            multipartToSinglepart.in_features = fc;
             String fcname_MultipartToSinglep = fcname + MultipartToSinglepSuffix;
             multipartToSinglepart.out_feature_class = fullPath + "\\" + fcname_MultipartToSinglep;
 
