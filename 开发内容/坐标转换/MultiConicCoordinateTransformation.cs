@@ -632,11 +632,11 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
 
             bool bound = true; // 是否需要根据实际中央经线与目标中央经线的差值进行原始数据裁剪,以完善公式限制
 
-            ws = DCDHelper.createTempWorkspace(fullPath);
+            IWorkspace wsProject = DCDHelper.createTempWorkspace(fullPath);
 
-            fws = ws as IFeatureWorkspace;
+            IFeatureWorkspace fwsProject = wsProject as IFeatureWorkspace;
 
-            Dictionary<string, IFeatureClass> fcName2FC = DCDHelper.GetAllFeatureClassFromWorkspace(fws);
+            Dictionary<string, IFeatureClass> fcName2FC = DCDHelper.GetAllFeatureClassFromWorkspace(fwsProject);
 
             // 获取数据库中要素类的数量
             int fcTotalNum = fcName2FC.Count;
@@ -660,13 +660,13 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                 if (Math.Abs(midlL - realMidlL) <= 2)
                 {
                     bound = false;
-                    FeatureClassProject(kv, fws, geometryType, fcNum, fcTotalNum, realMidlL, bound, mapScale, wo);
+                    FeatureClassProject(kv, fwsProject, geometryType, fcNum, fcTotalNum, realMidlL, bound, mapScale, wo);
                 }
                 else
                 {
                     FeatureClassProject(
-                        FCMultipartToSinglepart(geoprocessor, ws, fcname, fc, fcTotalNum, fcNum, wo),
-                        fws, geometryType, fcNum, fcTotalNum, midlL, bound, mapScale, wo);
+                        FCMultipartToSinglepart(geoprocessor, wsProject, fcname, fc, fcTotalNum, fcNum, wo),
+                        fwsProject, geometryType, fcNum, fcTotalNum, midlL, bound, mapScale, wo);
                 }
             }
 
@@ -674,14 +674,18 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
 
             #region 在投影数据库中进行定义投影
 
-            fcName2FC = DCDHelper.GetAllFeatureClassFromWorkspace(fws);
+            fcName2FC = DCDHelper.GetAllFeatureClassFromWorkspace(fwsProject);
 
-            var filePath = Application.StartupPath + "\\Equal_Difference_Multi_Cone.prj";
+            var filePath = Application.StartupPath + "\\Equal Difference Multi Cone.prj";
             if (!File.Exists(filePath))
             {
                 MessageBox.Show("等差分多圆锥投影文件不存在!");
                 return;
             }
+
+            // 使用空间参考工厂创建空间参考对象
+            ISpatialReferenceFactory spatialReferenceFactory = new SpatialReferenceEnvironmentClass();
+            ISpatialReference wgsProject = spatialReferenceFactory.CreateESRISpatialReferenceFromPRJFile(filePath);
 
             foreach (var kv in fcName2FC)
             {
@@ -689,10 +693,6 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
                 String fcname = kv.Key;
 
                 wo.SetText("将投影数据库中的要素类" + fcname + "定义为等差分多圆锥投影");
-
-                // 使用空间参考工厂创建空间参考对象
-                ISpatialReferenceFactory spatialReferenceFactory = new SpatialReferenceEnvironmentClass();
-                ISpatialReference wgsProject = spatialReferenceFactory.CreateESRISpatialReferenceFromPRJFile(filePath);
 
                 DefineProjection defineProjection = new DefineProjection();
                 defineProjection.in_dataset = fc;
@@ -908,6 +908,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
             Helper.ExecuteGPTool(geoprocessor, calculateField, null);
         }
 
+        // 防止飞地被连带移动
         public static KeyValuePair<string, IFeatureClass> FCMultipartToSinglepart(Geoprocessor geoprocessor, IWorkspace ws, String fcname, IFeatureClass fc, int fcTotalNum, int fcNum, WaitOperation wo)
         {
             fws = ws as IFeatureWorkspace;
