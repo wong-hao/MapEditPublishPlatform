@@ -734,9 +734,9 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
 
             Helper.ExecuteGPTool(geoprocessor, project, null);
 
-            IFeatureClass fc_WGS1984 = fws.OpenFeatureClass(fcname_Geographic);
+            IFeatureClass fc_Geographic = fws.OpenFeatureClass(fcname_Geographic);
 
-            var kv_WGS1984 = new KeyValuePair<string, IFeatureClass>(fcname_Geographic, fc_WGS1984);
+            var kv_WGS1984 = new KeyValuePair<string, IFeatureClass>(fcname_Geographic, fc_Geographic);
 
             return kv_WGS1984;
         }
@@ -761,20 +761,6 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
 
             // 设置为未知坐标系统
             ISpatialReference unknownSpatialReference = new UnknownCoordinateSystem() as ISpatialReference;
-
-            /*
-               // 创建一个 SpatialReferenceFactory
-               Type factoryType = Type.GetTypeFromProgID("esriGeometry.SpatialReferenceEnvironment");
-               ISpatialReferenceFactory spatialReferenceFactory = Activator.CreateInstance(factoryType) as ISpatialReferenceFactory;
-               
-               // 设置为指定投影坐标系统
-               ISpatialReference projectedSpatialReference = spatialReferenceFactory.CreateProjectedCoordinateSystem((int)esriSRProjCSType.esriSRProjCS_WGS1984UTM_10N);
-               
-               // 可以设置其他投影坐标系的参数，例如投影方式、单位等
-               // 比如，要设置投影单位为米：
-               IProjectedCoordinateSystem projectedCoordSys = projectedSpatialReference as IProjectedCoordinateSystem;
-               projectedCoordSys.CoordinateUnit(1);
-             */
 
             // 使用Append工具
             Append append = new Append();
