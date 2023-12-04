@@ -17,9 +17,8 @@ using ESRI.ArcGIS.DataSourcesGDB;
 using ESRI.ArcGIS.esriSystem;
 using ESRI.ArcGIS.GeoAnalyst;
 using ESRI.ArcGIS.Geoprocessor;
-using SMGI.Plugin.DCDProcess;
 
-namespace SMGI.Plugin.CollaborativeWorkWithAccount
+namespace SMGI.Plugin.EmergencyMap
 {
 
     public class CoordinateTransformationCmd : SMGI.Common.SMGICommand

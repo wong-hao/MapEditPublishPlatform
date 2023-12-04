@@ -17,9 +17,8 @@ using ESRI.ArcGIS.DataSourcesGDB;
 using ESRI.ArcGIS.esriSystem;
 using ESRI.ArcGIS.GeoAnalyst;
 using ESRI.ArcGIS.Geoprocessor;
-using SMGI.Plugin.DCDProcess;
 
-namespace SMGI.Plugin.CollaborativeWorkWithAccount
+namespace SMGI.Plugin.EmergencyMap
 {
 
     public class CoordinateTransformation
@@ -736,9 +735,9 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
 
             IFeatureClass fc_Geographic = fws.OpenFeatureClass(fcname_Geographic);
 
-            var kv_WGS1984 = new KeyValuePair<string, IFeatureClass>(fcname_Geographic, fc_Geographic);
+            var kv_Geographic = new KeyValuePair<string, IFeatureClass>(fcname_Geographic, fc_Geographic);
 
-            return kv_WGS1984;
+            return kv_Geographic;
         }
 
         public static void GDBInit(ref Envelope mapEnvelope, Geoprocessor geoprocessor, IWorkspace ws, WaitOperation wo)
