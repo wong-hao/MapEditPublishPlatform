@@ -147,9 +147,17 @@ namespace SMGI.Plugin.EmergencyMap
 
         static string appAath = DCDHelper.GetAppDataPath();
         static string projectedGDB = "投影数据库.gdb";
-        public static string fullPath = appAath + "\\" + projectedGDB;
+        public static IFeatureDataset sdeFeatureDataset = null;
+        public static string newDatasetName = "MainDataFrame";
+        public static string newDataSetLoc = appAath + "\\" + projectedGDB;
+        public static string fullPath = newDataSetLoc + "\\" + newDatasetName;
         public static IFeatureWorkspace fws = null;
+        public static ISpatialReferenceFactory spatialReferenceFactory = null;
+        public static ISpatialReference wgsProject = null;
+        public static IWorkspace wsProject = null;
+        public static IFeatureWorkspace fwsProject = null;
 
+        public static bool isProjectedBefore;
         public static string MultipartToSinglepSuffix = "_MultipartToSinglep";
         public static string UnknownSuffix = "_Unknown";
         public static string DissolvedSuffix = "_Dissolved";
@@ -188,7 +196,7 @@ namespace SMGI.Plugin.EmergencyMap
 
                 // 创建查询范围的 Envelope
                 IEnvelope queryEnvelope = new EnvelopeClass();
-                var deltaX = 0.001; // 避免移动的时候连带到边缘不该移动的要素
+                var deltaX = 0.00001; // 避免移动的时候连带到边缘不该移动的要素
                 queryEnvelope.PutCoords(-180 + deltaX, -1000, -30 - deltaX, 1000);
                 spatialFilter.Geometry = queryEnvelope;
 
@@ -402,6 +410,12 @@ namespace SMGI.Plugin.EmergencyMap
                  */
 
                 keyValuePair = FCRemoveSuffix(fws, fcname, fc, wo);
+                fcname = keyValuePair.Key;
+                fc = keyValuePair.Value;
+            }else if (isProjectedBefore)
+            {
+                suffixToRemove = GeographicSuffix;
+                var keyValuePair = FCRemoveSuffix(fws, fcname, fc, wo);
                 fcname = keyValuePair.Key;
                 fc = keyValuePair.Value;
             }
@@ -631,9 +645,9 @@ namespace SMGI.Plugin.EmergencyMap
 
             bool bound = true; // 是否需要根据实际中央经线与目标中央经线的差值进行原始数据裁剪,以完善公式限制
 
-            IWorkspace wsProject = DCDHelper.createTempWorkspace(fullPath);
+            wsProject = DCDHelper.createTempWorkspace(newDataSetLoc);
 
-            IFeatureWorkspace fwsProject = wsProject as IFeatureWorkspace;
+            fwsProject = wsProject as IFeatureWorkspace;
 
             Dictionary<string, IFeatureClass> fcName2FC = DCDHelper.GetAllFeatureClassFromWorkspace(fwsProject);
 
@@ -651,7 +665,7 @@ namespace SMGI.Plugin.EmergencyMap
                 int featureCount = fc.FeatureCount(null); // 如果传入 null，则计算所有的要素数量
                 if (featureCount == 0)
                 {
-                    continue;
+                    //continue;
                 }
 
                 esriGeometryType geometryType = fc.ShapeType;
@@ -673,8 +687,6 @@ namespace SMGI.Plugin.EmergencyMap
 
             #region 在投影数据库中进行定义投影
 
-            fcName2FC = DCDHelper.GetAllFeatureClassFromWorkspace(fwsProject);
-
             var filePath = Application.StartupPath + "\\Equivalent Difference Latitude Parallel Polyconic.prj";
             if (!File.Exists(filePath))
             {
@@ -683,22 +695,18 @@ namespace SMGI.Plugin.EmergencyMap
             }
 
             // 使用空间参考工厂创建空间参考对象
-            ISpatialReferenceFactory spatialReferenceFactory = new SpatialReferenceEnvironmentClass();
-            ISpatialReference wgsProject = spatialReferenceFactory.CreateESRISpatialReferenceFromPRJFile(filePath);
+            spatialReferenceFactory = new SpatialReferenceEnvironmentClass();
+            wgsProject = spatialReferenceFactory.CreateESRISpatialReferenceFromPRJFile(filePath);
 
-            foreach (var kv in fcName2FC)
-            {
-                IFeatureClass fc = kv.Value;
-                String fcname = kv.Key;
+            wo.SetText("将投影数据库中的要素集合" + newDatasetName + "定义为等差分纬线多圆锥投影");
 
-                wo.SetText("将投影数据库中的要素类" + fcname + "定义为等差分纬线多圆锥投影");
+            sdeFeatureDataset = fwsProject.OpenFeatureDataset(newDatasetName);
 
-                DefineProjection defineProjection = new DefineProjection();
-                defineProjection.in_dataset = fc;
-                defineProjection.coor_system = wgsProject;
+            DefineProjection defineProjectionDataset = new DefineProjection();
+            defineProjectionDataset.in_dataset = sdeFeatureDataset;
+            defineProjectionDataset.coor_system = wgsProject;
 
-                Helper.ExecuteGPTool(geoprocessor, defineProjection, null);
-            }
+            Helper.ExecuteGPTool(geoprocessor, defineProjectionDataset, null);
 
             #endregion
         }
@@ -755,11 +763,68 @@ namespace SMGI.Plugin.EmergencyMap
             createFileGdb.out_folder_path = appAath;
             Helper.ExecuteGPTool(geoprocessor, createFileGdb, null);
 
+            wo.SetText("正在创建投影数据库的要素数据集" + newDatasetName);
+
+            wsProject = DCDHelper.createTempWorkspace(newDataSetLoc);
+
+            fwsProject = wsProject as IFeatureWorkspace;
+
             // 使用CreateFeatureclass工具
             CreateFeatureclass createFeatureclass = new CreateFeatureclass();
 
             // 设置为未知坐标系统
             ISpatialReference unknownSpatialReference = new UnknownCoordinateSystem() as ISpatialReference;
+            unknownSpatialReference.SetDomain(-2000, 2000, -2000, 2000);
+            sdeFeatureDataset = fwsProject.CreateFeatureDataset(newDatasetName, unknownSpatialReference);
+
+            wo.SetText("正在将协同更新状态表拷贝进投影数据库");
+
+            /*
+            try
+            {
+                if (fws.OpenTable("econfig") != null)
+                {
+                    Copy copyeconfig = new Copy();
+                    copyeconfig.in_data = "econfig";
+                    copyeconfig.out_data = newDataSetLoc + "\\" + "econfig";
+                    Helper.ExecuteGPTool(geoprocessor, copyeconfig, null);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("状态表econfig不存在");
+            }
+            */
+
+            try
+            {
+                if (fws.OpenTable("RecordTable") != null)
+                {
+                    Copy copyeconfig = new Copy();
+                    copyeconfig.in_data = "RecordTable";
+                    copyeconfig.out_data = newDataSetLoc + "\\" + "RecordTable";
+                    Helper.ExecuteGPTool(geoprocessor, copyeconfig, null);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("状态表RecordTable不存在");
+            }
+
+            try
+            {
+                if (fws.OpenTable("SMGILocalState") != null)
+                {
+                    Copy copyeconfig = new Copy();
+                    copyeconfig.in_data = "SMGILocalState";
+                    copyeconfig.out_data = newDataSetLoc + "\\" + "SMGILocalState";
+                    Helper.ExecuteGPTool(geoprocessor, copyeconfig, null);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("状态表SMGILocalState不存在");
+            }
 
             // 使用Append工具
             Append append = new Append();
@@ -781,13 +846,15 @@ namespace SMGI.Plugin.EmergencyMap
                 int featureCount = fc.FeatureCount(null); // 如果传入 null，则计算所有的要素数量
                 if (featureCount == 0)
                 {
-                    continue;
+                    //continue;
                 }
 
                 IGeoDataset geoDataset = (IGeoDataset)fc;
 
                 if (geoDataset.SpatialReference is IProjectedCoordinateSystem)
                 {
+                    isProjectedBefore = true;
+
                     suffixToRemove = GeographicSuffix + MultipartToSinglepSuffix + UnknownSuffix;
 
                     var keyValuePair = FeatureClassReverseProject(fws, fcname, fc, wo);
@@ -796,18 +863,20 @@ namespace SMGI.Plugin.EmergencyMap
 
                     if (string.IsNullOrEmpty(fcname) || fc == null)
                     {
-                        Console.WriteLine("要素类" + fcname + "为注记类，无法投影");
-                        continue;
+                        //Console.WriteLine("要素类" + fcname + "为注记类，无法投影");
+                        //continue;
                     }
                 }
                 else
                 {
+                    isProjectedBefore = false;
+
                     suffixToRemove = MultipartToSinglepSuffix + UnknownSuffix;
 
                     if (fc.FeatureType == esriFeatureType.esriFTAnnotation)
                     {
-                        Console.WriteLine("要素类" + fcname + "为注记类，无法投影");
-                        continue;
+                        //Console.WriteLine("要素类" + fcname + "为注记类，无法投影");
+                        //continue;
                     }
                 }
 
@@ -822,17 +891,25 @@ namespace SMGI.Plugin.EmergencyMap
 
                 wo.SetText("正在创建投影数据库的第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname);
 
-                // 获取要素类的范围
-                IEnvelope fcEnvelope = ((IGeoDataset)fc).Extent;
-
-                if (fcEnvelope.XMin < mapEnvelope.XMin)
+                if (featureCount != 0)
                 {
-                    mapEnvelope.XMin = fcEnvelope.XMin;
+                    // 获取要素类的范围
+                    IEnvelope fcEnvelope = ((IGeoDataset)fc).Extent;
+
+                    if (fcEnvelope.XMin < mapEnvelope.XMin)
+                    {
+                        mapEnvelope.XMin = fcEnvelope.XMin;
+                    }
+
+                    if (fcEnvelope.XMax > mapEnvelope.XMax)
+                    {
+                        mapEnvelope.XMax = fcEnvelope.XMax;
+                    } 
                 }
-
-                if (fcEnvelope.XMax > mapEnvelope.XMax)
+                else
                 {
-                    mapEnvelope.XMax = fcEnvelope.XMax;
+                    mapEnvelope.XMin = -30;
+                    mapEnvelope.XMax = 150;
                 }
 
                 createFeatureclass.spatial_reference = unknownSpatialReference;
@@ -853,7 +930,6 @@ namespace SMGI.Plugin.EmergencyMap
                 if (geoDataset.SpatialReference is IProjectedCoordinateSystem)
                 {
                     ((IDataset)fc).Delete(); // 删除反投影要素类
-
                 }
             }
         }
