@@ -196,7 +196,7 @@ namespace SMGI.Plugin.EmergencyMap
 
                 // 创建查询范围的 Envelope
                 IEnvelope queryEnvelope = new EnvelopeClass();
-                var deltaX = 0.00001; // 避免移动的时候连带到边缘不该移动的要素
+                var deltaX = 0; // 避免移动的时候连带到边缘不该移动的要素
                 queryEnvelope.PutCoords(-180 + deltaX, -1000, -30 - deltaX, 1000);
                 spatialFilter.Geometry = queryEnvelope;
 
