@@ -18,7 +18,7 @@ using ESRI.ArcGIS.esriSystem;
 using ESRI.ArcGIS.GeoAnalyst;
 using ESRI.ArcGIS.Geoprocessor;
 
-namespace SMGI.Plugin.EmergencyMap
+namespace SMGI.Plugin.CollaborativeWorkWithAccount
 {
 
     public class CoordinateTransformation
@@ -78,7 +78,7 @@ namespace SMGI.Plugin.EmergencyMap
             return an * l / ln;
         }
 
-        // L：经度（坐标）；B：纬度（坐标）；mapScale：比例尺（真实值）；midlL：中央经线（坐标）
+        // //x（自南向北）-B（毫米）；y（自西向东）-L（毫米）；L：经度（坐标）；B：纬度（坐标）；mapScale：比例尺（真实值）；midlL：中央经线（坐标）
         public static void polyconicProjection(ref double x, ref double y, double L, double B, double midlL, double mapScale)
         {
             mapScale = mapScale / 10000; //比例尺（以万为单位）
@@ -156,6 +156,7 @@ namespace SMGI.Plugin.EmergencyMap
         public static ISpatialReference wgsProject = null;
         public static IWorkspace wsProject = null;
         public static IFeatureWorkspace fwsProject = null;
+        public static double zoomFactor = 1000; //用于弥补公式无法实现数据视图下较大比例尺的问题，这是由于单位换算造成的。方法是将通过将坐标放大zoomFactor倍以放大同等倍数的显示比例尺
 
         public static bool isProjectedBefore;
         public static string MultipartToSinglepSuffix = "_MultipartToSinglep";
@@ -196,7 +197,7 @@ namespace SMGI.Plugin.EmergencyMap
 
                 // 创建查询范围的 Envelope
                 IEnvelope queryEnvelope = new EnvelopeClass();
-                var deltaX = 0; // 避免移动的时候连带到边缘不该移动的要素
+                var deltaX = 0; // 避免domain过大时，误差引起的移动的时候连带到边缘不该移动的要素
                 queryEnvelope.PutCoords(-180 + deltaX, -1000, -30 - deltaX, 1000);
                 spatialFilter.Geometry = queryEnvelope;
 
@@ -420,6 +421,8 @@ namespace SMGI.Plugin.EmergencyMap
                 fc = keyValuePair.Value;
             }
 
+            DeleteSptialIndex(fc);
+
             // 获取要素类中要素的数量
             int featureCount = fc.FeatureCount(null); // 如果传入 null，则计算所有的要素数量
 
@@ -434,8 +437,8 @@ namespace SMGI.Plugin.EmergencyMap
 
             double longitude;
             double latitude;
-            double xCoordination = 0; //x（自南向北）-B
-            double yCoordination = 0; //y（自西向东）-L
+            double xCoordination = 0;
+            double yCoordination = 0;
 
             IFeatureCursor featureCursor = null;
             try
@@ -483,7 +486,7 @@ namespace SMGI.Plugin.EmergencyMap
                                 return;
                             }
 
-                            point.PutCoords(yCoordination, xCoordination);
+                            point.PutCoords(yCoordination * zoomFactor, xCoordination * zoomFactor);
 
                             //pGeo.Project(ISR);
 
@@ -522,7 +525,7 @@ namespace SMGI.Plugin.EmergencyMap
                                     return;
                                 }
 
-                                point.PutCoords(yCoordination, xCoordination);
+                                point.PutCoords(yCoordination * zoomFactor, xCoordination * zoomFactor);
 
                                 // 将移动后的点重新设置到要素中
                                 pointCollection.UpdatePoint(i, point);
@@ -589,7 +592,7 @@ namespace SMGI.Plugin.EmergencyMap
                                         return;
                                     }
 
-                                    point.PutCoords(yCoordination, xCoordination);
+                                    point.PutCoords(yCoordination * zoomFactor, xCoordination * zoomFactor);
 
                                     // 将移动后的点重新设置到环中
                                     pointCollection.UpdatePoint(j, point);
@@ -774,7 +777,7 @@ namespace SMGI.Plugin.EmergencyMap
 
             // 设置为未知坐标系统
             ISpatialReference unknownSpatialReference = new UnknownCoordinateSystem() as ISpatialReference;
-            unknownSpatialReference.SetDomain(-2000, 2000, -2000, 2000);
+            unknownSpatialReference.SetDomain(-2000 * zoomFactor, 2000 * zoomFactor, -2000 * zoomFactor, 2000 * zoomFactor);
             sdeFeatureDataset = fwsProject.CreateFeatureDataset(newDatasetName, unknownSpatialReference);
 
             wo.SetText("正在将协同更新状态表拷贝进投影数据库");
@@ -1173,6 +1176,45 @@ namespace SMGI.Plugin.EmergencyMap
                 new KeyValuePair<string, IFeatureClass>(fcname_Changed, fc_Changed);
 
             return kv_Changed;
+        }
+
+        public static void DeleteSptialIndex(IFeatureClass fc)
+        {
+            // Attempt to acquire an exclusive schema lock on the feature class.
+            ISchemaLock schemaLock = (ISchemaLock)fc;
+            try
+            {
+                // Find the shape field from the class's field set.
+                String shapeFieldName = fc.ShapeFieldName;
+                int shapeFieldIndex = fc.FindField(shapeFieldName);
+                IFields fields = fc.Fields;
+                IField shapeField = fields.get_Field(shapeFieldIndex);
+
+                // Get the name of the spatial index, if one exists.
+                IIndexes indexes = fc.Indexes;
+                IEnumIndex enumIndex = indexes.FindIndexesByFieldName(shapeFieldName);
+                enumIndex.Reset();
+                IIndex spatialIndex = enumIndex.Next();
+                if (spatialIndex == null)
+                {
+                    Console.WriteLine("No spatial index exists.");
+                    return;
+                }
+                else
+                {
+                    Console.WriteLine("Spatial index name: {0}", spatialIndex.Name);
+                    fc.DeleteIndex(spatialIndex);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle appropriately for your application.
+                Console.WriteLine("A COM Exception was thrown: {0}", ex.Message);
+            }
+            finally
+            {
+                schemaLock.ChangeSchemaLock(esriSchemaLock.esriSharedSchemaLock);
+            }
         }
     }
 }
