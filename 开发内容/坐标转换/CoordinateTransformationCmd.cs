@@ -18,7 +18,7 @@ using ESRI.ArcGIS.esriSystem;
 using ESRI.ArcGIS.GeoAnalyst;
 using ESRI.ArcGIS.Geoprocessor;
 
-namespace SMGI.Plugin.CollaborativeWorkWithAccount
+namespace SMGI.Plugin.EmergencyMap
 {
 
     public class CoordinateTransformationCmd : SMGI.Common.SMGICommand

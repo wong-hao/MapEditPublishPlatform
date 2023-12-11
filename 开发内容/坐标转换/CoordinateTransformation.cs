@@ -18,7 +18,7 @@ using ESRI.ArcGIS.esriSystem;
 using ESRI.ArcGIS.GeoAnalyst;
 using ESRI.ArcGIS.Geoprocessor;
 
-namespace SMGI.Plugin.CollaborativeWorkWithAccount
+namespace SMGI.Plugin.EmergencyMap
 {
 
     public class CoordinateTransformation
@@ -721,7 +721,7 @@ namespace SMGI.Plugin.CollaborativeWorkWithAccount
 
             if (fc.FeatureType == esriFeatureType.esriFTAnnotation)
             {
-                return new KeyValuePair<string, IFeatureClass>(string.Empty, null);
+                //return new KeyValuePair<string, IFeatureClass>(string.Empty, null);
             }
 
             wo.SetText("正在将要素类" + fcname + "从投影坐标系反投影为地理坐标系");

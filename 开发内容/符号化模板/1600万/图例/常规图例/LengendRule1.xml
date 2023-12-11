@@ -1,0 +1,347 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LengendTemplate>
+  <LengendInfo>
+    <Column Name="图例列数">2</Column>
+    <CharactersXStep Unit="毫米" Name="图例文字水平间隔">20</CharactersXStep>
+    <TitleFontSize Unit="毫米" Name="图例标题字体">7</TitleFontSize>
+    <ItemFontSize Unit="毫米" Name="图例项字体">4</ItemFontSize>
+    <ItemYStep Unit="毫米" Name="图例项垂直间隔">10</ItemYStep>
+    <ItemXStep Unit="毫米" Name="图例项水平间隔">56</ItemXStep>
+    <ScaleBarStep Unit="毫米" Name="比例尺间隔">15</ScaleBarStep>
+    <LegendType Name="图例类型">0</LegendType>
+  </LengendInfo>
+  <Lengend>
+    <Layer LayerName="注记图例" Checked="false">
+      <DataRow unit="毫米" display="true">
+        <AnnoName>北京市</AnnoName>
+        <AnnoFontSize>4.2</AnnoFontSize>
+        <AnnoFontName>黑体</AnnoFontName>
+        <AnnoNote>省级行政中心</AnnoNote>
+        <AnnoColor>M100Y100</AnnoColor>
+      </DataRow>
+      <DataRow unit="毫米" display="true">
+        <AnnoName>北京市</AnnoName>
+        <AnnoFontSize>3.2</AnnoFontSize>
+        <AnnoFontName>黑体</AnnoFontName>
+        <AnnoNote>地级行政中心</AnnoNote>
+        <AnnoColor>K100</AnnoColor>
+      </DataRow>
+      <DataRow unit="毫米" display="true">
+        <AnnoName>朝阳区</AnnoName>
+        <AnnoFontSize>2.7</AnnoFontSize>
+        <AnnoFontName>黑体</AnnoFontName>
+        <AnnoNote>县(区、市)政府驻地</AnnoNote>
+        <AnnoColor>K100</AnnoColor>
+      </DataRow>
+      <DataRow unit="毫米" display="true">
+        <AnnoName>三里屯街道</AnnoName>
+        <AnnoFontSize>2.1</AnnoFontSize>
+        <AnnoFontName>黑体</AnnoFontName>
+        <AnnoNote>乡、镇政府驻地</AnnoNote>
+        <AnnoColor>K100</AnnoColor>
+      </DataRow>
+      <DataRow unit="毫米" display="true">
+        <AnnoName>东三里社区</AnnoName>
+        <AnnoFontSize>2</AnnoFontSize>
+        <AnnoFontName>黑体</AnnoFontName>
+        <AnnoNote>村庄</AnnoNote>
+        <AnnoColor>K100</AnnoColor>
+      </DataRow>
+        </Layer>
+	<!-- From AGNP-->
+	<Layer LayerName="首都" Checked="true" RuleID="2" />
+	<Layer LayerName="直辖市、省会" Checked="true" RuleID="3" />
+        <Layer LayerName="州、地区驻地" Checked="true" RuleID="4" />
+        <Layer LayerName="地级市驻地" Checked="true"RuleID="5" />
+	<Layer LayerName="县、县级市驻地" Checked="true" RuleID="6" />
+	<Layer LayerName="镇" Checked="true" RuleID="7" />
+	<Layer LayerName="乡" Checked="true" RuleID="8" />
+        <Layer LayerName="街道办事处" Checked="true" RuleID="9" />
+        <Layer LayerName="建制村" Checked="true" RuleID="10" />
+	<Layer LayerName="自然村" Checked="true" RuleID="11" />
+        <Layer LayerName="农林牧渔场" Checked="true" RuleID="12" />
+        <Layer LayerName="外国首都、首府" Checked="true" RuleID="13" />
+	<Layer LayerName="外国重要城市、一级行政中心" Checked="true" RuleID="14" />
+        <Layer LayerName="外国一般城市、一级行政中心" Checked="true" RuleID="15" />
+        <Layer LayerName="外国城镇、一级行政中心" Checked="true"RuleID="16" />
+	<Layer LayerName="外国村庄、一级行政中心" Checked="true" RuleID="17" />
+	<Layer LayerName="外国重要城市" Checked="true" RuleID="18" />
+	<Layer LayerName="外国地级市驻地（重要城市）" Checked="true" RuleID="19" />
+        <Layer LayerName="外国一般城市" Checked="true" RuleID="20" />
+        <Layer LayerName="外国县级市驻地（一般城市）" Checked="true" RuleID="21" />
+	<Layer LayerName="外国城镇、外国乡镇" Checked="true" RuleID="22" />
+        <Layer LayerName="外国村庄" Checked="true" RuleID="23" />
+        <Layer LayerName="外国自然村" Checked="true" RuleID="24" />
+	<Layer LayerName="外国农林牧渔场" Checked="true" RuleID="25" />
+        <Layer LayerName="外国其他地名" Checked="true" RuleID="26" />
+	<!--From TERP -->
+	<Layer LayerName="孤峰" Checked="true" RuleID="2" />
+        <Layer LayerName="峰丛" Checked="true" RuleID="3" />
+	<Layer LayerName="山洞、溶洞" Checked="true" RuleID="4" />
+        <Layer LayerName="漏斗" Checked="true" RuleID="5" />
+	<Layer LayerName="火山口" Checked="true" RuleID="6" />
+        <Layer LayerName="冰塔" Checked="true" RuleID="7" />
+	<Layer LayerName="露岩地" Checked="true" RuleID="8" />
+        <Layer LayerName="高程点" Checked="true" RuleID="9" />
+	<Layer LayerName="实际位置水深" Checked="true" RuleID="10" />
+        <Layer LayerName="不精确水深" Checked="true" RuleID="11" />
+	<!--From BOUL -->
+	<Layer LayerName="已定国界" Checked="true" RuleID="2" />
+        <Layer LayerName="未定国界" Checked="true" RuleID="3" />
+	<Layer LayerName="已定省界" Checked="true" RuleID="5" />
+        <Layer LayerName="巳定地级界" Checked="true" RuleID="6" />
+	<Layer LayerName="已定县级界" Checked="true" RuleID="7" />
+        <Layer LayerName="特别行政区界线" Checked="true" RuleID="8" />
+        <Layer LayerName="军事分界线" Checked="true" RuleID="9" />
+        <Layer LayerName="特殊地区界线" Checked="true" RuleID="10" />
+        <Layer LayerName="领海基线" Checked="true" RuleID="4" />
+	<!--From BRGl -->
+	<Layer LayerName="自然、文化保护区界" Checked="true" RuleID="2" />
+	<!--From LRDL -->
+	<Layer LayerName="主干道" Checked="true" RuleID="12" />
+	<Layer LayerName="次干道" Checked="true" RuleID="13" />
+	<!--From LRDL LRRL -->
+	<Layer LayerName="高速铁路" Checked="true" RuleID="4" />
+        <Layer LayerName="普通铁路" Checked="true" RuleID="3" />
+	<Layer LayerName="建设中高速铁路" Checked="true" RuleID="2" />
+	<Layer LayerName="建设中普通铁路" Checked="true" RuleID="5" />
+        <Layer LayerName="建成高速公路" Checked="true" RuleID="2" />
+	<Layer LayerName="建筑中高速公路" Checked="true" RuleID="3" />
+        <Layer LayerName="建成国道" Checked="true" RuleID="4" />
+	<Layer LayerName="建筑中国道" Checked="true" RuleID="5" />
+        <Layer LayerName="建成省道" Checked="true" RuleID="6" />
+	<Layer LayerName="建筑中省道" Checked="true" RuleID="7" />
+        <Layer LayerName="建成县道" Checked="true" RuleID="8" />
+	<Layer LayerName="建筑中县道" Checked="true" RuleID="9" />
+        <Layer LayerName="乡道" Checked="true" RuleID="10" />
+	<Layer LayerName="专用公路" Checked="true" RuleID="11" />
+        <Layer LayerName="城市快速路" Checked="true" RuleID="14" />
+	<Layer LayerName="机耕路（大路）" Checked="true" RuleID="15" />
+        <Layer LayerName="乡村路" Checked="true" RuleID="16" />
+	<Layer LayerName="小路" Checked="true" RuleID="17" />
+	<!--From LFCP LFCL -->
+	<Layer LayerName="能起降飞机的公路路段" Checked="true" RuleID="2" />
+	<Layer LayerName="火车站" Checked="true" RuleID="3" />
+	<Layer LayerName="危险区" Checked="true" RuleID="4" />
+	<Layer LayerName="通航河段起迄点" Checked="true" RuleID="5" />
+	<Layer LayerName="山隘" Checked="true" RuleID="6" />
+        <Layer LayerName="高速路出入口" Checked="true" RuleID="7" />
+	<Layer LayerName="里程碑" Checked="true" RuleID="8" />
+        <Layer LayerName="收费站" Checked="true" RuleID="9" />
+        <Layer LayerName="停车场、服务区" Checked="true" RuleID="10" />
+	<Layer LayerName="隧道" Checked="true" RuleID="11" />
+	<Layer LayerName="铁路桥" Checked="true" RuleID="12" />
+	<Layer LayerName="公路桥" Checked="true" RuleID="13" />
+	<Layer LayerName="并行桥" Checked="true" RuleID="14" />
+	<Layer LayerName="双层桥" Checked="true" RuleID="15" />
+	<Layer LayerName="立交桥" Checked="true" RuleID="16" />
+	<Layer LayerName="人行桥" Checked="true" RuleID="62" />
+	<Layer LayerName="港口" Checked="true" RuleID="17" />
+	<Layer LayerName="栈桥式码头" Checked="true" RuleID="18" />
+	<Layer LayerName="突堤式码头" Checked="true" RuleID="19" />
+	<Layer LayerName="军用四级机场" Checked="true" RuleID="20" />
+	<Layer LayerName="军用三级机场" Checked="true" RuleID="21" />
+	<Layer LayerName="军用二级机场" Checked="true" RuleID="22" />
+	<Layer LayerName="军用一级机场" Checked="true" RuleID="23" />
+	<Layer LayerName="主要机场（民用）" Checked="true" RuleID="24" />
+	<Layer LayerName="主要机场（军用）" Checked="true" RuleID="25" />
+	<Layer LayerName="次要机场（民用）" Checked="true" RuleID="26" />
+	<Layer LayerName="次要机场（军用）" Checked="true" RuleID="27" />
+	<Layer LayerName="民用航空四级机场" Checked="true" RuleID="28" />
+	<Layer LayerName="民用航空三级机场" Checked="true" RuleID="29" />
+	<Layer LayerName="民用航空二级机场）" Checked="true" RuleID="30" />
+	<Layer LayerName="民用航空一级机场" Checked="true" RuleID="58" />
+	<Layer LayerName="其它民用机场" Checked="true" RuleID="31" />
+	<Layer LayerName="民用直升机场" Checked="true" RuleID="59" />
+	<Layer LayerName="军用直升机场" Checked="true" RuleID="60" />
+	<Layer LayerName="水上机场" Checked="true" RuleID="61" />
+	<Layer LayerName="非危险沉船" Checked="true" RuleID="32" />
+	<Layer LayerName="危险沉船" Checked="true" RuleID="33" />
+	<Layer LayerName="露出水面沉船" Checked="true" RuleID="34" />
+	<Layer LayerName="险恶地" Checked="true" RuleID="35" />
+	<Layer LayerName="障碍物" Checked="true" RuleID="36" />
+	<Layer LayerName="灯标" Checked="true" RuleID="37" />
+	<Layer LayerName="灯塔（雷达可视3）" Checked="true" RuleID="38" />
+	<Layer LayerName="灯桩" Checked="true" RuleID="39" />
+	<Layer LayerName="立标" Checked="true" RuleID="40" />
+	<Layer LayerName="灯船" Checked="true" RuleID="41" />
+	<Layer LayerName="大型浮标" Checked="true" RuleID="42" />
+	<Layer LayerName="船形灯浮标" Checked="true" RuleID="43" />
+	<Layer LayerName="柱形浮标" Checked="true" RuleID="44" />
+	<Layer LayerName="锥形浮标" Checked="true" RuleID="46" />
+	<Layer LayerName="球形浮标" Checked="true" RuleID="47" />
+	<Layer LayerName="罐形浮标" Checked="true" RuleID="48" />
+	<Layer LayerName="桶形浮标" Checked="true" RuleID="49" />
+	<Layer LayerName="内河助航标志" Checked="true" RuleID="50" />
+	<Layer LayerName="灯塔（海上）" Checked="true" RuleID="56" />
+	<Layer LayerName="雷达站" Checked="true" RuleID="51" />
+	<Layer LayerName="雷达应答器" Checked="true" RuleID="52" />
+	<Layer LayerName="雷达反射器" Checked="true" RuleID="53" />
+	<Layer LayerName="无线电站" Checked="true" RuleID="54" />
+	<Layer LayerName="雾号" Checked="true" RuleID="55" />
+	<Layer LayerName="顶端无灯光的机场障碍物" Checked="true" RuleID="57" />
+	<Layer LayerName="隧道" Checked="true" RuleID="2" />
+	<Layer LayerName="路堤" Checked="true" RuleID="4" />
+	<Layer LayerName="人行桥" Checked="true" RuleID="5" />
+	<Layer LayerName="铁路桥" Checked="true" RuleID="6" />
+	<Layer LayerName="公路桥" Checked="true" RuleID="7" />
+        <Layer LayerName="并行桥" Checked="true" RuleID="8" />
+	<Layer LayerName="双层桥" Checked="true" RuleID="9" />
+        <Layer LayerName="汽车渡" Checked="true" RuleID="10" />
+        <Layer LayerName="人渡" Checked="true" RuleID="11" />
+	<Layer LayerName="防波堤" Checked="true" RuleID="12" />
+	<Layer LayerName="突堤式码头" Checked="true" RuleID="13" />
+	<Layer LayerName="栈桥式码头" Checked="true" RuleID="14" />
+	<Layer LayerName="航海线" Checked="true" RuleID="15" />
+	<!-- HFCP HYDP-->
+	<Layer LayerName="拦水坝" Checked="true" RuleID="2" />
+	<Layer LayerName="能通车的水闸" Checked="true" RuleID="4" />
+	<Layer LayerName="不能通车的水闸" Checked="true" RuleID="5" />
+	<Layer LayerName="地下河段出入口" Checked="true" RuleID="6" />
+	<Layer LayerName="滚水坝" Checked="true" RuleID="7" />
+        <Layer LayerName="输水隧道" Checked="true" RuleID="8" />
+	<Layer LayerName="水库" Checked="true" RuleID="2" />
+	<Layer LayerName="水井" Checked="true" RuleID="3" />
+	<Layer LayerName="泉" Checked="true" RuleID="4" />
+	<Layer LayerName="明礁" Checked="true" RuleID="5" />
+	<Layer LayerName="海岛" Checked="true" RuleID="6" />
+        <Layer LayerName="适淹礁" Checked="true" RuleID="7" />
+	<Layer LayerName="适淹礁(危险级1）" Checked="true" RuleID="8" />
+        <Layer LayerName="适淹礁(危险级2）" Checked="true" RuleID="9" />
+        <Layer LayerName="适淹礁(危险级3）" Checked="true" RuleID="10" />
+	<Layer LayerName="暗礁" Checked="true" RuleID="11" />
+	<Layer LayerName="暗礁(危险级1）" Checked="true" RuleID="12" />
+	<Layer LayerName="暗礁(危险级2）" Checked="true" RuleID="13" />
+	<Layer LayerName="暗礁(危险级3）" Checked="true" RuleID="14" />
+	<Layer LayerName="河流、沟渠宽度标识点" Checked="true" RuleID="15" />
+	<Layer LayerName="涨潮流" Checked="true" RuleID="16" />
+	<Layer LayerName="落潮流" Checked="true" RuleID="17" />
+	<Layer LayerName="海流" Checked="true" RuleID="18" />
+	<Layer LayerName="洋流" Checked="true" RuleID="19" />
+	<Layer LayerName="浪花" Checked="true" RuleID="20" />
+	<Layer LayerName="回转潮流信息" Checked="true" RuleID="21" />
+	<Layer LayerName="干出礁" Checked="true" RuleID="22" />
+	<Layer LayerName="干出礁(危险级1）" Checked="true" RuleID="23" />
+	<Layer LayerName="干出礁(危险级2）" Checked="true" RuleID="24" />
+	<Layer LayerName="干出礁(危险级3）" Checked="true" RuleID="25" />
+	<Layer LayerName="瀑布、跌水" Checked="true" RuleID="26" />
+	<Layer LayerName="贮水池" Checked="true" RuleID="27" />
+	<Layer LayerName="海洋要素" Checked="true" RuleID="28" />
+        <!--From HYDL HYDA HFCL HFCA  -->
+	<Layer LayerName="地面河流" Checked="true" RuleID="5" />
+        <Layer LayerName="海岸线" Checked="true" RuleID="4" />
+	<Layer LayerName="时令河" Checked="true" RuleID="6" />
+	<Layer LayerName="消失河段" Checked="true" RuleID="7" />
+	<Layer LayerName="地下河段" Checked="true" RuleID="8" />
+        <Layer LayerName="运河" Checked="true" RuleID="9" />
+	<Layer LayerName="干渠" Checked="true" RuleID="11" />	
+	<Layer LayerName="支渠" Checked="true" RuleID="12" />
+        <Layer LayerName="干沟" Checked="true" RuleID="13" />
+        <Layer LayerName="坎儿井、地下渠道、暗渠" Checked="true" RuleID="14" />
+	<Layer LayerName="干出线" Checked="true" RuleID="2" />
+        <Layer LayerName="堤岸、海堤" Checked="true" RuleID="3" />
+        <Layer LayerName="输水隧道" Checked="true" RuleID="4" />
+	<Layer LayerName="输水渡槽" Checked="true" RuleID="5" />
+	<Layer LayerName="能通车的水闸" Checked="true" RuleID="7" />
+        <Layer LayerName="不能通车的水闸" Checked="true" RuleID="8" />
+	<Layer LayerName="滚水坝" Checked="true" RuleID="10" />
+	<Layer LayerName="拦水坝" Checked="true" RuleID="11" />
+	<Layer LayerName="塘梗" Checked="true" RuleID="13" />
+	<Layer LayerName="地面河流" Checked="true" RuleID="2" />
+	<Layer LayerName="时令河" Checked="true" RuleID="3" />
+        <Layer LayerName="湖泊" Checked="true" RuleID="4" />
+	<Layer LayerName="时令湖" Checked="true" RuleID="5" />
+	<Layer LayerName="池塘" Checked="true" RuleID="6" />
+        <Layer LayerName="水库" Checked="true" RuleID="7" />
+	<Layer LayerName="能通行的沼泽地" Checked="true" RuleID="8" />
+	<Layer LayerName="不能通行的沼泽地" Checked="true" RuleID="9" />
+        <Layer LayerName="海域" Checked="true" RuleID="10" />
+	<Layer LayerName="陆地" Checked="true" RuleID="11" />
+        <Layer LayerName="明礁" Checked="true" RuleID="12" />
+	<Layer LayerName="沙洲" Checked="true" RuleID="3" />
+	<Layer LayerName="沙滩" Checked="true" RuleID="5" />
+        <Layer LayerName="沙砾滩、砾石滩" Checked="true" RuleID="8" />
+	<Layer LayerName="岩石滩、珊瑚滩" Checked="true" RuleID="9" />
+        <Layer LayerName="行、蓄、灌洪区" Checked="true" RuleID="2" />
+	<!-- RFCP-->
+	<Layer LayerName="盐田" Checked="true" RuleID="2" />
+        <Layer LayerName="矿井" Checked="true" RuleID="3" />
+        <Layer LayerName="管道井(油、气)盐井" Checked="true" RuleID="4" />
+	<Layer LayerName="卫星地面站" Checked="true" RuleID="5" />
+	<Layer LayerName="水厂" Checked="true" RuleID="6" />
+        <Layer LayerName="发电厂（站）" Checked="true" RuleID="7" />
+	<Layer LayerName="雷达" Checked="true" RuleID="8" />
+	<!-- RFCL-->
+	<Layer LayerName="砖石城墙（完好）" Checked="true" RuleID="2" />
+        <Layer LayerName="砖石城墙长城损坏部" Checked="true" RuleID="3" />
+	<!-- TERL-->
+	<Layer LayerName="首曲线" Checked="true" RuleID="2" />
+	<Layer LayerName="雪山首曲线" Checked="true" RuleID="3" />
+	<Layer LayerName="计曲线" Checked="true" RuleID="4" />
+	<Layer LayerName="雪山计曲线" Checked="true" RuleID="5" />
+	<Layer LayerName="间曲线" Checked="true" RuleID="6" />
+        <Layer LayerName="草绘首曲线" Checked="true" RuleID="7" />
+	<Layer LayerName="草绘等高线（雪山首曲线）" Checked="true" RuleID="8" />
+        <Layer LayerName="任意等高线" Checked="true" RuleID="9" />
+        <Layer LayerName="土质陡崖" Checked="true" RuleID="10" />
+	<Layer LayerName="土质陡岸" Checked="true" RuleID="11" />
+	<Layer LayerName="石质陡崖" Checked="true" RuleID="12" />
+	<Layer LayerName="陡石山" Checked="true" RuleID="13" />
+	<Layer LayerName="陡崖" Checked="true" RuleID="14" />
+	<Layer LayerName="山行线" Checked="true" RuleID="15" />
+	<Layer LayerName="冰裂隙" Checked="true" RuleID="16" />
+	<Layer LayerName="雪山范围线" Checked="true" RuleID="17" />
+	<Layer LayerName="冰陡崖" Checked="true" RuleID="18" />
+	<Layer LayerName="冰碛" Checked="true" RuleID="19" />
+	<Layer LayerName="冲沟" Checked="true" RuleID="20" />
+	<Layer LayerName="干河床" Checked="true" RuleID="21" />
+	<!-- MOAL MOAP-->
+	<Layer LayerName="军区界" Checked="true" RuleID="2" />
+	<Layer LayerName="海上限制区" Checked="true" RuleID="3" />
+	<Layer LayerName="海上设施安全区" Checked="true" RuleID="4" />
+	<Layer LayerName="雷区" Checked="true" RuleID="5" />
+	<Layer LayerName="其他海上禁区、限制区" Checked="true" RuleID="6" />
+        <Layer LayerName="爆炸物倾倒区" Checked="true" RuleID="7" />
+	<Layer LayerName="垃圾倾倒区" Checked="true" RuleID="8" />
+        <Layer LayerName="无限制锚地" Checked="true" RuleID="9" />
+        <Layer LayerName="其它锚地" Checked="true" RuleID="10" />
+	<Layer LayerName="战区界/军区界" Checked="true" RuleID="11" />
+	<Layer LayerName="海军区界" Checked="true" RuleID="12" />
+	<Layer LayerName="争议地区界" Checked="true" RuleID="13" />
+	<Layer LayerName="其他界线" Checked="true" RuleID="14" />
+	<Layer LayerName="海军基地（外军）" Checked="true" RuleID="2" />
+	<Layer LayerName="空军基地（外军）" Checked="true" RuleID="3" />
+	<Layer LayerName="导弹基地（外军）" Checked="true" RuleID="4" />
+	<Layer LayerName="核设施" Checked="true" RuleID="5" />
+	<Layer LayerName="雷达站及部署" Checked="true" RuleID="6" />
+        <Layer LayerName="其它指挥机构（台军）" Checked="true" RuleID="7" />
+	<Layer LayerName="其它指挥机构（外军）" Checked="true" RuleID="8" />
+        <Layer LayerName="海军基地（台军）" Checked="true" RuleID="9" />
+        <Layer LayerName="空军基地（台军）" Checked="true" RuleID="10" />
+	<Layer LayerName="我国卫星发射中心" Checked="true" RuleID="11" />
+	<Layer LayerName="导弹基地（台军）" Checked="true" RuleID="12" />
+	<Layer LayerName="陆军基地（外军）" Checked="true" RuleID="13" />
+	<Layer LayerName="陆军基地（台军）" Checked="true" RuleID="14" />
+	<Layer LayerName="其他设施及部署" Checked="true" RuleID="15" />
+	<Layer LayerName="总司令部（外军）" Checked="true" RuleID="16" />
+	<Layer LayerName="总司令部（台军）" Checked="true" RuleID="17" />
+	<Layer LayerName="军区司令部" Checked="true" RuleID="18" />
+	<Layer LayerName="航运补给支点" Checked="true" RuleID="19" />
+	<Layer LayerName="边境口岸" Checked="true" RuleID="20" />
+	<Layer LayerName="南海侵占岛礁" Checked="true" RuleID="21" />
+	<Layer LayerName="战略岛" Checked="true" RuleID="22" />
+	<!-- PIPL PIPP-->
+	<Layer LayerName="辅助线" Checked="true" RuleID="2" />
+	<Layer LayerName="海底电力线" Checked="true" RuleID="3" />
+	<Layer LayerName="海底光缆" Checked="true" RuleID="4" />
+	<Layer LayerName="（海底）电缆区" Checked="true" RuleID="5" />
+	<Layer LayerName="地面管道" Checked="true" RuleID="6" />
+        <Layer LayerName="海底（地下）管道" Checked="true" RuleID="7" />
+	<Layer LayerName="地下管道" Checked="true" RuleID="8" />
+	<Layer LayerName="变电所" Checked="true" RuleID="2" />
+	<!-- RESA-->
+	<Layer LayerName="街区" Checked="true" RuleID="2" />
+	<Layer LayerName="空地" Checked="true" RuleID="3" />
+	<Layer LayerName="辅助面" Checked="true" RuleID="4" />
+  </Lengend>
+</LengendTemplate>
