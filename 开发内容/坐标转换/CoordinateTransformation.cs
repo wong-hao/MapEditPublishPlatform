@@ -166,6 +166,52 @@ namespace SMGI.Plugin.EmergencyMap
 
         public static string suffixToRemove = string.Empty;
 
+        // 找到指定要素类中指定字段包含指定内容的要素
+        public static IFeature FindFeature(IFeatureClass featureClass, string field, string fieldContent)
+        {
+            // 验证输入的有效性
+            if (featureClass == null)
+                throw new ArgumentNullException("featureClass");
+            if (string.IsNullOrEmpty(field))
+                throw new ArgumentNullException("field");
+            if (string.IsNullOrEmpty(fieldContent))
+                throw new ArgumentNullException("fieldContent");
+            // 找到字段的索引
+            int fieldIndex = featureClass.FindField(field);
+            // 如果给定的字段在特征类中不存在，则抛出异常
+            if (fieldIndex == -1)
+                throw new ArgumentException("在要素类中不存在提供的字段.", "field");
+            // 准备查询过滤器
+            IQueryFilter queryFilter = new QueryFilterClass();
+            queryFilter.WhereClause = string.Format("{0} = '{1}'", field, fieldContent);
+            // 执行查询并返回光标
+            IFeatureCursor featureCursor = featureClass.Search(queryFilter, false);
+            IFeature feature = featureCursor.NextFeature();
+            // 清理
+            Marshal.ReleaseComObject(featureCursor);
+            // 返回找到的特征，如果没有找到，则返回null
+            return feature;
+        }
+
+        // 平行四边形转矩形
+        public static IPolyline ConvertToMinimalRectangle(IPolyline parallelogramPolyline)
+        {
+            //获取parallelogramPolyline的MBR，也就是包络矩形
+            IEnvelope envelope = parallelogramPolyline.Envelope;
+            //创建一个新的polyline
+            IPolyline rectanglePolyline = new PolylineClass();
+            rectanglePolyline.SpatialReference = parallelogramPolyline.SpatialReference;
+            //定义新polyline的四个点（按逆时针次序）
+            object missing = Type.Missing;
+            IPointCollection pointCollection = rectanglePolyline as IPointCollection;
+            pointCollection.AddPoint(envelope.LowerLeft, ref missing, ref missing);
+            pointCollection.AddPoint(envelope.LowerRight, ref missing, ref missing);
+            pointCollection.AddPoint(envelope.UpperRight, ref missing, ref missing);
+            pointCollection.AddPoint(envelope.UpperLeft, ref missing, ref missing);
+            pointCollection.AddPoint(envelope.LowerLeft, ref missing, ref missing); // 关闭polyline
+            return rectanglePolyline;
+        }
+
         // 将 ArcObjects 的几何类型转换为字符串表示形式
         static string GetGeometryType(esriGeometryType shapeType)
         {
@@ -710,6 +756,43 @@ namespace SMGI.Plugin.EmergencyMap
             defineProjectionDataset.coor_system = wgsProject;
 
             Helper.ExecuteGPTool(geoprocessor, defineProjectionDataset, null);
+
+            #endregion
+
+            #region 对内外图廓进行修正
+
+            string type = "TYPE";
+
+            foreach (var kv in fcName2FC)
+            {
+                fcNum++;
+                IFeatureClass fc = kv.Value;
+                String fcname = kv.Key;
+                IFeature fe = null;
+                IGeometry shape = null;
+                IGeometry newShape = null;
+
+                if (fcname == "LLINE")
+                {
+                    fe = FindFeature(fc, type, "内图廓");
+                    shape = fe.Shape;
+                    if (shape.GeometryType == esriGeometryType.esriGeometryPolyline)
+                    {
+                        newShape = ConvertToMinimalRectangle(shape as IPolyline);
+                        fe.Shape = newShape;
+                        fe.Store();
+                    }
+
+                    fe = FindFeature(fc, type, "外图廓");
+                    shape = fe.Shape;
+                    if (shape.GeometryType == esriGeometryType.esriGeometryPolyline)
+                    {
+                        newShape = ConvertToMinimalRectangle(shape as IPolyline);
+                        fe.Shape = newShape;
+                        fe.Store();
+                    }
+                }
+            }
 
             #endregion
         }
