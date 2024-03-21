@@ -860,7 +860,7 @@ namespace SMGI.Plugin.EmergencyMap
 
             // 设置为未知坐标系统
             ISpatialReference unknownSpatialReference = new UnknownCoordinateSystem() as ISpatialReference;
-            unknownSpatialReference.SetDomain(-2000 * zoomFactor, 2000 * zoomFactor, -2000 * zoomFactor, 2000 * zoomFactor);
+            unknownSpatialReference.SetDomain(-20000 * zoomFactor, 20000 * zoomFactor, -20000 * zoomFactor, 20000 * zoomFactor);
             sdeFeatureDataset = fwsProject.CreateFeatureDataset(newDatasetName, unknownSpatialReference);
 
             wo.SetText("正在将协同更新状态表拷贝进投影数据库");
