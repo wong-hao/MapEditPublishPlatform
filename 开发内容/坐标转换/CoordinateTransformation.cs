@@ -676,6 +676,16 @@ namespace SMGI.Plugin.EmergencyMap
 
         public static void GDBProject(IWorkspace ws, double mapScale, WaitOperation wo)
         {
+            #region 编辑状态判定
+
+            if (GApplication.Application.EngineEditor.EditState == ESRI.ArcGIS.Controls.esriEngineEditState.esriEngineStateEditing)
+            {
+                MessageBox.Show("请关闭编辑状态！");
+                return;
+            }
+
+            #endregion
+
             #region 创建并初始化投影数据库
 
             // 创建GP工具对象
