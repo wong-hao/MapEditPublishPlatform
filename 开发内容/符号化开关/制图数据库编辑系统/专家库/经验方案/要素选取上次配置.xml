@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Template>
+  <Scheme>
+    <Type MapLevel="上次配置">
+      <HYDL note="单线河" mainGrade="6" adjGrade="2" />
+      <HYDA note="水系面" mainArea="0" adjArea="16" />
+      <LRDL note="道路" mainGrade="10" adjGrade="6" />
+      <MainAGNPPriority note="主区居民地点优先级" priority="12" />
+      <AdjAGNPPriority note="邻区居民地优先级" priority="12" />
+      <MainAGNP note="主区居民地点">
+        <Item slected="true">首都</Item>
+        <Item slected="true">省级行政中心</Item>
+        <Item slected="true">地级行政中心</Item>
+        <Item slected="true">县级行政中心</Item>
+        <Item slected="true">乡、镇政府驻地</Item>
+        <Item slected="true">街道办事处</Item>
+        <Item slected="true">行政村</Item>
+        <Item slected="true">自然村</Item>
+        <Item slected="true">农场</Item>
+        <Item slected="true">林场</Item>
+        <Item slected="true">分场</Item>
+      </MainAGNP>
+      <AdjAGNP note="邻区居民点">
+        <Item slected="true">首都</Item>
+        <Item slected="true">省级行政中心</Item>
+        <Item slected="true">地级行政中心</Item>
+        <Item slected="true">县级行政中心</Item>
+        <Item slected="true">乡、镇政府驻地</Item>
+      </AdjAGNP>
+      <RESA note="街区面" mainRegion="农村居民地" adjRegion="县级居民地" />
+      <BOUL note="境界线" mainRegion="乡镇级" adjRegion="区县级" />
+      <BOUAAnno note="表面注记" mainRegion="乡镇级" inProvAdjRegion="区县级" outProvAdjRegion="省级" />
+      <POI note="兴趣点" priority="3" adjPriority="3" />
+      <cbRiverSelect SelectionState="true" />
+      <cbRoadSelect SelectionState="true" />
+      <cbANGPSelect SelectionState="true" />
+      <cbRESASelect SelectionState="true" />
+      <cbBOULSelect SelectionState="true" />
+      <cbAnnoSelect SelectionState="true" />
+      <cbPOISelect SelectionState="true" />
+    </Type>
+  </Scheme>
+</Template>

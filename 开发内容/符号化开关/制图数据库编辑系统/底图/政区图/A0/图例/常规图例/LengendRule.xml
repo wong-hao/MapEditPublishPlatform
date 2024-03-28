@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LengendTemplate>
+  <LengendInfo>
+    <Column Name="图例列数">2</Column>
+    <CharactersXStep Unit="毫米" Name="图例文字水平间隔">22</CharactersXStep>
+    <TitleFontSize Unit="毫米" Name="图例标题字体">10</TitleFontSize>
+    <ItemFontSize Unit="毫米" Name="图例项字体">3</ItemFontSize>
+    <ItemYStep Unit="毫米" Name="图例项垂直间隔">8</ItemYStep>
+    <ItemXStep Unit="毫米" Name="图例项水平间隔">50</ItemXStep>
+    <ScaleBarStep Unit="毫米" Name="比例尺间隔">13</ScaleBarStep>
+    <LegendType Name="图例类型">0</LegendType>
+  </LengendInfo>
+  <Lengend>
+    <Layer LayerName="注记图例" Checked="false">
+      <DataRow unit="毫米" display="true">
+        <AnnoName>北京</AnnoName>
+        <AnnoFontSize>4.2</AnnoFontSize>
+        <AnnoFontName>黑体</AnnoFontName>
+        <AnnoNote>省政府驻地</AnnoNote>
+        <AnnoColor>M100Y100</AnnoColor>
+      </DataRow>
+      <DataRow unit="毫米" display="true">
+        <AnnoName>银川市</AnnoName>
+        <AnnoFontSize>3.2</AnnoFontSize>
+        <AnnoFontName>黑体</AnnoFontName>
+        <AnnoNote>设区市政府驻地</AnnoNote>
+        <AnnoColor>K100</AnnoColor>
+      </DataRow>
+      <DataRow unit="毫米" display="true">
+        <AnnoName>兴庆区</AnnoName>
+        <AnnoFontSize>2.7</AnnoFontSize>
+        <AnnoFontName>黑体</AnnoFontName>
+        <AnnoNote>县(区、市)政府驻地</AnnoNote>
+        <AnnoColor>K100</AnnoColor>
+      </DataRow>
+      <DataRow unit="毫米" display="true">
+        <AnnoName>凤凰北街街道</AnnoName>
+        <AnnoFontSize>2.1</AnnoFontSize>
+        <AnnoFontName>黑体</AnnoFontName>
+        <AnnoNote>乡、镇政府驻地</AnnoNote>
+        <AnnoColor>K100</AnnoColor>
+      </DataRow>
+      <DataRow unit="毫米" display="true">
+        <AnnoName>崇安社区</AnnoName>
+        <AnnoFontSize>2</AnnoFontSize>
+        <AnnoFontName>黑体</AnnoFontName>
+        <AnnoNote>村庄</AnnoNote>
+        <AnnoColor>K100</AnnoColor>
+      </DataRow>
+    </Layer>
+    <Layer LayerName="居民地点" Checked="true">
+      <ItemInfo RuleID="4" Checked="true">县(区、市)行政中心</ItemInfo>
+      <ItemInfo RuleID="5" Checked="true">乡镇级政府</ItemInfo>
+      <ItemInfo RuleID="6" Checked="true">行政村</ItemInfo>
+      <ItemInfo RuleID="7" Checked="true">自然村</ItemInfo>
+    </Layer>
+    <Layer LayerName="自然地名" Checked="true">
+      <ItemInfo RuleID="2" Checked="true">山峰</ItemInfo>
+    </Layer>
+    <Layer LayerName="交通附属点" Checked="true">
+      <ItemInfo RuleID="2" Checked="true">火车站</ItemInfo>
+      <ItemInfo RuleID="3" Checked="true">山隘</ItemInfo>
+      <ItemInfo RuleID="7" Checked="true">服务区</ItemInfo>
+      <ItemInfo RuleID="8" Checked="true">收费站（出入口）</ItemInfo>
+      <ItemInfo RuleID="17" Checked="true">长途汽车站</ItemInfo>
+    </Layer>
+    <Layer LayerName="自然保护区线" Checked="true">
+      <ItemInfo RuleID="2" Checked="true">自然、文化保护区域</ItemInfo>
+      <ItemInfo RuleID="4" Checked="true">开发区、保税区域</ItemInfo>
+    </Layer>
+    <Layer LayerName="交通附属线" Checked="true">
+      <ItemInfo RuleID="8" Checked="true">高速公路桥梁</ItemInfo>
+      <ItemInfo RuleID="9" Checked="true">高速公路隧道</ItemInfo>
+      <ItemInfo RuleID="10" Checked="true">国道桥梁</ItemInfo>
+      <ItemInfo RuleID="11" Checked="true">国道隧道</ItemInfo>
+      <ItemInfo RuleID="32" Checked="true">铁路桥</ItemInfo>
+      <ItemInfo RuleID="33" Checked="true">火车隧道</ItemInfo>
+    </Layer>
+    <Layer LayerName="铁路" Checked="true">
+      <ItemInfo RuleID="2" Checked="true">铁路</ItemInfo>
+      <ItemInfo RuleID="3" Checked="true">高速铁路</ItemInfo>
+      <ItemInfo RuleID="5" Checked="true">窄轨</ItemInfo>
+    </Layer>
+    <Layer LayerName="公路" Checked="true">
+      <ItemInfo RuleID="2" Checked="true">建成高速公路</ItemInfo>
+      <ItemInfo RuleID="3" Checked="true">建筑中的高速公路</ItemInfo>
+      <ItemInfo RuleID="4" Checked="true">建成国道</ItemInfo>
+      <ItemInfo RuleID="6" Checked="true">建成省道</ItemInfo>
+      <ItemInfo RuleID="8" Checked="true">建成县道</ItemInfo>
+      <ItemInfo RuleID="10" Checked="true">乡道</ItemInfo>
+      <ItemInfo RuleID="12" Checked="true">专用公路</ItemInfo>
+      <ItemInfo RuleID="14" Checked="true">其他公路</ItemInfo>
+    </Layer>
+    <Layer LayerName="水系面边线" Checked="true">
+      <ItemInfo RuleID="1" Checked="true">河流边线</ItemInfo>
+    </Layer>
+    <Layer LayerName="水系线" Checked="true">
+      <ItemInfo RuleID="2" Checked="true">地面河流</ItemInfo>
+      <ItemInfo RuleID="3" Checked="true">地下河段</ItemInfo>
+      <ItemInfo RuleID="5" Checked="true">时令河</ItemInfo>
+      <ItemInfo RuleID="6" Checked="true">河道干河</ItemInfo>
+      <ItemInfo RuleID="8" Checked="true">干渠</ItemInfo>
+      <ItemInfo RuleID="9" Checked="true">支渠</ItemInfo>
+    </Layer>
+    <Layer LayerName="水系附属面" Checked="true">
+      <ItemInfo RuleID="2" Checked="true">沙洲</ItemInfo>
+      <ItemInfo RuleID="5" Checked="true">沼泽、湿地</ItemInfo>
+    </Layer>
+    <Layer LayerName="水系面" Checked="true">
+      <ItemInfo RuleID="2" Checked="true">地面河段</ItemInfo>
+      <ItemInfo RuleID="10" Checked="true">湖泊</ItemInfo>
+      <ItemInfo RuleID="11" Checked="true">池塘</ItemInfo>
+      <ItemInfo RuleID="14" Checked="true">水库</ItemInfo>
+    </Layer>
+    <Layer LayerName="居民地面" Checked="true">
+      <ItemInfo RuleID="2" Checked="true">街区</ItemInfo>
+    </Layer>
+  </Lengend>
+</LengendTemplate>

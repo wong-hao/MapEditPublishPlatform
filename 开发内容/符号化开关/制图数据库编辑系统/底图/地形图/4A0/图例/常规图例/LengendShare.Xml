@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DataTable>
+  <DataGroup ShareItemName="地面河流" ShareRuleID="5">
+    <DataRow>
+      <RuleID>5,10</RuleID>
+      <FclName>HYDL</FclName>
+      <LGNote>地面河流</LGNote>
+    </DataRow>
+    <DataRow>
+      <RuleID>2</RuleID>
+      <FclName>HYDA</FclName>
+      <LGNote>地面河流</LGNote>
+    </DataRow>
+  </DataGroup>
+  <DataGroup ShareItemName="渠" ShareRuleID="7">
+    <DataRow>
+      <RuleID>11,12</RuleID>
+      <FclName>HYDL</FclName>
+      <LGNote>渠</LGNote>
+    </DataRow>
+  </DataGroup>
+  <DataGroup ShareItemName="湖泊、池塘" ShareRuleID="9">
+    <DataRow>
+      <RuleID>4,6</RuleID>
+      <FclName>HYDA</FclName>
+      <LGNote>湖泊、池塘</LGNote>
+    </DataRow>
+  </DataGroup>
+ <DataGroup ShareItemName="河、湖岛" ShareRuleID="12">
+    <DataRow>
+      <RuleID>11,12</RuleID>
+      <FclName>HYDA</FclName>
+      <LGNote>河、湖岛</LGNote>
+    </DataRow>
+  </DataGroup>
+  <DataGroup ShareItemName="水库" ShareRuleID="10">
+    <DataRow>
+      <RuleID>7</RuleID>
+      <FclName>HYDA</FclName>
+      <LGNote>水库</LGNote>
+    </DataRow>
+  </DataGroup>
+  <DataGroup Type="通用" ShareItemName="桥梁" ShareRuleID="3">
+    <DataRow>
+      <RuleID>5,6,7,8,9</RuleID>
+      <FclName>LFCL</FclName>
+      <LGNote>桥梁</LGNote>
+    </DataRow>
+  </DataGroup>
+  <DataGroup Type="通用" ShareItemName="隧道" ShareRuleID="4">
+    <DataRow>
+      <RuleID>2</RuleID>
+      <FclName>LFCL</FclName>
+      <LGNote>隧道</LGNote>
+    </DataRow>
+  </DataGroup>
+</DataTable>

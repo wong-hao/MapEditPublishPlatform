@@ -1,0 +1,17 @@
+﻿<Color>
+  <Item Type="省内" ProvPac="45">
+    <Red>242</Red>
+    <Green>255</Green>
+    <Blue>242</Blue>
+  </Item>
+  <Item Type="省外">
+      <Red>242</Red>
+      <Green>255</Green>
+      <Blue>242</Blue>
+   </Item>
+   <Item Type="国外">
+    <Red>253</Red>
+    <Green>243</Green>
+    <Blue>242</Blue>
+  </Item>
+</Color>

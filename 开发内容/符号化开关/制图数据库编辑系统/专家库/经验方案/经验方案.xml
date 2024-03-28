@@ -1,0 +1,252 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Template name="经验参数">
+  <Content>
+    <MapLine name="图廓线定位">
+      <Top>45</Top>
+      <Bottom>49.1</Bottom>
+      <Right>45.5</Right>
+      <Left>45.5</Left>
+      <Interval>6</Interval>
+    </MapLine>
+    <BoulDraw name="境界跳绘节点">
+      <BufferValue name="境界套合容差(mm)">0.1</BufferValue>
+      <ObjectLayer>
+        <Item checked="true" SQL="GB &lt;&gt; 210400" Note="全部水系">HYDL</Item>
+        <Item checked="true" SQL="" Note="全部铁路">LRRL</Item>
+        <Item checked="true" SQL="LGB &lt;= 440100" Note="乡村耕路以上">LRDL</Item>
+        <Item checked="true" SQL="GB=380100 Or GB=380102" Note="长城和破坏长城">AANL</Item>
+      </ObjectLayer>
+      <Boul>
+        <Item>
+          <Level name="省">Province</Level>
+          <BlankValue name="留白间距(mm)">5</BlankValue>
+          <SolidValue name="境界实线间距(mm)">7.000441056</SolidValue>
+          <PointStep name="点间距(mm)">1.00006452</PointStep>
+          <SymbolGroup name="跳绘组数(个)">2</SymbolGroup>
+          <GB>630201</GB>
+        </Item>
+        <Item>
+          <Level name="市">State</Level>
+          <BlankValue name="留白间距(mm)">5</BlankValue>
+          <SolidValue name="境界实线间距(mm)">10.000634616</SolidValue>
+          <PointStep name="点间距(mm)">1.300082112</PointStep>
+          <SymbolGroup name="跳绘组数(个)">2</SymbolGroup>
+          <GB>640201</GB>
+        </Item>
+        <Item>
+          <Level name="县">County</Level>
+          <BlankValue name="留白间距(mm)">5</BlankValue>
+          <SolidValue name="境界实线间距(mm)">5.50034604</SolidValue>
+          <PointStep name="点间距(mm)">1.075066272</PointStep>
+          <SymbolGroup name="跳绘组数(个)">2</SymbolGroup>
+          <GB>650201</GB>
+        </Item>
+        <Item>
+          <Level name="乡镇">Town</Level>
+          <BlankValue name="留白间距(mm)">5</BlankValue>
+          <SolidValue name="境界实线间距(mm)">9.500600592</SolidValue>
+          <PointStep name="点间距(mm)">0.600038712</PointStep>
+          <SymbolGroup name="跳绘组数(个)">2</SymbolGroup>
+          <GB>660201</GB>
+        </Item>
+      </Boul>
+    </BoulDraw>
+    <MapName name="地图图名">
+      <ArtChecked name="艺术字">True</ArtChecked>
+      <Title name="图名">
+        <FontSize unit="pt(磅)">42.75</FontSize>
+        <FontSpace>50</FontSpace>
+        <FontWidth>125</FontWidth>
+        <Location>图名横排-图廓内左侧</Location>
+        <FontName>黑体</FontName>
+        <FontColor>
+          <Red>0</Red>
+          <Green>0</Green>
+          <Blue>0</Blue>
+        </FontColor>
+        <TopDis>4</TopDis>
+      </Title>
+      <ProductUnit name="生产单位">
+        <FontSize unit="pt(磅)">14.25</FontSize>
+        <FontWidth>100</FontWidth>
+        <ProductUnitName>河北省自然资源厅  监制   河北省制图院  编制</ProductUnitName>
+        <FontName>黑体</FontName>
+        <FontColor>
+          <Red>0</Red>
+          <Green>0</Green>
+          <Blue>0</Blue>
+        </FontColor>
+        <TopDis>2</TopDis>
+      </ProductUnit>
+      <MapTime name="制图日期">
+        <FontSize unit="pt(磅)">14.25</FontSize>
+        <FontWidth>100</FontWidth>
+        <FontName>黑体</FontName>
+        <Time>二〇二一年十二月</Time>
+        <FontColor>
+          <Red>0</Red>
+          <Green>0</Green>
+          <Blue>0</Blue>
+        </FontColor>
+        <TopDis>2</TopDis>
+      </MapTime>
+      <TopDis>4</TopDis>
+      <MapPublish>
+        <FontWidth>125</FontWidth>
+        <TopDis>2</TopDis>
+        <FontSize unit="pt(磅)">18</FontSize>
+        <Content></Content>
+        <FontName>方正中等线简体</FontName>
+        <Direction>true</Direction>
+      </MapPublish>
+      <MapPublish>
+        <TopDis />
+        <Content />
+        <Direction />
+      </MapPublish>
+    </MapName>
+    <LaceBorder name="地图花边">
+      <Width>1</Width>
+      <Interval>1</Interval>
+      <Border>
+        <Item>
+          <Length>0</Length>
+          <Angle>0</Angle>
+          <Flip>false</Flip>
+          <Name>花边1</Name>
+        </Item>
+      </Border>
+      <Corner>
+        <Item>
+          <Length>0</Length>
+          <Angle>0</Angle>
+          <Flip>false</Flip>
+          <Name>花边1角</Name>
+        </Item>
+      </Corner>
+    </LaceBorder>
+    <GridLine name="格网线">
+      <MeatureGrid name="方里网" checked="false">
+        <X>5</X>
+        <Y>10</Y>
+      </MeatureGrid>
+      <GraticuleGrid name="经纬网" checked="false">
+        <Longitude name="经度">0°4′0″</Longitude>
+        <Latitude name="纬度">0°5′0″</Latitude>
+      </GraticuleGrid>
+      <IndexGrid name="索引网" checked="true">
+        <Row>4</Row>
+        <Column>5</Column>
+      </IndexGrid>
+      <HorizontalStep name="注记水平间距" unit="毫米">2</HorizontalStep>
+      <VerticalStep name="注记垂直间距" unit="毫米">2</VerticalStep>
+      <AnnoSize>2</AnnoSize>
+      <AnnoInterval>1.5</AnnoInterval>
+      <NumSize>2</NumSize>
+      <NumInterval>1.5</NumInterval>
+    </GridLine>
+    <CutLine name="丁字线">
+      <Top>10</Top>
+      <Bottom>10</Bottom>
+      <Right>10</Right>
+      <Left>10</Left>
+    </CutLine>
+    <MapLengend>
+      <LengendInfo>
+        <Column Name="图例列数">2</Column>
+        <CharactersXStep Unit="毫米" Name="图例文字水平间隔">11</CharactersXStep>
+        <TitleFontSize Unit="毫米" Name="图例标题字体">5.25</TitleFontSize>
+        <ItemFontSize Unit="毫米" Name="图例项字体">3</ItemFontSize>
+        <ItemYStep Unit="毫米" Name="图例项垂直间隔">7</ItemYStep>
+        <ItemXStep Unit="毫米" Name="图例项水平间隔">39</ItemXStep>
+        <ScaleBarStep Unit="毫米" Name="比例尺间隔">12</ScaleBarStep>
+        <LegendType Name="图例类型">0</LegendType>
+      </LengendInfo>
+      <Lengend>
+        <Layer LayerName="注记图例" Checked="false">
+          <DataRow unit="毫米" display="true">
+            <AnnoName>安徽省</AnnoName>
+            <AnnoFontSize>4</AnnoFontSize>
+            <AnnoFontName>黑体</AnnoFontName>
+            <AnnoNote>省级政府驻地</AnnoNote>
+            <AnnoColor>M100Y100</AnnoColor>
+          </DataRow>
+          <DataRow unit="毫米" display="true">
+            <AnnoName>合肥市</AnnoName>
+            <AnnoFontSize>3</AnnoFontSize>
+            <AnnoFontName>黑体</AnnoFontName>
+            <AnnoNote>地级市政府驻地</AnnoNote>
+            <AnnoColor>K100</AnnoColor>
+          </DataRow>
+          <DataRow unit="毫米" display="true">
+            <AnnoName>蜀山区</AnnoName>
+            <AnnoFontSize>2.5</AnnoFontSize>
+            <AnnoFontName>黑体</AnnoFontName>
+            <AnnoNote>县（区）政府驻地</AnnoNote>
+            <AnnoColor>K100</AnnoColor>
+          </DataRow>
+          <DataRow unit="毫米" display="true">
+            <AnnoName>稻香村街道</AnnoName>
+            <AnnoFontSize>2</AnnoFontSize>
+            <AnnoFontName>黑体</AnnoFontName>
+            <AnnoNote>乡、镇街办驻地</AnnoNote>
+            <AnnoColor>K100</AnnoColor>
+          </DataRow>
+          <DataRow unit="毫米" display="true">
+            <AnnoName>青阳路社区</AnnoName>
+            <AnnoFontSize>1.8</AnnoFontSize>
+            <AnnoFontName>黑体</AnnoFontName>
+            <AnnoNote>村庄</AnnoNote>
+            <AnnoColor>K100</AnnoColor>
+          </DataRow>
+        </Layer>
+        <Layer LayerName="自然、文化保护区界" Checked="true" RuleID="2" />
+        <Layer LayerName="乡、镇行政地名" Checked="true" RuleID="7" />
+        <Layer LayerName="行政村" Checked="true" RuleID="8" />
+        <Layer LayerName="社区名" Checked="true" RuleID="9" />
+        <Layer LayerName="自然村" Checked="true" RuleID="11" />
+        <Layer LayerName="地面河流" Checked="true" RuleID="2" />
+        <Layer LayerName="地面干渠" Checked="true" RuleID="4" />
+        <Layer LayerName="池塘" Checked="true" RuleID="7" />
+        <Layer LayerName="河、湖岛" Checked="true" RuleID="9" />
+        <Layer LayerName="火车站" Checked="true" RuleID="2" />
+        <Layer LayerName="停车场、服务区" Checked="true" RuleID="5" />
+        <Layer LayerName="收费站" Checked="true" RuleID="6" />
+        <Layer LayerName="沙洲" Checked="true" RuleID="2" />
+        <Layer LayerName="岸滩" Checked="true" RuleID="3" />
+        <Layer LayerName="省界" Checked="true" RuleID="2" />
+        <Layer LayerName="地级市界" Checked="true" RuleID="4" />
+        <Layer LayerName="县界" Checked="true" RuleID="6" />
+        <Layer LayerName="乡界" Checked="true" RuleID="8" />
+        <Layer LayerName="地面河流" Checked="true" RuleID="2" />
+        <Layer LayerName="河道干河" Checked="true" RuleID="4" />
+        <Layer LayerName="地面支渠" Checked="true" RuleID="6" />
+        <Layer LayerName="街区" Checked="true" RuleID="2" />
+        <Layer LayerName="拦水坝" Checked="true" RuleID="6" />
+        <Layer LayerName="水闸" Checked="true" RuleID="4" />
+        <Layer LayerName="高速铁路" Checked="true" RuleID="4" />
+        <Layer LayerName="单线标准轨" Checked="true" RuleID="2" />
+        <Layer LayerName="建成高速公路" Checked="true" RuleID="2" />
+        <Layer LayerName="建成国道" Checked="true" RuleID="4" />
+        <Layer LayerName="建成省道" Checked="true" RuleID="6" />
+        <Layer LayerName="建成县道" Checked="true" RuleID="8" />
+        <Layer LayerName="乡道" Checked="true" RuleID="10" />
+        <Layer LayerName="专用公路" Checked="true" RuleID="11" />
+        <Layer LayerName="主干道" Checked="true" RuleID="12" />
+        <Layer LayerName="次干道" Checked="true" RuleID="13" />
+        <Layer LayerName="支线" Checked="true" RuleID="14" />
+        <Layer LayerName="农村硬化路" Checked="true" RuleID="15" />
+        <Layer LayerName="高速公路桥梁" Checked="true" RuleID="4" />
+        <Layer LayerName="国道桥梁" Checked="true" RuleID="6" />
+        <Layer LayerName="省道桥梁" Checked="true" RuleID="8" />
+        <Layer LayerName="县道桥梁" Checked="true" RuleID="10" />
+        <Layer LayerName="乡道桥梁" Checked="true" RuleID="12" />
+        <Layer LayerName="其他公路桥梁" Checked="true" RuleID="14" />
+        <Layer LayerName="长城" Checked="true" RuleID="3" />
+        <Layer LayerName="涵洞" Checked="true" RuleID="2" />
+        <Layer LayerName="山峰" Checked="true" RuleID="2" />
+        <Layer LayerName="ANNO" Checked="true" RuleID="1" />
+      </Lengend>
+    </MapLengend>
+  </Content>
+</Template>

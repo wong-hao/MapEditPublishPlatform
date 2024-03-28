@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Template>
+  <Point2Line>
+    <AGNP note="居民地点">
+      <Item  sql="class='AB'">省、直辖市行政中心</Item>
+      <Item  sql="class='AC' OR class='AD'">设区市行政中心</Item>
+      <Item  sql="class='AE' OR class='AF'">县(区、市)行政中心</Item>
+      <Item  sql="class='AG' OR class='AH' OR class='AI' OR class='AJ'">乡镇级政府</Item>
+      <Item  sql="class='AK'">行政村</Item>
+      <Item  sql="class='BA' OR class='BB'">自然村</Item>
+      <Item  sql="class='BC'">牧点、渔点、棚屋</Item>
+    </AGNP>
+    <LRDL note="道路线">
+      <Item sql="LGB in (420901,420902)">高速公路</Item>
+      <Item sql="LGB in (420101,420102)">国道</Item>
+      <Item sql="LGB in (420201,420202)">省道</Item>
+      <Item sql="LGB in (420301,420302)">县道</Item>
+	  <Item sql="LGB in (430200)">快速路</Item>
+	  <Item sql="LGB in (430501)">主干道</Item>
+      <Item sql="LGB in (430502)">次干道</Item>
+	  <Item sql="LGB not in (420901,420902,420101,420102,420201,420202,420301,420302,430200,430501,430502)">其他类型公路</Item>
+    </LRDL>
+  </Point2Line>
+</Template>

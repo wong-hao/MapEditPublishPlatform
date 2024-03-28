@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<POISelectRule>
+  <POISelectInfo TYPE="主区">
+    <Layer LayerName="AGNP" Rule="省级政府 " Percent="1" Checked="True" />
+    <Layer LayerName="AGNP" Rule="地级市政府 " Percent="1" Checked="True" />
+    <Layer LayerName="AGNP" Rule="县级政府 " Percent="1" Checked="True" />
+    <Layer LayerName="AGNP" Rule="乡镇级政府 " Percent="0.8" Checked="True" />
+    <Layer LayerName="AGNP" Rule="行政村 " Percent="0.6" Checked="True" />
+    <Layer LayerName="AGNP" Rule="自然村" Percent="0.6" Checked="True" />
+    <Layer LayerName="AGNP" Rule="牧点、渔点、棚屋" Percent="0.6" Checked="True" />
+    <Layer LayerName="AANP" Rule="山峰" Percent="0.6" Checked="True" />
+    <Layer LayerName="LFCP" Rule="火车站" Percent="0.6" Checked="True" />
+    <Layer LayerName="LFCP" Rule="山隘" Percent="0.6" Checked="True" />
+    <Layer LayerName="LFCP" Rule="地铁站" Percent="0.6" Checked="True" />
+    <Layer LayerName="LFCP" Rule="长途汽车站" Percent="0.6" Checked="True" />
+    <Layer LayerName="LFCP" Rule="加油（气）站" Percent="0.6" Checked="True" />
+    <Layer LayerName="LFCP" Rule="服务区" Percent="0.6" Checked="True" />
+    <Layer LayerName="LFCP" Rule="收费站（出入口）" Percent="0.6" Checked="True" />
+    <Layer LayerName="LFCP" Rule="水运港客运站" Percent="0.6" Checked="True" />
+    <Layer LayerName="LFCP" Rule="干船坞" Percent="0.6" Checked="True" />
+    <Layer LayerName="LFCP" Rule="停泊场" Percent="0.6" Checked="True" />
+    <Layer LayerName="LFCP" Rule="机场" Percent="0.6" Checked="True" />
+    <Layer LayerName="HYDP" Rule="泉" Percent="0.6" Checked="True" />
+    <Layer LayerName="HYDP" Rule="水井" Percent="0.6" Checked="True" />
+    <Layer LayerName="HYDP" Rule="地热井" Percent="0.6" Checked="True" />
+    <Layer LayerName="HYDP" Rule="蓄水池、水窖" Percent="0.6" Checked="True" />
+    <Layer LayerName="HFCP" Rule="地下河段出入口" Percent="0.6" Checked="True" />
+    <Layer LayerName="HFCP" Rule="输水渡槽" Percent="0.6" Checked="True" />
+    <Layer LayerName="HFCP" Rule="输水隧道" Percent="0.6" Checked="True" />
+    <Layer LayerName="HFCP" Rule="涵洞" Percent="0.6" Checked="True" />
+    <Layer LayerName="HFCP" Rule="地震堰塞湖" Percent="0.6" Checked="True" />
+    <Layer LayerName="HFCP" Rule="废弃的水库" Percent="0.6" Checked="True" />
+    <Layer LayerName="HFCP" Rule="瀑布、跌水" Percent="0.6" Checked="True" />
+  </POISelectInfo>
+  <POISelectInfoEx TYPE="附区">
+    <Layer LayerName="AGNP" Rule="省级政府 " Percent="1" Checked="True" />
+    <Layer LayerName="AGNP" Rule="地级市政府 " Percent="1" Checked="True" />
+    <Layer LayerName="AGNP" Rule="县级政府 " Percent="1" Checked="True" />
+    <Layer LayerName="AGNP" Rule="乡镇级政府 " Percent="0.4" Checked="True" />
+    <Layer LayerName="AGNP" Rule="行政村 " Percent="0.4" Checked="True" />
+    <Layer LayerName="AGNP" Rule="自然村" Percent="0.4" Checked="True" />
+    <Layer LayerName="AGNP" Rule="牧点、渔点、棚屋" Percent="0.8" Checked="True" />
+    <Layer LayerName="AANP" Rule="山峰" Percent="0.8" Checked="True" />
+    <Layer LayerName="LFCP" Rule="火车站" Percent="0.8" Checked="True" />
+    <Layer LayerName="LFCP" Rule="山隘" Percent="0.8" Checked="True" />
+    <Layer LayerName="LFCP" Rule="地铁站" Percent="0.8" Checked="True" />
+    <Layer LayerName="LFCP" Rule="长途汽车站" Percent="0.8" Checked="True" />
+    <Layer LayerName="LFCP" Rule="加油（气）站" Percent="0.8" Checked="True" />
+    <Layer LayerName="LFCP" Rule="服务区" Percent="0.8" Checked="True" />
+    <Layer LayerName="LFCP" Rule="收费站（出入口）" Percent="0.3" Checked="True" />
+    <Layer LayerName="LFCP" Rule="水运港客运站" Percent="0.8" Checked="True" />
+    <Layer LayerName="LFCP" Rule="干船坞" Percent="0.8" Checked="True" />
+    <Layer LayerName="LFCP" Rule="停泊场" Percent="0.8" Checked="True" />
+    <Layer LayerName="LFCP" Rule="机场" Percent="0.8" Checked="True" />
+    <Layer LayerName="HYDP" Rule="泉" Percent="0.8" Checked="True" />
+    <Layer LayerName="HYDP" Rule="水井" Percent="0.8" Checked="True" />
+    <Layer LayerName="HYDP" Rule="地热井" Percent="0.8" Checked="True" />
+    <Layer LayerName="HYDP" Rule="蓄水池、水窖" Percent="0.8" Checked="True" />
+    <Layer LayerName="HFCP" Rule="地下河段出入口" Percent="0.8" Checked="True" />
+    <Layer LayerName="HFCP" Rule="输水渡槽" Percent="0.8" Checked="True" />
+    <Layer LayerName="HFCP" Rule="输水隧道" Percent="0.8" Checked="True" />
+    <Layer LayerName="HFCP" Rule="涵洞" Percent="0.8" Checked="True" />
+    <Layer LayerName="HFCP" Rule="地震堰塞湖" Percent="0.8" Checked="True" />
+    <Layer LayerName="HFCP" Rule="废弃的水库" Percent="0.8" Checked="True" />
+    <Layer LayerName="HFCP" Rule="瀑布、跌水" Percent="0.8" Checked="True" />
+  </POISelectInfoEx>
+</POISelectRule>

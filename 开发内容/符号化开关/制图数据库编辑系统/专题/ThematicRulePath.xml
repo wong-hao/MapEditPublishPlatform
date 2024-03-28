@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Template>
+  <Content>
+    <Thematic Path="专题\自然资源管理专题库\自然保护区\普通注记规则.mdb">
+      <Name>ZRBHQ</Name>
+	  <Layer AliasName="自然保护区">ZRBHQ</Layer>
+	  <Layer AliasName="自然保护区注记">ZRBHQANNO</Layer>
+    </Thematic>
+    <Thematic Path="专题\自然资源管理专题库\森林公园\普通注记规则.mdb">
+      <Name>SLGY</Name>
+	  <Layer AliasName="森林公园">SLGY</Layer>
+	  <Layer AliasName="森林公园注记">SLGYANNO</Layer>
+    </Thematic>
+  </Content>
+</Template>

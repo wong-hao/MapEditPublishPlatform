@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Template>
+  <Content>
+      <MakingLayer note="被隐藏图层">HYDL</MakingLayer>
+      <MakedLayer  note="隐藏图层">HYDA</MakedLayer>
+  </Content>
+</Template>

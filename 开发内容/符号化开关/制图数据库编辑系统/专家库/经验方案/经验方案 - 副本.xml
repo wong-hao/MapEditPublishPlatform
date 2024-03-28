@@ -1,0 +1,258 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Template name="经验参数">
+  <Content>
+    <MapLine name="图廓线定位">
+      <Top></Top>
+      <Bottom></Bottom>
+      <Right></Right>
+      <Left></Left>
+      <Interval></Interval>
+    </MapLine>
+    <BoulDraw name="境界跳绘节点">
+      <BufferValue name="境界套合容差(mm)">0.1</BufferValue>
+      <ObjectLayer>
+        <ObjectLayer>
+          <ObjectLayer>HYDL</ObjectLayer>
+        </ObjectLayer>
+      </ObjectLayer>
+      <Boul>
+        <Item>
+          <Level name="省">Province</Level>
+          <BlankValue name="留白间距(mm)">15</BlankValue>
+          <SolidValue name="境界实线间距(mm)">7.3</SolidValue>
+          <PointStep name="点间距(mm)">0.9333</PointStep>
+          <SymbolGroup name="跳绘组数(个)">3</SymbolGroup>
+          <GB>630201</GB>
+        </Item>
+        <Item>
+          <Level name="市">State</Level>
+          <BlankValue name="留白间距(mm)">15</BlankValue>
+          <SolidValue name="境界实线间距(mm)">8.9</SolidValue>
+          <PointStep name="点间距(mm)">0.9</PointStep>
+          <SymbolGroup name="跳绘组数(个)">3</SymbolGroup>
+          <GB>640201</GB>
+        </Item>
+        <Item>
+          <Level name="县">County</Level>
+          <BlankValue name="留白间距(mm)">15</BlankValue>
+          <SolidValue name="境界实线间距(mm)">3.95</SolidValue>
+          <PointStep name="点间距(mm)">1.225</PointStep>
+          <SymbolGroup name="跳绘组数(个)">3</SymbolGroup>
+          <GB>650201</GB>
+        </Item>
+        <Item>
+          <Level name="乡镇">Town</Level>
+          <BlankValue name="留白间距(mm)">15</BlankValue>
+          <SolidValue name="境界实线间距(mm)">7</SolidValue>
+          <PointStep name="点间距(mm)">0</PointStep>
+          <SymbolGroup name="跳绘组数(个)">3</SymbolGroup>
+          <GB>660201</GB>
+        </Item>
+      </Boul>
+    </BoulDraw>
+    <MapName name="地图图名">
+      <ArtChecked name="艺术字">false</ArtChecked>
+      <Title name="图名">
+        <FontSize unit="毫米">30</FontSize>
+        <FontName>黑体</FontName>
+        <FontColor>
+          <Red>0</Red>
+          <Green>0</Green>
+          <Blue>0</Blue>
+        </FontColor>
+      </Title>
+      <ProductUnit name="生产单位">
+        <FontSize unit="毫米">8</FontSize>
+        <FontName>黑体</FontName>
+        <FontColor>
+          <Red>0</Red>
+          <Green>0</Green>
+          <Blue>0</Blue>
+        </FontColor>
+      </ProductUnit>
+      <MapTime name="制图日期">
+        <FontSize unit="毫米">8</FontSize>
+        <FontName>黑体</FontName>
+        <FontColor>
+          <Red>0</Red>
+          <Green>0</Green>
+          <Blue>0</Blue>
+        </FontColor>
+      </MapTime>
+    </MapName>
+    <LaceBorder name="地图花边">
+      <Width>12</Width>
+      <Interval>3</Interval>
+      <Border name="花边符号"></Border>
+      <Corner name="转角符号"></Corner>
+    </LaceBorder>
+    <GridLine name="格网线">
+      <MeatureGrid name="方里网">
+        <X>1</X>
+        <Y>2</Y>
+      </MeatureGrid>
+      <GraticuleGrid name="经纬网">
+        <Longitude name="经度">0°4′0″</Longitude>
+        <Latitude name="纬度">0°5′0″</Latitude>
+      </GraticuleGrid>
+      <IndexGrid name="索引网">
+        <Row>8</Row>
+        <Column>8</Column>
+      </IndexGrid>
+      <HorizontalStep name="注记水平间距" unit="毫米">1.5</HorizontalStep>
+      <VerticalStep name="注记垂直间距" unit="毫米">1.5</VerticalStep>
+    </GridLine>
+    <CutLine name="丁字线">
+      <Top>2</Top>
+      <Bottom>2</Bottom>
+      <Right>2</Right>
+      <Left>2</Left>
+    </CutLine>
+    <MapLengend>
+      <LengendInfo>
+        <Column Name="图例列数">2</Column>
+        <TitleFontSize Unit="毫米" Name="图例标题字体">10</TitleFontSize>
+        <ItemFontSize Unit="毫米" Name="图例项字体">3</ItemFontSize>
+        <ItemYStep Unit="毫米" Name="图例项垂直间隔">8</ItemYStep>
+        <ItemXStep Unit="毫米" Name="图例项水平间隔">42</ItemXStep>
+      </LengendInfo>
+      <Lengend>
+        <Layer LayerName="注记图例" Checked="false">
+          <DataRow unit="毫米" display="true">
+            <AnnoName>河北省</AnnoName>
+            <AnnoFontSize>4.2</AnnoFontSize>
+            <AnnoFontName>黑体</AnnoFontName>
+            <AnnoNote>省、自治区、直;辖市政府驻地</AnnoNote>
+            <AnnoColor>M100Y100</AnnoColor>
+          </DataRow>
+          <DataRow unit="毫米" display="true">
+            <AnnoName>石家庄市</AnnoName>
+            <AnnoFontSize>3.2</AnnoFontSize>
+            <AnnoFontName>黑体</AnnoFontName>
+            <AnnoNote>地区、自治州;地级市政府驻地</AnnoNote>
+            <AnnoColor>K100</AnnoColor>
+          </DataRow>
+          <DataRow unit="毫米" display="true">
+            <AnnoName>长安区</AnnoName>
+            <AnnoFontSize>2.7</AnnoFontSize>
+            <AnnoFontName>黑体</AnnoFontName>
+            <AnnoNote>县、县级市;政府驻地</AnnoNote>
+            <AnnoColor>K100</AnnoColor>
+          </DataRow>
+          <DataRow unit="毫米" display="true">
+            <AnnoName>桃园镇</AnnoName>
+            <AnnoFontSize>2.1</AnnoFontSize>
+            <AnnoFontName>黑体</AnnoFontName>
+            <AnnoNote>乡、镇政府驻地</AnnoNote>
+            <AnnoColor>K100</AnnoColor>
+          </DataRow>
+          <DataRow unit="毫米" display="true">
+            <AnnoName>陈章村</AnnoName>
+            <AnnoFontSize>2</AnnoFontSize>
+            <AnnoFontName>黑体</AnnoFontName>
+            <AnnoNote>村庄</AnnoNote>
+            <AnnoColor>K100</AnnoColor>
+          </DataRow>
+        </Layer>
+        <Layer LayerName="RESP" Checked="true">
+          <ItemInfo RuleID="4" Checked="true">县级政府</ItemInfo>
+          <ItemInfo RuleID="5" Checked="true">乡镇级政府</ItemInfo>
+          <ItemInfo RuleID="6" Checked="true">行政村</ItemInfo>
+          <ItemInfo RuleID="7" Checked="true">自然村</ItemInfo>
+          <ItemInfo RuleID="8" Checked="true">牧点、渔点、棚屋</ItemInfo>
+        </Layer>
+        <Layer LayerName="LRDL" Checked="true">
+          <ItemInfo RuleID="2" Checked="true">建成高速公路</ItemInfo>
+          <ItemInfo RuleID="4" Checked="true">建成国道</ItemInfo>
+          <ItemInfo RuleID="6" Checked="true">建成省道</ItemInfo>
+          <ItemInfo RuleID="8" Checked="true">建成县道</ItemInfo>
+          <ItemInfo RuleID="10" Checked="true">乡道</ItemInfo>
+          <ItemInfo RuleID="12" Checked="true">其他公路</ItemInfo>
+          <ItemInfo RuleID="14" Checked="true">主干道</ItemInfo>
+          <ItemInfo RuleID="15" Checked="true">次干道</ItemInfo>
+          <ItemInfo RuleID="17" Checked="true">机耕路（大路）</ItemInfo>
+          <ItemInfo RuleID="19" Checked="true">小路</ItemInfo>
+          <ItemInfo RuleID="20" Checked="true">时令路</ItemInfo>
+          <ItemInfo RuleID="23" Checked="true">省道隧道</ItemInfo>
+          <ItemInfo RuleID="29" Checked="true">高速公路桥梁</ItemInfo>
+          <ItemInfo RuleID="30" Checked="true">高速公路隧道</ItemInfo>
+          <ItemInfo RuleID="31" Checked="true">国道桥梁</ItemInfo>
+          <ItemInfo RuleID="32" Checked="true">国道隧道</ItemInfo>
+          <ItemInfo RuleID="36" Checked="true">县道隧道</ItemInfo>
+          <ItemInfo RuleID="38" Checked="true">乡道隧道</ItemInfo>
+          <ItemInfo RuleID="42" Checked="true">其他公路隧道</ItemInfo>
+        </Layer>
+        <Layer LayerName="JJTH" Checked="true">
+          <ItemInfo RuleID="2" Checked="true">县界未跳绘</ItemInfo>
+          <ItemInfo RuleID="3" Checked="true">县界跳绘左跳</ItemInfo>
+          <ItemInfo RuleID="4" Checked="true">县界跳绘右跳</ItemInfo>
+          <ItemInfo RuleID="8" Checked="true">地级市界未跳绘</ItemInfo>
+          <ItemInfo RuleID="14" Checked="true">乡界</ItemInfo>
+          <ItemInfo RuleID="15" Checked="true">乡界跳绘右跳</ItemInfo>
+          <ItemInfo RuleID="16" Checked="true">乡界跳绘左跳</ItemInfo>
+        </Layer>
+        <Layer LayerName="HYDL" Checked="true">
+          <ItemInfo RuleID="2" Checked="true">地面河流</ItemInfo>
+          <ItemInfo RuleID="4" Checked="true">消失河段</ItemInfo>
+          <ItemInfo RuleID="5" Checked="true">时令河</ItemInfo>
+          <ItemInfo RuleID="6" Checked="true">河道干河</ItemInfo>
+        </Layer>
+        <Layer LayerName="HYDA" Checked="true">
+          <ItemInfo RuleID="2" Checked="true">地面河段</ItemInfo>
+          <ItemInfo RuleID="10" Checked="true">湖泊</ItemInfo>
+          <ItemInfo RuleID="15" Checked="true">水库</ItemInfo>
+        </Layer>
+        <Layer LayerName="TERP" Checked="true">
+          <ItemInfo RuleID="2" Checked="true">高程点</ItemInfo>
+          <ItemInfo RuleID="3" Checked="true">山峰</ItemInfo>
+        </Layer>
+        <Layer LayerName="LFCP" Checked="true">
+          <ItemInfo RuleID="3" Checked="true">山隘</ItemInfo>
+          <ItemInfo RuleID="6" Checked="true">加油（气）站</ItemInfo>
+          <ItemInfo RuleID="8" Checked="true">收费站（出入口）</ItemInfo>
+          <ItemInfo RuleID="18" Checked="true">停车场</ItemInfo>
+        </Layer>
+        <Layer LayerName="RFCP" Checked="true">
+          <ItemInfo RuleID="15" Checked="true">发电站（厂）</ItemInfo>
+          <ItemInfo RuleID="16" Checked="true">电视发射塔</ItemInfo>
+          <ItemInfo RuleID="19" Checked="true">水文站</ItemInfo>
+          <ItemInfo RuleID="20" Checked="true">矿井、矿山</ItemInfo>
+          <ItemInfo RuleID="25" Checked="true">国家级风景名胜区</ItemInfo>
+          <ItemInfo RuleID="35" Checked="true">塔</ItemInfo>
+          <ItemInfo RuleID="36" Checked="true">庙宇</ItemInfo>
+          <ItemInfo RuleID="40" Checked="true">历史纪念地</ItemInfo>
+          <ItemInfo RuleID="43" Checked="true">一般景点</ItemInfo>
+        </Layer>
+        <Layer LayerName="DZP" Checked="true">
+          <ItemInfo RuleID="3" Checked="true">滑坡 大型</ItemInfo>
+          <ItemInfo RuleID="4" Checked="true">滑坡 中型</ItemInfo>
+          <ItemInfo RuleID="5" Checked="true">滑坡 小型</ItemInfo>
+          <ItemInfo RuleID="6" Checked="true">崩塌 巨型</ItemInfo>
+          <ItemInfo RuleID="7" Checked="true">崩塌 大型</ItemInfo>
+          <ItemInfo RuleID="8" Checked="true">崩塌 中型</ItemInfo>
+          <ItemInfo RuleID="9" Checked="true">崩塌 小型</ItemInfo>
+          <ItemInfo RuleID="10" Checked="true">泥石流 巨型</ItemInfo>
+          <ItemInfo RuleID="11" Checked="true">泥石流 大型</ItemInfo>
+          <ItemInfo RuleID="12" Checked="true">泥石流 中型</ItemInfo>
+          <ItemInfo RuleID="13" Checked="true">泥石流 小型</ItemInfo>
+        </Layer>
+        <Layer LayerName="RESA" Checked="true">
+          <ItemInfo RuleID="2" Checked="true">居民地面</ItemInfo>
+        </Layer>
+        <Layer LayerName="QJA" Checked="false">
+          <ItemInfo RuleID="1" Checked="true">1</ItemInfo>
+          <ItemInfo RuleID="2" Checked="true">2</ItemInfo>
+          <ItemInfo RuleID="3" Checked="true">3</ItemInfo>
+          <ItemInfo RuleID="4" Checked="true">4</ItemInfo>
+          <ItemInfo RuleID="5" Checked="true">5</ItemInfo>
+          <ItemInfo RuleID="6" Checked="true">6</ItemInfo>
+        </Layer>
+        <Layer LayerName="BOUA" Checked="false">
+          <ItemInfo RuleID="6" Checked="true">1</ItemInfo>
+          <ItemInfo RuleID="7" Checked="true">2</ItemInfo>
+          <ItemInfo RuleID="8" Checked="true">3</ItemInfo>
+        </Layer>
+      </Lengend>
+    </MapLengend>
+  </Content>
+</Template>

@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Template>
+  <Content>
+    <HYDL note="单线河">
+      <Item minScale ="700001" maxScale="2500000">0</Item>
+      <Item minScale ="500001" maxScale="700000">1</Item>
+      <Item minScale ="350001" maxScale="500000">2</Item>
+      <Item minScale ="250001" maxScale="350000">3</Item>
+      <Item minScale ="150001" maxScale="250000">4</Item>
+      <Item minScale ="100001" maxScale="150000">5</Item>
+      <Item minScale ="70001" maxScale="100000">6</Item>
+      <Item minScale ="50001" maxScale="70000">7</Item>
+      <Item minScale ="35001" maxScale="50000">8</Item>
+	  <Item minScale ="35001" maxScale="50000">9</Item>
+	  <Item minScale ="35001" maxScale="50000">10</Item>
+	  <Item minScale ="35001" maxScale="50000">11</Item>
+	  <Item minScale ="35001" maxScale="50000">12</Item>
+	  <Item minScale ="35001" maxScale="50000">13</Item>
+    </HYDL>
+    <HYDA note="水系面">
+    </HYDA>
+    <LRDL note="道路">
+      <Item minScale ="700001" maxScale="2500000">1</Item>
+      <Item minScale ="700001" maxScale="2500000">2</Item>
+      <Item minScale ="700001" maxScale="2500000">3</Item>
+      <Item minScale ="600001" maxScale="700000">4</Item>
+      <Item minScale ="400001" maxScale="600000">5</Item>
+      <Item minScale ="300001" maxScale="400000">6</Item>
+      <Item minScale ="200001" maxScale="300000">7</Item>
+      <Item minScale ="120001" maxScale="200000">8</Item>
+      <Item minScale ="70001" maxScale="120000">9</Item>
+      <Item minScale ="35001" maxScale="70000">10</Item>
+      <Item minScale ="35001" maxScale="70000">11</Item>
+      <Item minScale ="35001" maxScale="70000">12</Item>
+	  <Item minScale ="35001" maxScale="70000">13</Item>
+    </LRDL>
+    <AGNP_Priority note="居民地点优先级">
+      <Item minScale ="700001" maxScale="2500000">1</Item>
+      <Item minScale ="700001" maxScale="2500000">2</Item>
+      <Item minScale ="700001" maxScale="2500000">3</Item>
+      <Item minScale ="600001" maxScale="700000">4</Item>
+      <Item minScale ="400001" maxScale="600000">5</Item>
+      <Item minScale ="300001" maxScale="400000">6</Item>
+      <Item minScale ="200001" maxScale="300000">7</Item>
+      <Item minScale ="120001" maxScale="200000">8</Item>
+      <Item minScale ="70001" maxScale="120000">9</Item>
+      <Item minScale ="35001" maxScale="70000">10</Item>
+      <Item minScale ="70001" maxScale="120000">11</Item>
+      <Item minScale ="35001" maxScale="70000">12</Item>
+	</AGNP_Priority>
+	<AGNP note="居民地点">
+      <Item  sql="class='AA1'">首都</Item>
+      <Item  sql="class='AB'">省级行政中心</Item>
+      <Item  sql="class='AC' OR class='AD'">地级行政中心</Item>
+      <Item  sql="class='AE' OR class='AF'">县级行政中心</Item>
+      <Item  sql="class='AG' OR class='AI' OR class='AJ'">乡、镇政府驻地</Item>
+      <Item  sql="class='AH'">街道办事处</Item>
+      <Item  sql="class='AK'">行政村</Item>
+      <Item  sql="class='BA' OR class='BB'">自然村</Item>
+      <Item  sql="class='BC'" >农场</Item>
+      <Item  sql="class='BC1'" >林场</Item>
+      <Item  sql="class='CC'">分场</Item>
+    </AGNP>
+    <RESA note="街区面">
+      <Item sql="class1='首都'" level = "1">首都</Item>
+      <Item sql="class1 in ('首都','直辖市')" level = "2">直辖市</Item>
+      <Item sql="class1 in ('首都','直辖市','省级行政中心')" level = "3">省级行政中心居民地</Item>
+      <Item sql="class1 in ('首都','直辖市','省级行政中心','地级行政中心')" level = "4">地级市居民地</Item>
+      <Item sql="class1 in ('首都','直辖市','省级行政中心','地级行政中心','县级行政中心')" level = "5">县级居民地</Item>
+      <Item sql="class1 in ('首都','直辖市','省级行政中心','地级行政中心','县级行政中心','乡级行政中心')" level = "6">乡镇级居民地</Item>
+      <Item sql="class1 in ('首都','直辖市','省级行政中心','地级行政中心','县级行政中心','乡级行政中心','农村居民地')" level = "7">农村居民地</Item>
+      <Item sql="" level = "8">其他</Item>
+    </RESA>
+    <BOUL note="境界线">
+      <Item gb="630201" >省级</Item>
+      <Item gb="640201" >市级</Item>
+      <Item gb="650201" >区县级</Item>
+      <Item gb="660201" >乡镇级</Item>
+    </BOUL>
+	<BOUAAnno note="表面注记" ProvPac="130000">
+      <Item fcName="BOUA2" >省级</Item>
+      <Item fcName="BOUA4" >市级</Item>
+      <Item fcName="BOUA5" >区县级</Item>
+      <Item fcName="BOUA6" >乡镇级</Item>
+    </BOUAAnno>
+	<POI note="兴趣点">
+	  <Item minScale ="120001" maxScale="200000">1</Item>
+	  <Item minScale ="70001" maxScale="120000">2</Item>
+      <Item minScale ="35001" maxScale="70000">3</Item>
+	</POI>
+  </Content>
+  <Scheme>
+    <Type MapLevel="自定义">
+      <HYDL note="单线河" mainGrade="6" adjGrade="2"></HYDL>
+      <HYDA note="水系面" mainArea ="0" adjArea="16"></HYDA>
+      <LRDL note="道路" mainGrade="10" adjGrade="6"></LRDL>
+      <MainAGNPPriority note="主区居民地点优先级" priority="12"></MainAGNPPriority>
+	  <AdjAGNPPriority note="邻区居民地点优先级" priority="12"></AdjAGNPPriority>
+      <MainAGNP note="主区居民地点">
+        <Item slected="true">首都</Item>
+        <Item slected="true">直辖市</Item>
+        <Item slected="true">省级行政中心</Item>
+        <Item slected="true">地级行政中心</Item>
+        <Item slected="true">县级行政中心</Item>
+        <Item slected="true">乡、镇政府驻地</Item>
+        <Item slected="true">街道办事处</Item>
+        <Item slected="true">行政村</Item>
+        <Item slected="true">自然村</Item>
+        <Item slected="true">农场</Item>
+        <Item slected="true">林场</Item>
+        <Item slected="true">分场</Item>
+      </MainAGNP>
+      <AdjAGNP note="邻区居民地点">
+        <Item slected="true">首都</Item>
+        <Item slected="true">直辖市</Item>
+        <Item slected="true">省级行政中心</Item>
+        <Item slected="true">地级行政中心</Item>
+        <Item slected="true">县级行政中心</Item>
+        <Item slected="true">乡、镇政府驻地</Item>
+        <Item slected="false">街道办事处</Item>
+        <Item slected="false">行政村</Item>
+        <Item slected="false">自然村</Item>
+        <Item slected="false">农场</Item>
+        <Item slected="false">林场</Item>
+        <Item slected="false">分场</Item>
+      </AdjAGNP>
+      <RESA note="街区面" mainRegion ="农村居民地" adjRegion ="县级居民地"></RESA>
+      <BOUL note="境界线" mainRegion ="乡镇级" adjRegion ="区县级"></BOUL>
+	  <BOUAAnno note="表面注记" mainRegion ="乡镇级" inProvAdjRegion ="区县级" outProvAdjRegion="省级"></BOUAAnno>
+	  <POI note="兴趣点" priority="3" adjPriority="3"></POI>
+    </Type>
+    <Type MapLevel="省图">
+      <HYDL note="单线河" mainGrade="2" adjGrade="0"></HYDL>
+      <HYDA note="水系面" mainArea ="0" adjArea="36"></HYDA>
+      <LRDL note="道路" mainGrade="6" adjGrade="4"></LRDL>
+	  <MainAGNPPriority note="主区居民地点优先级" priority="12"></MainAGNPPriority>
+	  <AdjAGNPPrioriy note="邻区居民地点优先级" priority="12"></AdjAGNPPrioriy>
+      <MainAGNP note="主区居民地点">
+        <Item slected="true">首都</Item>
+        <Item slected="true">直辖市</Item>
+        <Item slected="true">省级行政中心</Item>
+        <Item slected="true">地级行政中心</Item>
+        <Item slected="true">县级行政中心</Item>
+        <Item slected="true">乡、镇政府驻地</Item>
+        <Item slected="false">街道办事处</Item>
+        <Item slected="false">行政村</Item>
+        <Item slected="false">自然村</Item>
+        <Item slected="false">农场</Item>
+        <Item slected="false">林场</Item>
+        <Item slected="false">分场</Item>
+      </MainAGNP>
+      <AdjAGNP note="邻区居民地点">
+        <Item slected="true">首都</Item>
+        <Item slected="true">直辖市</Item>
+        <Item slected="true">省级行政中心</Item>
+        <Item slected="true">地级行政中心</Item>
+        <Item slected="false">县级行政中心</Item>
+        <Item slected="false">乡、镇政府驻地</Item>
+        <Item slected="false">街道办事处</Item>
+        <Item slected="false">行政村</Item>
+        <Item slected="false">自然村</Item>
+        <Item slected="false">农场</Item>
+        <Item slected="false">林场</Item>
+        <Item slected="false">分场</Item>
+      </AdjAGNP>
+      <RESA note="街区面" mainRegion ="地级市居民地" adjRegion ="省级行政中心居民地"></RESA>
+      <BOUL note="境界线" mainRegion ="市级" adjRegion="省级"></BOUL>
+	  <BOUAAnno note="表面注记" mainRegion ="乡镇级" inProvAdjRegion ="区县级" outProvAdjRegion="省级"></BOUAAnno>
+	  <POI note="兴趣点" priority="3" adjPriority="3"></POI>
+    </Type>
+    <Type MapLevel="市图">
+      <HYDL note="单线河" mainGrade="4" adjGrade="1"></HYDL>
+      <HYDA note="水系面" mainArea ="0" adjArea="25"></HYDA>
+      <LRDL note="道路" mainGrade="8" adjGrade="5"></LRDL>
+	  <MainAGNPPriority note="主区居民地点优先级" priority="12"></MainAGNPPriority>
+	  <AdjAGNPPrioriy note="邻区居民地点优先级" priority="12"></AdjAGNPPrioriy>
+      <MainAGNP note="主区居民地点">
+        <Item slected="true">首都</Item>
+        <Item slected="true">直辖市</Item>
+        <Item slected="true">省级行政中心</Item>
+        <Item slected="true">地级行政中心</Item>
+        <Item slected="true">县级行政中心</Item>
+        <Item slected="true">乡、镇政府驻地</Item>
+        <Item slected="true">街道办事处</Item>
+        <Item slected="true">行政村</Item>
+        <Item slected="false">自然村</Item>
+        <Item slected="false">农场</Item>
+        <Item slected="false">林场</Item>
+        <Item slected="false">分场</Item>
+      </MainAGNP>
+      <AdjAGNP note="邻区居民地点">
+        <Item slected="true">首都</Item>
+        <Item slected="true">直辖市</Item>
+        <Item slected="true">省级行政中心</Item>
+        <Item slected="true">地级行政中心</Item>
+        <Item slected="true">县级行政中心</Item>
+        <Item slected="false">乡、镇政府驻地</Item>
+        <Item slected="false">街道办事处</Item>
+        <Item slected="false">行政村</Item>
+        <Item slected="false">自然村</Item>
+        <Item slected="false">农场</Item>
+        <Item slected="false">林场</Item>
+        <Item slected="false">分场</Item>
+      </AdjAGNP>
+      <RESA note="街区面" mainRegion ="县级居民地" adjRegion ="地级市居民地"></RESA>
+      <BOUL note="境界线" mainRegion ="区县级" adjRegion ="市级"></BOUL>
+	  <BOUAAnno note="表面注记" mainRegion ="乡镇级" inProvAdjRegion ="区县级" outProvAdjRegion="省级"></BOUAAnno>
+	  <POI note="兴趣点" priority="3" adjPriority="3"></POI>
+    </Type>
+    <Type MapLevel="县图">
+      <HYDL note="单线河" mainGrade="6" adjGrade="2"></HYDL>
+      <HYDA note="水系面" mainArea ="0" adjArea="16"></HYDA>
+      <LRDL note="道路" mainGrade="10" adjGrade="6"></LRDL>
+	  <MainAGNPPriority note="主区居民地点优先级" priority="12"></MainAGNPPriority>
+	  <AdjAGNPPrioriy note="邻区居民地点优先级" priority="12"></AdjAGNPPrioriy>
+      <MainAGNP note="主区居民地点">
+        <Item slected="true">首都</Item>
+        <Item slected="true">直辖市</Item>
+        <Item slected="true">省级行政中心</Item>
+        <Item slected="true">地级行政中心</Item>
+        <Item slected="true">县级行政中心</Item>
+        <Item slected="true">乡、镇政府驻地</Item>
+        <Item slected="true">街道办事处</Item>
+        <Item slected="true">行政村</Item>
+        <Item slected="true">自然村</Item>
+        <Item slected="true">农场</Item>
+        <Item slected="true">林场</Item>
+        <Item slected="true">分场</Item>
+      </MainAGNP>
+      <AdjAGNP note="邻区居民地点">
+        <Item slected="true">首都</Item>
+        <Item slected="true">直辖市</Item>
+        <Item slected="true">省级行政中心</Item>
+        <Item slected="true">地级行政中心</Item>
+        <Item slected="true">县级行政中心</Item>
+        <Item slected="true">乡、镇政府驻地</Item>
+        <Item slected="true">街道办事处</Item>
+        <Item slected="false">行政村</Item>
+        <Item slected="false">自然村</Item>
+        <Item slected="false">农场</Item>
+        <Item slected="false">林场</Item>
+        <Item slected="false">分场</Item>
+      </AdjAGNP>
+      <RESA note="街区面" mainRegion ="农村居民地" adjRegion ="县级居民地"></RESA>
+      <BOUL note="境界线" mainRegion ="乡镇级" adjRegion ="区县级"></BOUL>
+	  <BOUAAnno note="表面注记" mainRegion ="乡镇级" inProvAdjRegion ="区县级" outProvAdjRegion="省级"></BOUAAnno>
+	  <POI note="兴趣点" priority="3" adjPriority="3"></POI>
+    </Type>
+  </Scheme>
+</Template>

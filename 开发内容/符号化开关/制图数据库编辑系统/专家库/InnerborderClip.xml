@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<params>
+  <innerborder FCName ="LLINE" SQL = "TYPE='内图廓'">内图廓</innerborder>
+  <clipFC>
+    <fcName>AGNP</fcName>
+	<fcName>AANP</fcName>
+	<fcName>HYDP</fcName>
+	<fcName>HFCP</fcName>
+	<fcName>LFCP</fcName>
+	<fcName>HYDL</fcName>
+	<fcName>LRDL</fcName>
+	<fcName>LRRL</fcName>
+	<fcName>LFCL</fcName>
+	<fcName>HFCL</fcName>
+	<fcName>JJTH</fcName>
+	<fcName>BOUL</fcName>
+	<fcName>AANL</fcName>
+	<fcName>BRGL</fcName>
+	<fcName>RESA</fcName>
+	<fcName>HYDA</fcName>
+	<fcName>HFCA</fcName>
+	<fcName>BRGA</fcName>
+	<fcName>BOUA2</fcName>
+	<fcName>BOUA4</fcName>
+	<fcName>BOUA5</fcName>
+	<fcName>BOUA6</fcName>
+  </clipFC>
+</params>

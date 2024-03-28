@@ -1,0 +1,20 @@
+﻿<Template>
+  <Caption>制图数据库编辑系统</Caption>
+  <ClassName>制图数据库编辑系统</ClassName>
+  <CommandLayout>Commands.xml</CommandLayout>
+  <Content>
+    <DataUpdate5W>true</DataUpdate5W>
+    <DataTemplate>DataTemple.gdb</DataTemplate>
+    <SkinStyle>Office 2010 Blue</SkinStyle>
+    <SatrtImage>启动图片.png</SatrtImage>
+    <CartoMxd>Template.mxd</CartoMxd>
+    <GdbMxd>TempGdb.mxd</GdbMxd>
+    <FieldNameMapping>FNConfig.xml</FieldNameMapping>
+   <地理信息管理>基础地理信息管理系统</地理信息管理>
+    <多尺度地图库生产>制图数据库编辑系统</多尺度地图库生产>
+    <数据转换>成果数据改化转换系统</数据转换>
+    <应急快速制图>专题地图快速制图系统</应急快速制图>
+    <EnvironmentSettings>EnvironmentSettings.xml</EnvironmentSettings>
+    <Expertise>Expertise.xml</Expertise>
+  </Content>
+</Template>

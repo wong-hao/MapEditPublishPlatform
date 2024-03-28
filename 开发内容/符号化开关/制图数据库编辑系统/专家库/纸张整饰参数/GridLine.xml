@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Template>
+  <Content>
+    <Group MapLevel="省图">
+      <Longitude name="经度">1°0′0″</Longitude>
+      <Latitude name="纬度">1°0′0″</Latitude>
+    </Group>
+    <Group MapLevel="市图">
+      <Longitude name="经度">0°30′0″</Longitude>
+      <Latitude name="纬度">0°30′0″</Latitude>
+    </Group>
+    <Group MapLevel="县图">
+      <Longitude name="经度">0°10′0″</Longitude>
+      <Latitude name="纬度">0°10′0″</Latitude>
+    </Group>
+  </Content>
+</Template>

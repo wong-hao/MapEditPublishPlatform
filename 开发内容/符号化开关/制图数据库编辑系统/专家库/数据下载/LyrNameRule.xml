@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Template>
+  <Content>
+    <Layer name="AGNP">
+      <AliaName>居民地地名</AliaName>
+      <GeoType>点</GeoType>
+    </Layer>
+    <Layer name="BOUA2">
+      <AliaName>省级境界（面）</AliaName>
+      <GeoType>面</GeoType>
+    </Layer>
+    <Layer name="BOUA4">
+      <AliaName>地级境界（面）</AliaName>
+      <GeoType>面</GeoType>
+    </Layer>
+    <Layer name="BOUA5">
+      <AliaName>县级境界（面）</AliaName>
+      <GeoType>面</GeoType>
+    </Layer>
+    <Layer name="BOUA6">
+      <AliaName>乡级境界（面）</AliaName>
+      <GeoType>面</GeoType>
+    </Layer>
+    <Layer name="BOUL">
+      <AliaName>境界（线）</AliaName>
+      <GeoType>线</GeoType>
+    </Layer>
+    <Layer name="BRGL">
+      <AliaName>区域界线（线）</AliaName>
+      <GeoType>线</GeoType>
+    </Layer>
+   <Layer name="HFCA">
+      <AliaName>水系附属设施（面）</AliaName>
+      <GeoType>面</GeoType>
+    </Layer>
+   <Layer name="HFCL">
+      <AliaName>水系附属设施（线）</AliaName>
+      <GeoType>线</GeoType>
+    </Layer>
+   <Layer name="HFCP">
+      <AliaName>水系附属设施（点）</AliaName>
+      <GeoType>点</GeoType>
+    </Layer>
+   <Layer name="HYDA">
+      <AliaName>水系（面）</AliaName>
+      <GeoType>面</GeoType>
+    </Layer>
+    <Layer name="HYDL">
+      <AliaName>水系（线）</AliaName>
+      <GeoType>线</GeoType>
+    </Layer>
+   <Layer name="HYDP">
+      <AliaName>水系（点）</AliaName>
+      <GeoType>点</GeoType>
+    </Layer>
+   <Layer name="LFCL">
+      <AliaName>交通附属设施（线）</AliaName>
+      <GeoType>线</GeoType>
+    </Layer>
+   <Layer name="LFCP">
+      <AliaName>交通附属设施（点）</AliaName>
+      <GeoType>点</GeoType>
+    </Layer>
+   <Layer name="LRDL">
+      <AliaName>道路</AliaName>
+      <GeoType>线</GeoType>
+    </Layer>
+   <Layer name="LRRL">
+      <AliaName>铁路</AliaName>
+      <GeoType>线</GeoType>
+    </Layer>
+   <Layer name="RESA">
+      <AliaName>居民地（面）</AliaName>
+      <GeoType>面</GeoType>
+    </Layer>
+   <Layer name="RESL">
+      <AliaName>居民地（线）</AliaName>
+      <GeoType>线</GeoType>
+    </Layer>
+   <Layer name="RESP">
+      <AliaName>居民地（点）</AliaName>
+      <GeoType>点</GeoType>
+    </Layer>
+  </Content>
+</Template>

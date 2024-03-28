@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Template>
+  <Content note="附属设施关联选取规则">
+    <HYDL>
+      <Item note="水系附属点设施">HFCP</Item>
+      <Item note="水系附属线设施">HFCL</Item>
+      <Item note="道路附属线设施">LFCL</Item>
+    </HYDL>
+    <HYDA>
+      <Item note="道路附属点设施">LFCP</Item>
+      <Item note="道路附属线设施">LFCL</Item>
+    </HYDA>
+    <LRDL>
+      <Item note="道路附属点设施">LFCP</Item>
+      <Item note="道路附属线设施">LFCL</Item>
+      <Item note="水系附属点设施">HFCP</Item>
+      <Item note="水系附属线设施">HFCL</Item>
+    </LRDL>
+  </Content>
+</Template>

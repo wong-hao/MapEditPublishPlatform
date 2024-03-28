@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DataTable>
+  <DataRow  unit="毫米" display="true">
+    <AnnoName>宁夏回族自治区</AnnoName>
+    <AnnoFontSize>4.2</AnnoFontSize>
+    <AnnoFontName>黑体</AnnoFontName>
+    <AnnoNote>省级行政中心</AnnoNote>
+    <AnnoColor>C0M100Y100K0</AnnoColor>
+  </DataRow>
+  <DataRow  unit="毫米" display="true">
+    <AnnoName>银川市</AnnoName>
+    <AnnoFontName>黑体</AnnoFontName>
+    <AnnoFontSize>3.2</AnnoFontSize>
+    <AnnoNote>地级行政中心</AnnoNote>
+    <AnnoColor></AnnoColor>
+  </DataRow>
+  <DataRow  unit="毫米" display="true">
+    <AnnoName>兴庆区</AnnoName>
+    <AnnoFontName>黑体</AnnoFontName>
+    <AnnoFontSize>2.7</AnnoFontSize>
+    <AnnoNote>县(区、市)政府驻地</AnnoNote>
+    <AnnoColor></AnnoColor>
+  </DataRow>
+  <DataRow  unit="毫米" display="true">
+    <AnnoName>凤凰北街街道</AnnoName>
+    <AnnoFontName>黑体</AnnoFontName>
+    <AnnoFontSize>2.1</AnnoFontSize>
+    <AnnoNote>乡、镇政府驻地</AnnoNote>
+    <AnnoColor></AnnoColor>
+  </DataRow>
+  <DataRow  unit="毫米" display="true">
+    <AnnoName>崇安社区</AnnoName>
+    <AnnoFontName>黑体</AnnoFontName>
+    <AnnoFontSize>2.0</AnnoFontSize>
+    <AnnoNote>村庄</AnnoNote>
+    <AnnoColor></AnnoColor>
+  </DataRow>
+</DataTable>

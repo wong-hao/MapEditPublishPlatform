@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Template>
+  <Content  note="道路">
+      <Item RoadLevel="建成高速公路">420901-2</Item>
+      <Item RoadLevel="在建高速公路">420902-3</Item>
+      <Item RoadLevel="建成国道">420101-4</Item>
+      <Item RoadLevel="在建国道">420102-5</Item>
+      <Item RoadLevel="建成省道">420201-6</Item>
+      <Item RoadLevel="在建省道">420202-7</Item>
+      <Item RoadLevel="建成县道">420301-8</Item>
+      <Item RoadLevel="在建县道">420302-9</Item>
+      <Item RoadLevel="乡道">420400-10</Item>
+      <Item RoadLevel="专用公路">420500-12</Item>
+      <Item RoadLevel="其他公路">420800-14</Item>
+      <Item RoadLevel="快速路">430200-16</Item>
+      <Item RoadLevel="主要街道">430501-17</Item>
+      <Item RoadLevel="次要街道">430502-18</Item>
+      <Item RoadLevel="其他街道">430503-19</Item>
+      <Item RoadLevel="机耕路（大路）">440100-20</Item>
+      <Item RoadLevel="乡村路">440200-21</Item>
+      <Item RoadLevel="小路">440300-22</Item>
+      <Item RoadLevel="不显示要素">RuleID is NULL-1</Item>
+  </Content>
+
+  <Sheme note ="符号化">
+    <Type RoadLevel="建成高速公路">
+        <name>建成高速公路</name>
+        <ruleid>2</ruleid>
+        <lgb>420901</lgb>
+        <ShowLGB>首都;省级行政中心;地级行政中心;县级行政中心;乡级行政中心;农村居民地</ShowLGB>
+        <ShowGB>NULL</ShowGB>
+        <NoShowLGB>首都;省级行政中心;地级行政中心;县级行政中心;乡级行政中心;农村居民地</NoShowLGB>
+        <NoShowGB>NULL</NoShowGB>
+    </Type>
+    <Type RoadLevel="建成国道">
+        <name>建成国道</name>
+        <ruleid>4</ruleid>
+        <lgb>420101</lgb>
+        <ShowLGB>首都;省级行政中心;地级行政中心;县级行政中心;乡级行政中心;农村居民地</ShowLGB>
+        <ShowGB>NULL</ShowGB>
+        <NoShowLGB>首都;省级行政中心;地级行政中心;县级行政中心;乡级行政中心;农村居民地</NoShowLGB>
+        <NoShowGB>NULL</NoShowGB>
+    </Type>
+    <Type RoadLevel="建成省道">
+        <name>建成省道</name>
+        <ruleid>6</ruleid>
+        <lgb>420201</lgb>
+        <ShowLGB>首都;省级行政中心;地级行政中心;县级行政中心;乡级行政中心;农村居民地</ShowLGB>
+        <ShowGB>NULL</ShowGB>
+        <NoShowLGB>首都;省级行政中心;地级行政中心;县级行政中心;乡级行政中心;农村居民地</NoShowLGB>
+        <NoShowGB>NULL</NoShowGB>
+    </Type>
+    <Type RoadLevel="建成县道">
+        <name>建成县道</name>
+        <ruleid>8</ruleid>
+        <lgb>420301</lgb>
+        <ShowLGB>乡级行政中心;农村居民地</ShowLGB>
+        <ShowGB>首都;省级行政中心;地级行政中心;县级行政中心</ShowGB>
+        <NoShowLGB>首都;省级行政中心;地级行政中心;县级行政中心;乡级行政中心;农村居民地</NoShowLGB>
+        <NoShowGB>NULL</NoShowGB>
+    </Type>
+    <Type RoadLevel="乡道">
+        <name>乡道</name>
+        <ruleid>10</ruleid>
+        <lgb>420400</lgb>
+        <ShowLGB>乡级行政中心;农村居民地</ShowLGB>
+        <ShowGB>首都;省级行政中心;地级行政中心;县级行政中心</ShowGB>
+        <NoShowLGB>首都;省级行政中心;地级行政中心;县级行政中心;乡级行政中心;农村居民地</NoShowLGB>
+        <NoShowGB>NULL</NoShowGB>
+    </Type>
+    <Type RoadLevel="乡村路">
+        <name>乡村路</name>
+        <ruleid>21</ruleid>
+        <lgb>440200</lgb>
+        <ShowLGB>NULL</ShowLGB>
+        <ShowGB>首都;省级行政中心;地级行政中心;县级行政中心;乡级行政中心;农村居民地</ShowGB>
+        <NoShowLGB>首都;省级行政中心;地级行政中心;县级行政中心;乡级行政中心;农村居民地</NoShowLGB>
+        <NoShowGB>NULL</NoShowGB>
+    </Type>
+  </Sheme>
+</Template>

@@ -1,0 +1,18 @@
+﻿<Content>
+    <RiverAnnoSelection name="河流注记选取参数">
+      <Group name = "HYDL">
+        <Item>
+          <Grade>5</Grade>
+          <Ratio>0.5</Ratio>
+        </Item>
+        <Item>
+          <Grade>6</Grade>
+          <Ratio>0.3</Ratio>
+        </Item>
+        <Item>
+          <Grade>7</Grade>
+          <Ratio>0.1</Ratio>
+        </Item>
+      </Group>
+    </RiverAnnoSelection>
+</Content>

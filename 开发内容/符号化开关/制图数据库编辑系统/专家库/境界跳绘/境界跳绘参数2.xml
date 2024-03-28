@@ -1,0 +1,60 @@
+﻿<Expertise name="境界跳绘参数设置">
+  <Content>
+    <BufferValue name="境界套合容差(mm)">0.1</BufferValue>
+    <ObjectLayer>
+      <Item SQL="GB &lt;&gt; 210400" Note="全部水系">HYDL</Item>
+      <Item SQL="" Note="全部铁路">LRRL</Item>
+      <Item SQL="LGB &lt;= 440100" Note="乡村耕路以上">LRDL</Item>
+    </ObjectLayer>
+     <Boul>
+      <Item>
+        <Level name="国家">Nation</Level>
+        <BlankValue name="留白间距(mm)">5</BlankValue>
+        <SolidValue name="境界实线间距(mm)">7.3</SolidValue>
+        <PointStep name="点间距(mm)">1</PointStep>
+        <SymbolGroup name="跳绘组数(个)">2</SymbolGroup>
+        <GB>620201</GB>
+      </Item>
+      <Item>
+        <Level name="省">Province</Level>
+        <BlankValue name="留白间距(mm)">5</BlankValue>
+        <SolidValue name="境界实线间距(mm)">7.3</SolidValue>
+        <PointStep name="点间距(mm)">0.9333</PointStep>
+        <SymbolGroup name="跳绘组数(个)">2</SymbolGroup>
+        <GB>630201</GB>
+      </Item>
+       <Item>
+        <Level name="市" >State</Level>
+        <BlankValue name="留白间距(mm)">5</BlankValue>
+        <SolidValue name="境界实线间距(mm)">8.9</SolidValue>
+        <PointStep name="点间距(mm)">0.9</PointStep>
+        <SymbolGroup name="跳绘组数(个)">2</SymbolGroup> 
+        <GB>640201</GB>
+      </Item>
+      <Item>
+        <Level name="县">County</Level>
+        <BlankValue name="留白间距(mm)">5</BlankValue>
+        <SolidValue name="境界实线间距(mm)">3.95</SolidValue>
+        <PointStep name="点间距(mm)">1.225</PointStep>
+        <SymbolGroup name="跳绘组数(个)">2</SymbolGroup>
+        <GB>650201</GB>
+      </Item>
+       <Item>
+        <Level name="乡镇">Town</Level>
+         <BlankValue name="留白间距(mm)">5</BlankValue>
+         <SolidValue name="境界实线间距(mm)">7</SolidValue>
+         <PointStep name="点间距(mm)">0</PointStep>
+         <SymbolGroup name="跳绘组数(个)">2</SymbolGroup>
+         <GB>660201</GB>
+      </Item>
+      <Item>
+        <Level name="雄安新区">XA</Level>
+         <BlankValue name="留白间距(mm)">10</BlankValue>
+         <SolidValue name="境界实线间距(mm)">4</SolidValue>
+         <PointStep name="点间距(mm)">0</PointStep>
+         <SymbolGroup name="跳绘组数(个)">2</SymbolGroup>
+         <GB>640999</GB>
+      </Item>
+    </Boul>    
+  </Content>
+</Expertise>

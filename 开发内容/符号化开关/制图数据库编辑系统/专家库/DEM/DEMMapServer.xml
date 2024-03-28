@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Template>
+  <Content>
+    <Server>
+      <IPAddress>10.62.119.85</IPAddress>
+      <DataBase>dem</DataBase>
+      <DEMName>dem</DEMName>
+      <UserName>sde</UserName>
+      <Password>SDEPassword</Password>
+    </Server>
+  </Content>
+</Template>

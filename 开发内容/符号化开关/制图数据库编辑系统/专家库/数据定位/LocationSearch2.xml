@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Template>
+  <Content>
+    <Server name="地名定位">
+      <IPAddress>10.62.119.85</IPAddress>
+      <UserName>sde</UserName>
+      <Password>SDEPassword</Password>
+      <DataBase>nx10</DataBase>
+      <Lyr>AGNP</Lyr>
+      <Field>NAME</Field>
+    </Server>
+    <Server name="行政区定位">
+      <IPAddress>10.62.119.85</IPAddress>
+      <UserName>sde</UserName>
+      <Password>SDEPassword</Password>
+      <DataBase>nx10</DataBase>
+      <Field>NAME</Field>
+      <BOUA2>BOUA2</BOUA2>
+      <BOUA4>BOUA4</BOUA4>
+      <BOUA5>BOUA5</BOUA5>
+      <BOUA6>BOUA6</BOUA6>
+      <ProvincePAC>340000000000</ProvincePAC>
+    </Server>
+  </Content>
+</Template>

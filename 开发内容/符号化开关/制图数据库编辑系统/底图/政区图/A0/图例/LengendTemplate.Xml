@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Template>
+   <Lengend name="常规图例">
+     <Lengend>Lengend.mdb</Lengend>
+     <LengendShare name="共享图例">LengendShare.Xml</LengendShare>
+     <LengendGroup name="组合图例">LengendGroup.Xml</LengendGroup>
+   </Lengend>
+</Template>

@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Lengend Note="不表示图例项">
+   <Item Name="水系面边线" FeatureClass="HYDATOLINE" >2</Item>
+   <Item Name="水系线" FeatureClass="HYDL" >2,8,12,13,15</Item>
+   <Item Name="交通附属设施线" FeatureClass="LFCP" ></Item>
+   <Item Name="水系附属设施线" FeatureClass="HFCL" >2,3,13</Item>
+   <Item Name="水系面" FeatureClass="HYDA" >8,9</Item>
+   <Item Name="境界线" FeatureClass="BOUL" ></Item>
+   <Item Name="自然地名" FeatureClass="AANP" >2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25</Item>
+   <Item Name="地貌线" FeatureClass="AANL" >2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19</Item>
+   <Item Name="公路" FeatureClass="LRDL" ></Item>
+   <Item Name="居民地面" FeatureClass="RESA" >2,3,4</Item>
+   <Item Name="居民地点" FeatureClass="AGNP" ></Item>
+   <Item Name="侧界" FeatureClass="CJL" >1,2</Item>
+   <Item Name="色带面" FeatureClass="SDM" >1,2</Item>
+   <Item Name="骑界线" FeatureClass="QJL" >2</Item>
+   <Item Name="骑界面" FeatureClass="QJA" >1,2,3,4,5,6,7,8,9,10,11,12</Item>
+   <Item Name="县级行政区面" FeatureClass="BOUA5" >2,3,4,5,6,7</Item>
+   <Item Name="地级行政区面" FeatureClass="BOUA4" >2,3,4,5,6,7</Item>
+   <Item Name="省级行政区面" FeatureClass="BOUA2" >2,3,4,5,6,7</Item>
+   <Item Name="国家级行政区面" FeatureClass="BOUA1" >2,3,4,5,6,7</Item>
+</Lengend>

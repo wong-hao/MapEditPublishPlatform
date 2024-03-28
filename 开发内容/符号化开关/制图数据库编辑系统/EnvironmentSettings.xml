@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Template>
+  <Content>
+    <Server>
+      <IPAddress>10.62.119.84</IPAddress>
+      <UserName>sde</UserName>
+      <Password>123456</Password>
+    </Server>
+    <BaseMap>一般</BaseMap>
+    <ThematicMap>地震应急</ThematicMap>
+    <MapScale>775000</MapScale>
+    <DatabaseName>xq100w</DatabaseName>
+    <MapTemplate>100万</MapTemplate>
+    <SpatialReference>Asia_Lambert_Conformal_Conic.prj</SpatialReference>
+    <AttachArea>
+      <AttachMapScale>50000</AttachMapScale>
+      <AttachDatabaseName>pgdb</AttachDatabaseName>
+      <AttachMapTemplate>5万</AttachMapTemplate>
+    </AttachArea>
+    <PageSize>
+      <Width>841</Width>
+      <Height>594</Height>
+    </PageSize>
+    <MapSizeStyle>100万</MapSizeStyle>
+    <MapSize>
+      <Width>594</Width>
+      <Height>420</Height>
+    </MapSize>
+    <MapInnerSize>
+      <Width>554</Width>
+      <Height>378</Height>
+    </MapInnerSize>
+    <MapInterval>5</MapInterval>
+  </Content>
+</Template>

@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Template>
+  <Content>
+    <ColorRamp id="1">
+      <FromColor>
+        <R>255</R>
+        <G>255</G>
+        <B>255</B>
+      </FromColor>
+      <ToColor>
+        <R>0</R>
+        <G>115</G>
+        <B>76</B>
+      </ToColor>
+    </ColorRamp>
+    <ColorRamp id="2">
+      <FromColor>
+        <R>192</R>
+        <G>218</G>
+        <B>234</B>
+      </FromColor>
+      <ToColor>
+        <R>0</R>
+        <G>92</G>
+        <B>230</B>
+      </ToColor>
+    </ColorRamp>
+    <ColorRamp id="4">
+      <FromColor>
+        <R>255</R>
+        <G>235</G>
+        <B>175</B>
+      </FromColor>
+      <ToColor>
+        <R>168</R>
+        <G>112</G>
+        <B>0</B>
+      </ToColor>
+    </ColorRamp>
+    <ColorRamp id="5">
+      <FromColor>
+        <R>255</R>
+        <G>255</G>
+        <B>255</B>
+      </FromColor>
+      <ToColor>
+        <R>76</R>
+        <G>0</G>
+        <B>115</B>
+      </ToColor>
+    </ColorRamp>
+    <ColorRamp id="6">
+      <FromColor>
+        <R>255</R>
+        <G>190</G>
+        <B>190</B>
+      </FromColor>
+      <ToColor>
+        <R>230</R>
+        <G>0</G>
+        <B>0</B>
+      </ToColor>
+    </ColorRamp>
+    <ColorRamp id="7">
+      <FromColor>
+        <R>255</R>
+        <G>255</G>
+        <B>255</B>
+      </FromColor>
+      <ToColor>
+        <R>52</R>
+        <G>52</G>
+        <B>52</B>
+      </ToColor>
+    </ColorRamp>
+    <ColorRamp id="8">
+      <FromColor>
+        <R>255</R>
+        <G>255</G>
+        <B>190</B>
+      </FromColor>
+      <ToColor>
+        <R>230</R>
+        <G>230</G>
+        <B>0</B>
+      </ToColor>
+    </ColorRamp>
+    <ColorRamp id="9">
+      <FromColor>
+        <R>255</R>
+        <G>255</G>
+        <B>255</B>
+      </FromColor>
+      <ToColor>
+        <R>156</R>
+        <G>156</G>
+        <B>156</B>
+      </ToColor>
+    </ColorRamp>
+  </Content>
+</Template>

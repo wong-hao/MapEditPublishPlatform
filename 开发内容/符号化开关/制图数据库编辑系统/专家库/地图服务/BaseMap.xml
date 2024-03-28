@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Template>
+  <Content>
+    <MapService>
+      <Item>
+        <MapServiceUrl type="Server">
+          <DataBase>nx10</DataBase>
+          <IPAddress>10.62.119.85</IPAddress>
+          <UserName>sde</UserName>
+          <Password>SDEPassword</Password>
+        </MapServiceUrl>
+        <MapServiceName>定位地图.Mxd</MapServiceName>
+        <MapServiceDes>多尺度数据库数据范围</MapServiceDes>
+      </Item>
+    </MapService>
+  </Content>
+</Template>

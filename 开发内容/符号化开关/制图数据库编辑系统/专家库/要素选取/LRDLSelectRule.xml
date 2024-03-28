@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Template>
+  <Content>
+    <LRDL note="道路">
+      <Item  sql="LGB=420901">建成高速公路</Item>
+      <Item  sql="LGB=420902">建筑中高速公路</Item>
+      <Item  sql="LGB=420903">规划高速公路</Item>
+      <Item  sql="LGB=420101">建成国道</Item>
+      <Item  sql="LGB=420102">建筑中国道</Item>
+      <Item  sql="LGB=420201">建成省道</Item>
+      <Item  sql="LGB=420202">建筑中省道</Item>
+      <Item  sql="LGB=420301">建成县道</Item>
+      <Item  sql="LGB=420302">建筑中县道</Item>
+      <Item  sql="LGB=420400">乡道</Item>
+      <Item  sql="LGB=430200">快速路</Item>
+      <Item  sql="LGB=420500">专用公路</Item>
+      <Item  sql="LGB=420800">其他公路</Item>
+      <Item  sql="LGB=430501">主干道</Item>
+      <Item  sql="LGB=430502">次干道</Item>
+      <Item  sql="LGB=430503">支线</Item>
+      <Item  sql="LGB=430504">建筑中街道</Item>
+      <Item  sql="LGB=440100">机耕路（大路）</Item>
+      <Item  sql="LGB=440200">乡村路</Item>
+      <Item  sql="LGB=440300">小路</Item>
+      <Item  sql="LGB=430600">内部道路</Item>
+    </LRDL>
+  </Content>
+  <Scheme>
+    <Type MapLevel="自定义">
+      <MainLRDL note="主区道路线">
+        <Item slected="true">建成高速公路</Item>
+        <Item slected="true">建筑中高速公路</Item>
+        <Item slected="true">规划高速公路</Item>
+        <Item slected="true">建成国道</Item>
+        <Item slected="true">建筑中国道</Item>
+        <Item slected="true">建成省道</Item>
+        <Item slected="true">建筑中省道</Item>
+        <Item slected="true">建成县道</Item>
+        <Item slected="true">建筑中县道</Item>
+        <Item slected="true">乡道</Item>
+        <Item slected="true">快速路</Item>
+        <Item slected="true">专用公路</Item>
+        <Item slected="true">其他公路</Item>
+        <Item slected="true">主干道</Item>
+        <Item slected="true">次干道</Item>
+        <Item slected="true">支线</Item>
+        <Item slected="true">建筑中街道</Item>
+        <Item slected="true">机耕路（大路）</Item>
+        <Item slected="true">乡村路</Item>
+        <Item slected="true">小路</Item>
+        <Item slected="true">内部道路</Item>
+      </MainLRDL>
+      <AdjLRDL note="邻区道路线">
+        <Item slected="true">建成高速公路</Item>
+        <Item slected="true">建筑中高速公路</Item>
+        <Item slected="true">规划高速公路</Item>
+        <Item slected="true">建成国道</Item>
+        <Item slected="true">建筑中国道</Item>
+        <Item slected="true">建成省道</Item>
+        <Item slected="true">建筑中省道</Item>
+        <Item slected="true">建成县道</Item>
+        <Item slected="true">建筑中县道</Item>
+        <Item slected="true">乡道</Item>
+        <Item slected="true">快速路</Item>
+        <Item slected="false">专用公路</Item>
+        <Item slected="false">其他公路</Item>
+        <Item slected="false">主干道</Item>
+        <Item slected="false">次干道</Item>
+        <Item slected="false">支线</Item>
+        <Item slected="false">建筑中街道</Item>
+        <Item slected="false">机耕路（大路）</Item>
+        <Item slected="false">乡村路</Item>
+        <Item slected="false">小路</Item>
+        <Item slected="false">内部道路</Item>
+      </AdjLRDL>
+    </Type>
+  </Scheme>
+</Template>

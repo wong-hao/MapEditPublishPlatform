@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Template>
+  <Content>
+    <HYDL note="单线河" field="GRADE2">
+      <Item>
+        <Max>50000</Max>
+        <Min>35000</Min>
+        <Level>7</Level>
+      </Item>
+      <Item>
+        <Max>700000</Max>
+        <Min>50000</Min>
+        <Level>6</Level>
+      </Item>
+      <Item>
+        <Max>100000</Max>
+        <Min>70000</Min>
+        <Level>5</Level>
+      </Item>
+       <Item>
+        <Max>150000</Max>
+        <Min>100000</Min>
+        <Level>4</Level>
+      </Item>
+      <Item>
+        <Max>250000</Max>
+        <Min>175000</Min>
+        <Level>3</Level>
+      </Item>
+      <Item>
+        <Max>350000</Max>
+        <Min>250000</Min>
+        <Level>2</Level>
+      </Item>
+      <Item>
+        <Max>500000</Max>
+        <Min>350000</Min>
+        <Level>1</Level>
+      </Item>
+      <Item>
+        <Max>750000</Max>
+        <Min>500000</Min>
+        <Level>0</Level>
+      </Item>
+      <Item>
+        <Max>1000000</Max>
+        <Min>700000</Min>
+        <Level>0</Level>
+      </Item>
+      <Item>
+        <Max>1500000</Max>
+        <Min>1000000</Min>
+        <Level>0</Level>
+      </Item>
+    </HYDL>
+    <HYDA note="水系面" >
+      <GB>210301</GB>
+      <Area note="面积容差平方毫米">10</Area>
+    </HYDA>
+    <LRDL note="道路" field="GRAD">3</LRDL>
+    <AdjRegionAGNP note="邻区居民地点">
+      <Item slected="true" sql="class='AB'">省级政府</Item>
+      <Item slected="true" sql="class='AC' OR class='AD'">地级市政府</Item>
+      <Item slected="true" sql="class='AE' OR class='AF' OR class='AG'">县级政府</Item>
+      <Item slected="true" sql="class='AH' OR class='AI' OR class='AJ'">乡镇级政府</Item>
+      <Item slected="false" sql="class='AK'">行政村</Item>
+      <Item slected="false" sql="class='BA' OR class='BB'">自然村</Item>
+      <Item slected="false" sql="class='BC'">牧点、渔点、棚屋</Item>
+    </AdjRegionAGNP>
+    <OutProvinceAGNP note="省外居民地点">
+      <Item slected="true" sql="class='AB'">省级政府</Item>
+      <Item slected="true" sql="class='AC' OR class='AD'">地级市政府</Item>
+      <Item slected="true" sql="class='AE' OR class='AF' OR class='AG'">县级政府</Item>
+      <Item slected="true" sql="class='AH' OR class='AI' OR class='AJ'">乡镇级政府</Item>
+      <Item slected="false" sql="class='AK'">行政村</Item>
+      <Item slected="false" sql="class='BA' OR class='BB'">自然村</Item>
+      <Item slected="false" sql="class='BC'">牧点、渔点、棚屋</Item>
+    </OutProvinceAGNP>
+    <MainRegionRESA note="主区居民地面">
+      <Item slected="true" sql="class='AB'">省级政府</Item>
+      <Item slected="true" sql="class='AC' OR class='AD'">地级市政府</Item>
+      <Item slected="true" sql="class='AE' OR class='AF' OR class='AG'">县级政府</Item>
+      <Item slected="true" sql="class='AH' OR class='AI' OR class='AJ'">乡镇级政府</Item>
+      <Item slected="false" sql="class='AK'">行政村</Item>
+      <Item slected="false" sql="class='BA' OR class='BB'">自然村</Item>
+      <Item slected="false" sql="class='BC'">牧点、渔点、棚屋</Item>
+    </MainRegionRESA>
+    <AdjRegionRESA note="附区居民地面">
+      <Item slected="true" sql="class='AB'">省级政府</Item>
+      <Item slected="true" sql="class='AC' OR class='AD'">地级市政府</Item>
+      <Item slected="true" sql="class='AE' OR class='AF' OR class='AG'">县级政府</Item>
+      <Item slected="true" sql="class='AH' OR class='AI' OR class='AJ'">乡镇级政府</Item>
+      <Item slected="false" sql="class='AK'">行政村</Item>
+      <Item slected="false" sql="class='BA' OR class='BB'">自然村</Item>
+      <Item slected="false" sql="class='BC'">牧点、渔点、棚屋</Item>
+    </AdjRegionRESA>
+    <BOUL note="境界线">
+      <Item slected="true"  gb="630201" >省</Item>
+      <Item slected="true"  gb="640201" >市</Item>
+      <Item slected="true"  gb="650201" >区县</Item>
+      <Item slected="false" gb="660201" >乡镇</Item>
+    </BOUL>
+    <HYDATOLINE note="河流面转线">
+      <Items RuleID="2"><!--安徽系统特殊设置-->
+        <Item  gb="210101" >地面河段</Item>
+        <Item  gb="220100" >运河</Item>
+        <Item  gb="220200" >干渠</Item>
+        <Item  gb="230101" >湖泊</Item>
+        <Item  gb="240101" >水库</Item>
+        <Item  gb="230102" >池塘</Item>
+      </Items>
+      <Items RuleID="2">
+        <Item  gb="210104" >消失的河段</Item>
+      </Items>
+      <Items RuleID="3">
+        <Item  gb="210200" >时令河</Item>
+        <Item  gb="230200" >时令湖</Item>
+     </Items>
+      <Items RuleID="4">
+        <Item  gb="240200" >溢洪道</Item>
+      </Items>
+      <Items RuleID="5">
+        <Item  gb="261000" >蓄水池</Item>
+      </Items>
+      <Items RuleID="6">
+        <Item  gb="210301" >河道干河</Item>
+      </Items>
+    </HYDATOLINE>
+  </Content>
+</Template>

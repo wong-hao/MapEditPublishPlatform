@@ -1,0 +1,47 @@
+<Template name="参数设置">
+  <Content>
+    <Item type="通用">
+      <MainRegion note="主区">
+        <Level>乡镇界（含）以上做骑界</Level>
+        <Width>2</Width>
+      </MainRegion>
+      <ExRegion note="邻区">
+        <Level>县级界（含）以上做骑界</Level>
+        <Width>1.5</Width>
+      </ExRegion>
+    </Item>
+    <Item type="省图">
+      <MainRegion note="主区">
+        <Level>地级界（含）以上做骑界</Level>
+        <Width>3</Width>
+      </MainRegion>
+      <ExRegion note="邻区">
+        <Level>省级界做骑界</Level>
+        <ProvinceWidth>5</ProvinceWidth>
+      </ExRegion>
+    </Item>
+    <Item type="市图">
+      <MainRegion note="主区">
+        <Level>县级界（含）以上做骑界</Level>
+        <Width>2.5</Width>
+      </MainRegion>
+      <ExRegion note="邻区">
+        <Level>地级界（含）以上做骑界</Level>
+        <ProvinceWidth>4.5</ProvinceWidth>
+        <StateWidth>3.5</StateWidth>
+      </ExRegion>
+    </Item>
+    <Item type="县图">
+      <MainRegion note="主区">
+        <Level>乡镇界（含）以上做骑界</Level>
+        <Width>2</Width>
+      </MainRegion>
+      <ExRegion note="邻区">
+        <Level>县级界（含）以上做骑界</Level>
+        <ProvinceWidth>4</ProvinceWidth>
+        <StateWidth>3</StateWidth>
+        <CountyWidth>2</CountyWidth>
+      </ExRegion>
+    </Item>
+  </Content>
+</Template>
