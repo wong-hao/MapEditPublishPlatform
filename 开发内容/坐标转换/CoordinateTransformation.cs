@@ -194,7 +194,7 @@ namespace SMGI.Plugin.EmergencyMap
         }
 
         // 平行四边形转矩形
-        public static IPolyline ConvertToMinimalRectangle(IPolyline parallelogramPolyline)
+        public static IPolyline ConvertPolylineToMinimalRectangle(IPolyline parallelogramPolyline)
         {
             //获取parallelogramPolyline的MBR，也就是包络矩形
             IEnvelope envelope = parallelogramPolyline.Envelope;
@@ -210,6 +210,26 @@ namespace SMGI.Plugin.EmergencyMap
             pointCollection.AddPoint(envelope.UpperLeft, ref missing, ref missing);
             pointCollection.AddPoint(envelope.LowerLeft, ref missing, ref missing); // 关闭polyline
             return rectanglePolyline;
+        }
+
+        // 平行四边形转矩形
+        public static IPolygon ConvertPolygonToMinimalPolygon(IPolygon parallelogramPolygon)
+        {
+            // 获取多边形的最小包围矩形
+            IEnvelope envelope = parallelogramPolygon.Envelope;
+            // 创建一个新的Polygon
+            IPolygon mbrPolygon = new PolygonClass();
+            // 启动编辑
+            IPointCollection pointCollection = mbrPolygon as IPointCollection;
+            // 添加MBR的四个顶点到新的Polygon
+            pointCollection.AddPoint(new Point { X = envelope.XMin, Y = envelope.YMin });
+            pointCollection.AddPoint(new Point { X = envelope.XMax, Y = envelope.YMin });
+            pointCollection.AddPoint(new Point { X = envelope.XMax, Y = envelope.YMax });
+            pointCollection.AddPoint(new Point { X = envelope.XMin, Y = envelope.YMax });
+            // 添加第一个点，使Polygon闭合
+            pointCollection.AddPoint(new Point { X = envelope.XMin, Y = envelope.YMin });
+            // 结束编辑，并返回新的Polygon
+            return mbrPolygon;
         }
 
         // 将 ArcObjects 的几何类型转换为字符串表示形式
@@ -769,7 +789,7 @@ namespace SMGI.Plugin.EmergencyMap
 
             #endregion
 
-            #region 对内外图廓进行修正
+            #region 对内外图廓、遮盖与页面进行修正
 
             string type = "TYPE";
 
@@ -782,13 +802,13 @@ namespace SMGI.Plugin.EmergencyMap
                 IGeometry shape = null;
                 IGeometry newShape = null;
 
-                if (fcname == "LLINE")
+                if (fcname == "LLINE" || fcname == "图廓裁切线")
                 {
                     fe = FindFeature(fc, type, "内图廓");
                     shape = fe.Shape;
                     if (shape.GeometryType == esriGeometryType.esriGeometryPolyline)
                     {
-                        newShape = ConvertToMinimalRectangle(shape as IPolyline);
+                        newShape = ConvertPolylineToMinimalRectangle(shape as IPolyline);
                         fe.Shape = newShape;
                         fe.Store();
                     }
@@ -797,7 +817,28 @@ namespace SMGI.Plugin.EmergencyMap
                     shape = fe.Shape;
                     if (shape.GeometryType == esriGeometryType.esriGeometryPolyline)
                     {
-                        newShape = ConvertToMinimalRectangle(shape as IPolyline);
+                        newShape = ConvertPolylineToMinimalRectangle(shape as IPolyline);
+                        fe.Shape = newShape;
+                        fe.Store();
+                    }
+                }else if (fcname == "LPOLY" || fcname == "挡白")
+                {
+                    fe = FindFeature(fc, type, "遮盖");
+                    shape = fe.Shape;
+                    if (shape.GeometryType == esriGeometryType.esriGeometryPolygon)
+                    {
+                        newShape = ConvertPolygonToMinimalPolygon(shape as IPolygon);
+                        fe.Shape = newShape;
+                        fe.Store();
+                    }
+                }
+                else if (fcname == "ClipBoundary" || fcname == "纸张[不打开]")
+                {
+                    fe = FindFeature(fc, type, "页面");
+                    shape = fe.Shape;
+                    if (shape.GeometryType == esriGeometryType.esriGeometryPolygon)
+                    {
+                        newShape = ConvertPolygonToMinimalPolygon(shape as IPolygon);
                         fe.Shape = newShape;
                         fe.Store();
                     }
