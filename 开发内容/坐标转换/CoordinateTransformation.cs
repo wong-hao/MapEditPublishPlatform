@@ -789,7 +789,13 @@ namespace SMGI.Plugin.EmergencyMap
 
             #endregion
 
-            #region 对内外图廓、遮盖与页面进行修正
+            #region 对内外图廓、遮盖与页面的形状进行修正
+
+            wsProject = DCDHelper.createTempWorkspace(newDataSetLoc);
+
+            fwsProject = wsProject as IFeatureWorkspace;
+
+            fcName2FC = DCDHelper.GetAllFeatureClassFromWorkspace(fwsProject);
 
             string type = "TYPE";
 
@@ -798,6 +804,9 @@ namespace SMGI.Plugin.EmergencyMap
                 fcNum++;
                 IFeatureClass fc = kv.Value;
                 String fcname = kv.Key;
+
+                wo.SetText("正在对要素类" + fcname + "的形状进行修正");
+
                 IFeature fe = null;
                 IGeometry shape = null;
                 IGeometry newShape = null;
