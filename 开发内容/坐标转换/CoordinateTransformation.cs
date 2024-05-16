@@ -23,6 +23,8 @@ namespace SMGI.Plugin.EmergencyMap
 
     public class CoordinateTransformation
     {
+        #region 等差分纬线多圆锥投影
+
         private static double R = 6371116;
         private static double mu0 = 1 / 26000000;
         private static double x0;
@@ -139,6 +141,64 @@ namespace SMGI.Plugin.EmergencyMap
                 y = q * Math.Sin(a) * 14000 / mapScale;
             }
         }
+
+        #endregion
+
+        #region 伪方位投影
+
+        static double R2 = 6371000; //地球半径（可根据自己所需单位调整）
+        static double rotation = 0; //旋转角，有的公式设置为15度，但经过测试，在这个项目应该是0
+        static double phi0 = radians(35); //基准纬线35度
+        static double lambda0 = radians(104); //中央经线104度
+
+        public static double radians(double degrees)
+        {
+            return degrees * Math.PI / 180.0;
+        }
+
+        public static double degrees(double radians)
+        {
+            return radians * 180.0 / Math.PI;
+        }
+
+        static Tuple<double, double> Calculate_Z_alpha(double phi, double lambda_) //公式我也不懂原理，就硬写成代码呗。这里大概是将经纬度转换成球面极坐标
+        {
+            phi = radians(phi);
+            lambda_ = radians(lambda_);
+
+            double cosZ = Math.Sin(phi) * Math.Sin(phi0) + Math.Cos(phi) * Math.Cos(phi0) * Math.Cos(lambda_ - lambda0);
+            double Z = Math.Acos(cosZ);
+            double sinZcosAlpha = Math.Sin(phi) * Math.Cos(phi0) - Math.Cos(phi) * Math.Sin(phi0) * Math.Cos(lambda_ - lambda0);
+            double sinZsinAlpha = Math.Cos(phi) * Math.Sin(lambda_ - lambda0);
+
+            double alpha = Math.Atan2(sinZsinAlpha, sinZcosAlpha);
+
+            return new Tuple<double, double>(degrees(Z), degrees(alpha));
+        }
+
+        static Tuple<double, double> Calculate_x_y(double Z, double alpha) //这里大概是球面极坐标转换成伪方位投影坐标
+        {
+            alpha = radians(alpha);
+
+            double delta = alpha + 0.005308 * radians(Z) * Math.Sin(3 * (radians(rotation) + alpha)) / 0.453786;
+
+            double x = radians(Z) * Math.Cos(delta) * R2; //只有这两行用到R，且只进行乘法运算
+            double y = radians(Z) * Math.Sin(delta) * R2;
+
+            return new Tuple<double, double>(x, y);
+        }
+
+        public static void pseudoAzimuthProjection(ref double x, ref double y, double lon, double lat)
+        {
+            var Z_alpha = Calculate_Z_alpha(lat, lon);
+            double Z = Z_alpha.Item1;
+            double alpha = Z_alpha.Item2;
+            var x_y = Calculate_x_y(Z, alpha);
+            x = x_y.Item1;
+            y = x_y.Item2;
+        }
+
+        #endregion
     }
 
     public class GDBOperation
@@ -156,7 +216,8 @@ namespace SMGI.Plugin.EmergencyMap
         public static ISpatialReference wgsProject = null;
         public static IWorkspace wsProject = null;
         public static IFeatureWorkspace fwsProject = null;
-        public static double zoomFactor = 1000; //用于弥补公式无法实现数据视图下较大比例尺的问题，这是由于单位换算造成的。方法是将通过将坐标放大zoomFactor倍以放大同等倍数的显示比例尺
+        public static double zoomFactor = 1; //用于弥补甲方提供的等差分多圆锥纬线投影公式无法实现数据视图下较大比例尺的问题，这是由于单位换算造成的。
+                                             //方法是将通过将坐标放大zoomFactor倍以放大同等倍数的显示比例尺
 
         public static bool isProjectedBefore;
         public static string MultipartToSinglepSuffix = "_MultipartToSinglep";
@@ -452,7 +513,7 @@ namespace SMGI.Plugin.EmergencyMap
             }
         }
 
-        public static void FeatureClassProject(KeyValuePair<string, IFeatureClass> fcName2FC, IFeatureWorkspace fws, esriGeometryType geometryType, int fcNum, int fcTotalNum, double midlL, bool bound, double mapScale, WaitOperation wo)
+        public static void FeatureClassProject(KeyValuePair<string, IFeatureClass> fcName2FC, IFeatureWorkspace fws, esriGeometryType geometryType, int fcNum, int fcTotalNum, double midlL, bool bound, double mapScale, string projectionType, WaitOperation wo)
         {
             IFeatureClass fc = fcName2FC.Value;
             String fcname = fcName2FC.Key;
@@ -538,7 +599,14 @@ namespace SMGI.Plugin.EmergencyMap
                             longitude = point.X;
                             latitude = point.Y;
 
-                            CoordinateTransformation.polyconicProjection(ref xCoordination, ref yCoordination, longitude, latitude, midlL, mapScale);
+                            if (projectionType == "等差分纬线多圆锥")
+                            {
+                                CoordinateTransformation.polyconicProjection(ref xCoordination, ref yCoordination, longitude, latitude, midlL, mapScale);
+                            }
+                            else if (projectionType == "伪方位")
+                            {
+                                CoordinateTransformation.pseudoAzimuthProjection(ref xCoordination, ref yCoordination, longitude, latitude);
+                            }
 
                             Console.WriteLine("正在投影第" + fcNum + "/" + fcTotalNum + "个要素类" + fcname + "的第" + featurecount + "/" + featureCount + "个要素" + "(100%)");
 
@@ -575,7 +643,14 @@ namespace SMGI.Plugin.EmergencyMap
                                 longitude = point.X;
                                 latitude = point.Y;
 
-                                CoordinateTransformation.polyconicProjection(ref xCoordination, ref yCoordination, longitude, latitude, midlL, mapScale);
+                                if (projectionType == "等差分纬线多圆锥")
+                                {
+                                    CoordinateTransformation.polyconicProjection(ref xCoordination, ref yCoordination, longitude, latitude, midlL, mapScale);
+                                }
+                                else if (projectionType == "伪方位")
+                                {
+                                    CoordinateTransformation.pseudoAzimuthProjection(ref xCoordination, ref yCoordination, longitude, latitude);
+                                }
 
                                 pointCount++;
 
@@ -642,7 +717,14 @@ namespace SMGI.Plugin.EmergencyMap
                                     longitude = originalPoints[j].X;
                                     latitude = originalPoints[j].Y;
 
-                                    CoordinateTransformation.polyconicProjection(ref xCoordination, ref yCoordination, longitude, latitude, midlL, mapScale);
+                                    if (projectionType == "等差分纬线多圆锥")
+                                    {
+                                        CoordinateTransformation.polyconicProjection(ref xCoordination, ref yCoordination, longitude, latitude, midlL, mapScale);
+                                    }
+                                    else if (projectionType == "伪方位")
+                                    {
+                                        CoordinateTransformation.pseudoAzimuthProjection(ref xCoordination, ref yCoordination, longitude, latitude);
+                                    }
 
                                     pointCount++;
 
@@ -694,8 +776,19 @@ namespace SMGI.Plugin.EmergencyMap
         }
 
 
-        public static void GDBProject(IWorkspace ws, double mapScale, WaitOperation wo)
+        public static void GDBProject(IWorkspace ws, string projectionType, WaitOperation wo)
         {
+            #region 地图参考比例尺设置
+
+            double mapScale = GApplication.Application.MapControl.Map.ReferenceScale;
+            if (mapScale == 0)
+            {
+                MessageBox.Show("请先设置参考比例尺！");
+                return;
+            }
+
+            #endregion
+
             #region 编辑状态判定
 
             if (GApplication.Application.EngineEditor.EditState == ESRI.ArcGIS.Controls.esriEngineEditState.esriEngineStateEditing)
@@ -749,16 +842,17 @@ namespace SMGI.Plugin.EmergencyMap
 
                 esriGeometryType geometryType = fc.ShapeType;
 
-                if (Math.Abs(midlL - realMidlL) <= 2)
-                {
-                    bound = false;
-                    FeatureClassProject(kv, fwsProject, geometryType, fcNum, fcTotalNum, realMidlL, bound, mapScale, wo);
-                }
-                else
+                if (projectionType == "等差分纬线多圆锥" && Math.Abs(midlL - realMidlL) > 2)
                 {
                     FeatureClassProject(
                         FCMultipartToSinglepart(geoprocessor, wsProject, fcname, fc, fcTotalNum, fcNum, wo),
-                        fwsProject, geometryType, fcNum, fcTotalNum, midlL, bound, mapScale, wo);
+                        fwsProject, geometryType, fcNum, fcTotalNum, midlL, bound, mapScale, projectionType, wo);
+
+                }
+                else
+                {
+                    bound = false;
+                    FeatureClassProject(kv, fwsProject, geometryType, fcNum, fcTotalNum, realMidlL, bound, mapScale, projectionType, wo);
                 }
             }
 
@@ -766,10 +860,20 @@ namespace SMGI.Plugin.EmergencyMap
 
             #region 在投影数据库中进行定义投影
 
-            var filePath = Application.StartupPath + "\\Equivalent Difference Latitude Parallel Polyconic.prj";
+            var filePath = string.Empty;
+
+            if (projectionType == "等差分纬线多圆锥")
+            {
+                filePath = Application.StartupPath + "\\Equivalent Difference Latitude Parallel Polyconic.prj";
+            }
+            else if (projectionType == "伪方位")
+            {
+                filePath = Application.StartupPath + "\\Pseudo Azimuth.prj";
+            }
+
             if (!File.Exists(filePath))
             {
-                MessageBox.Show("等差分纬线多圆锥投影文件不存在!");
+                MessageBox.Show(projectionType + "投影文件不存在!");
                 return;
             }
 
@@ -777,7 +881,7 @@ namespace SMGI.Plugin.EmergencyMap
             spatialReferenceFactory = new SpatialReferenceEnvironmentClass();
             wgsProject = spatialReferenceFactory.CreateESRISpatialReferenceFromPRJFile(filePath);
 
-            wo.SetText("将投影数据库中的要素集合" + newDatasetName + "定义为等差分纬线多圆锥投影");
+            wo.SetText("将投影数据库中的要素集合" + newDatasetName + "定义为" + projectionType + "投影");
 
             sdeFeatureDataset = fwsProject.OpenFeatureDataset(newDatasetName);
 
@@ -920,7 +1024,7 @@ namespace SMGI.Plugin.EmergencyMap
 
             // 设置为未知坐标系统
             ISpatialReference unknownSpatialReference = new UnknownCoordinateSystem() as ISpatialReference;
-            unknownSpatialReference.SetDomain(-20000 * zoomFactor, 20000 * zoomFactor, -20000 * zoomFactor, 20000 * zoomFactor);
+            unknownSpatialReference.SetDomain(-20000000000 * zoomFactor, 20000000000 * zoomFactor, -20000000000 * zoomFactor, 20000000000 * zoomFactor);
             sdeFeatureDataset = fwsProject.CreateFeatureDataset(newDatasetName, unknownSpatialReference);
 
             wo.SetText("正在将协同更新状态表拷贝进投影数据库");

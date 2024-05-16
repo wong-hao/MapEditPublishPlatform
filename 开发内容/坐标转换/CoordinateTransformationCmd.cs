@@ -33,16 +33,16 @@ namespace SMGI.Plugin.EmergencyMap
 
         public override void OnClick()
         {
-            double mapScale = m_Application.MapControl.Map.ReferenceScale;
-            if (mapScale == 0)
-            {
-                MessageBox.Show("请先设置参考比例尺！");
-                return;
-            }
-
             using (var wo = m_Application.SetBusy())
             {
-                GDBOperation.GDBProject(m_Application.Workspace.EsriWorkspace, mapScale, wo);
+                ProjectionParaSet pa = new ProjectionParaSet();
+                if (pa.ShowDialog() != DialogResult.OK)
+                {
+                    return;
+                }
+
+                string projectionType = pa.projectionParameter;
+                GDBOperation.GDBProject(m_Application.Workspace.EsriWorkspace, projectionType, wo);
             }
         }
     }
